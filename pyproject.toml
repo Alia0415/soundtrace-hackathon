@@ -1,0 +1,10 @@
+[project]
+name = "soundtrace"
+version = "0.1.0"
+description = "SoundTrace environment-sound and humming music prototype"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26"]
+
+[project.scripts]
+soundtrace = "soundtrace_mvp:main"
+soundtrace-api = "soundtrace_api:main"

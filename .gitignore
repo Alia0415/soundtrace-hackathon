@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+outputs/audiosep_input.wav
+outputs/audiosep_target.wav
+
+outputs/jobs/
+.pytest_cache/
+.venv/
