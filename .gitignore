@@ -6,3 +6,9 @@ outputs/audiosep_target.wav
 outputs/jobs/
 .pytest_cache/
 .venv/
+# MVP 服务运行产物与本地实验目录
+clearvoice/
+outputs/service_uploads/
+outputs/service_jobs/
+outputs_ab_*/
+.mimosa/

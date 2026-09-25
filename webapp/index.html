@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>声迹 SoundTrace — MVP</title>
+<style>
+  :root { --bg:#0f1420; --card:#171e2e; --line:#26304a; --acc:#5b8cff; --ok:#3ddc97; --dim:#8a94ad; }
+  * { box-sizing:border-box; }
+  body { font-family:"Microsoft YaHei",system-ui,sans-serif; background:var(--bg); color:#e8ecf5; margin:0; padding:24px 16px 80px; }
+  .wrap { max-width:1060px; margin:0 auto; }
+  h1 { font-size:22px; margin:0 0 4px; } .sub { color:var(--dim); font-size:13px; margin-bottom:24px; }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:14px 0; }
+  .step h2 { font-size:15px; margin:0 0 12px; color:var(--acc); display:flex; gap:8px; align-items:center; }
+  .num { background:var(--acc); color:#fff; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  button { background:var(--acc); border:none; color:#fff; padding:10px 18px; border-radius:8px; font-size:14px; cursor:pointer; }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  button.ghost { background:transparent; border:1px solid var(--line); color:#cfd7ea; }
+  button.rec { background:#e5484d; }
+  .note { font-size:12px; color:var(--dim); margin-top:8px; line-height:1.6; }
+  .status { font-size:13px; margin-top:10px; color:var(--ok); }
+  .err { font-size:13px; color:#ff7b72; white-space:pre-wrap; }
+  .hide { display:none; }
+  #recDot { width:10px; height:10px; border-radius:50%; background:#e5484d; display:none; animation:blink 1s infinite; }
+  @keyframes blink { 50% { opacity:.2; } }
+  input[type=text], select { background:#0d1220; border:1px solid var(--line); color:#e8ecf5; border-radius:8px; padding:9px 12px; font-size:14px; }
+  input[type=text] { flex:1; min-width:200px; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .chip { border:1px solid var(--line); border-radius:20px; padding:6px 14px; cursor:pointer; font-size:13px; }
+  .chip.on { border-color:var(--acc); background:rgba(91,140,255,.18); }
+  .chip small { color:var(--dim); margin-left:6px; }
+  /* 素材库 */
+  .mat { display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px dashed var(--line); border-radius:8px; margin-top:8px; }
+  .mat b { min-width:150px; font-size:13px; }
+  .mat audio { flex:1; height:32px; }
+  /* DAW */
+  #dawbar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+  #timeLabel { font-size:13px; color:var(--dim); font-variant-numeric:tabular-nums; min-width:90px; }
+  #dawouter { border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  #dawflex { display:flex; }
+  #laneLabels { width:130px; flex:none; border-right:1px solid var(--line); }
+  #laneLabels .lab, #dawscroll .lane { height:74px; border-bottom:1px solid var(--line); }
+  #laneLabels .lab { display:flex; align-items:center; gap:6px; padding:0 8px; font-size:12px; }
+  #laneLabels .lab b { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px; }
+  #laneLabels .rulerpad { height:24px; border-bottom:1px solid var(--line); }
+  button.ms { padding:2px 8px; font-size:11px; border-radius:5px; height:20px; }
+  button.m.on { background:#e5484d; }
+  button.s.on { background:#f5a623; }
+  #dawscroll { overflow-x:auto; flex:1; position:relative; }
+  #dawinner { position:relative; }
+  #ruler { display:block; height:24px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .lane { position:relative; background:#0d1220; }
+  .lane.noclip { background:#0d122088; }
+  .clip { position:absolute; top:4px; height:66px; border-radius:6px; overflow:hidden; cursor:grab;
+          border:1px solid rgba(255,255,255,.25); user-select:none; touch-action:none; }
+  .clip:active { cursor:grabbing; }
+  .clip canvas { position:absolute; left:0; top:14px; }
+  .clip .cname { position:absolute; left:6px; top:2px; font-size:11px; color:#06131f; font-weight:600; }
+  .clip .cx { position:absolute; right:4px; top:2px; font-size:12px; color:#06131f; cursor:pointer; padding:0 4px; }
+  #playhead { position:absolute; top:0; bottom:0; width:2px; background:#fff; pointer-events:none; z-index:5; }
+  .trayline { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px; font-size:13px; }
+  .trayline .tag { border:1px solid var(--line); border-radius:6px; padding:4px 10px; display:flex; gap:8px; align-items:center; }
+  .tag button { padding:2px 10px; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>声迹 SoundTrace</h1>
+  <div class="sub">地点是乐器，记忆是旋律 —— 多段环境声 × AI 生成音乐 · DAW 式排布混音</div>
+
+  <div class="step">
+    <h2><span class="num">1</span>上传 / 录制环境声（可重复多次，不限数量）</h2>
+    <div class="row">
+      <button onclick="pick.click()">选择音频文件（WAV/M4A/MP3 均可）</button>
+      <input type="file" id="pick" accept="audio/*" class="hide" onchange="uploadFile(this.files[0]); this.value=''">
+      <button id="recBtn" class="rec" onclick="toggleRec()">● 开始录音</button>
+      <span id="recDot"></span><span id="recTime" class="note"></span>
+    </div>
+    <div id="upInfo" class="note"></div>
+  </div>
+
+  <div class="step hide" id="s2">
+    <h2><span class="num">2</span>识别声源 → 提取降噪 → 存入素材库</h2>
+    <div class="chips" id="tags"></div>
+    <div class="row" style="margin-top:12px">
+      <input type="text" id="custom" placeholder="或输入自定义声源（英文效果更佳，如 flowing stream）">
+      <button onclick="startExtract()" id="extractBtn">提取 + 降噪</button>
+      <button class="ghost" onclick="startHum()" id="humBtn">🎵 这段是哼唱</button>
+    </div>
+    <div id="s2status" class="status"></div>
+  </div>
+
+  <div class="step hide" id="s3">
+    <h2><span class="num">3</span>素材库（<span id="matCount">0</span> 段）</h2>
+    <div id="tray"></div>
+    <div class="note">可回到第 1 步继续上传新的环境声。生成时会自动把所有素材散点排布到音乐各处。</div>
+  </div>
+
+  <div class="step hide" id="s4">
+    <h2><span class="num">4</span>生成音乐底</h2>
+    <div class="row">
+      <select id="style">
+        <option value="lofi">Lo-fi 慢摇</option>
+        <option value="ambient" selected>氛围空间</option>
+        <option value="cinematic">电影感</option>
+      </select>
+      <select id="dur">
+        <option value="15">15 秒</option>
+        <option value="30" selected>30 秒</option>
+        <option value="45">45 秒</option>
+      </select>
+      <button onclick="startGenerate()">生成音乐</button>
+    </div>
+    <div id="s4status" class="status"></div>
+  </div>
+
+  <div class="step hide" id="s5">
+    <h2><span class="num">5</span>排布混音台 <span style="font-size:12px;color:var(--dim)">拖动音频块调整出现位置 · 点标尺跳转 · M 静音 / S 独奏</span></h2>
+    <div id="dawbar">
+      <button id="playBtn" onclick="dawToggle()">▶ 播放</button>
+      <span id="timeLabel">0:00 / 0:00</span>
+      <select id="dawLv">
+        <option value="0.15">环境音·若隐若现</option>
+        <option value="0.35" selected>环境音·标准可闻</option>
+        <option value="0.55">环境音·突出存在感</option>
+      </select>
+      <select id="duckSel">
+        <option value="0">音乐避让·关</option>
+        <option value="3" selected>音乐避让·轻微</option>
+        <option value="5">音乐避让·明显</option>
+      </select>
+      <button onclick="dawRemix()" id="remixBtn">按当前排布混音</button>
+      <span id="s5status" class="status"></span>
+    </div>
+    <div id="dawouter">
+      <div id="dawflex">
+        <div id="laneLabels"></div>
+        <div id="dawscroll"><div id="dawinner"></div></div>
+      </div>
+    </div>
+    <div class="trayline" id="trayAdd"></div>
+    <div class="note">绿色为各段环境声在音乐中的出现位置——按住可拖动，× 删除；点素材名旁的 ＋ 可再加一次出现。调整后点「按当前排布混音」生成成品（琥珀色轨）。</div>
+  </div>
+
+  <div class="note">服务地址 http://127.0.0.1:8090 · 生成约需 时长×4~6 秒 · 环境音已做响度自适应对齐，必定可闻</div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let uploadId = null, selected = null, recording = false, recCtx = null, chunks = [], recTimer = null, recStart = 0;
+let tray = [];          // {name, url, dur, buffer}
+let actx = null;        // 共享 AudioContext
+let daw = null;         // {dur, pps, lanes:[{name,color,type,buffer,matIdx,muted,solo,clips:[{start,el}]}], generated, playing, offset, startedAt, nodes}
+
+const api = async (url, opt) => { const r = await fetch(url, opt); if (!r.ok) throw new Error((await r.json()).detail || r.statusText); return r.json(); };
+const poll = async (id, cb) => { for (;;) { const j = await api('/api/jobs/' + id); cb(j); if (j.status === 'done' || j.status === 'failed') return j; await new Promise(r => setTimeout(r, 2000)); } };
+const fmt = s => Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2, '0');
+function getCtx() { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); return actx; }
+async function decode(url) { return await getCtx().decodeAudioData(await (await fetch(url)).arrayBuffer()); }
+
+/* ───── 上传 / 录音 ───── */
+async function uploadFile(f) {
+  if (!f) return;
+  $('upInfo').textContent = `${f.name} 解码中…`;
+  try {
+    // 浏览器端解码任意格式（WAV/M4A/MP3/AAC…）→ 单声道 WAV，服务端无需 ffmpeg
+    const ab = await getCtx().decodeAudioData(await f.arrayBuffer());
+    const wav = encodeWav(ab.getChannelData(0), ab.sampleRate);
+    const fd = new FormData();
+    fd.append('file', new File([wav], 'upload.wav', { type: 'audio/wav' }));
+    const r = await api('/api/upload', { method: 'POST', body: fd });
+    uploadId = r.upload_id;
+    $('upInfo').textContent = `已上传：${f.name}（${r.duration}s，已自动转 WAV）`;
+    analyze();
+  } catch (e) {
+    $('upInfo').textContent = `解码失败：${e.message}（可改用页面录音按钮）`;
+  }
+}
+async function toggleRec() { recording ? stopRec() : startRec(); }
+async function startRec() {
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  recCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const src = recCtx.createMediaStreamSource(stream);
+  const proc = recCtx.createScriptProcessor(4096, 1, 1);
+  chunks = [];
+  proc.onaudioprocess = e => chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+  src.connect(proc); proc.connect(recCtx.destination);
+  recording = true; recStart = Date.now();
+  $('recBtn').textContent = '■ 结束录音'; $('recDot').style.display = 'inline-block';
+  window._recStream = stream; window._recProc = proc;
+  recTimer = setInterval(() => $('recTime').textContent = Math.round((Date.now()-recStart)/1000) + ' s', 500);
+}
+async function stopRec() {
+  clearInterval(recTimer);
+  window._recProc.disconnect(); window._recStream.getTracks().forEach(t => t.stop());
+  const sr = recCtx.sampleRate; await recCtx.close();
+  recording = false;
+  $('recBtn').textContent = '● 开始录音'; $('recDot').style.display = 'none';
+  const len = chunks.reduce((a, c) => a + c.length, 0);
+  const pcm = new Float32Array(len);
+  let o = 0; for (const c of chunks) { pcm.set(c, o); o += c.length; }
+  uploadFile(new File([encodeWav(pcm, sr)], 'recording.wav', { type: 'audio/wav' }));
+}
+function encodeWav(samples, sr) {
+  const buf = new ArrayBuffer(44 + samples.length * 2), v = new DataView(buf);
+  const ws = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  ws(0,'RIFF'); v.setUint32(4, 36 + samples.length*2, true); ws(8,'WAVE');
+  ws(12,'fmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+  ws(36,'data'); v.setUint32(40, samples.length*2, true);
+  let o = 44;
+  for (let i = 0; i < samples.length; i++, o += 2) {
+    const s = Math.max(-1, Math.min(1, samples[i]));
+    v.setInt16(o, s < 0 ? s*0x8000 : s*0x7FFF, true);
+  }
+  return new Blob([buf], { type: 'audio/wav' });
+}
+
+/* ───── 识别 + 提取 ───── */
+async function analyze() {
+  $('s2').classList.remove('hide');
+  const st = $('s2status'); st.textContent = '声源识别中（首次需加载模型约20秒）…';
+  try {
+    const r = await api('/api/analyze/' + uploadId, { method: 'POST' });
+    st.textContent = '识别完成，点击选择目标声源：';
+    const box = $('tags'); box.innerHTML = '';
+    r.tags.forEach(t => {
+      const c = document.createElement('div');
+      c.className = 'chip';
+      c.innerHTML = `${t.zh}<small>${t.en} ${t.score}</small>`;
+      c.onclick = () => { document.querySelectorAll('.chip').forEach(x => x.classList.remove('on')); c.classList.add('on'); selected = t.en; };
+      box.appendChild(c);
+    });
+  } catch (e) { st.innerHTML = `<span class="err">识别失败：${e.message}</span>`; }
+}
+const target = () => selected || $('custom').value.trim() || 'interesting sound';
+
+async function startExtract() {
+  const btn = $('extractBtn'); btn.disabled = true;
+  const st = $('s2status'); st.textContent = '提取任务已提交…';
+  const j = await api('/api/jobs', { method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ type: 'extract', upload_id: uploadId, target_en: target() }) });
+  const fin = await poll(j.job_id, p => st.textContent = `${p.stage}（${p.elapsed}s）`);
+  btn.disabled = false;
+  if (fin.status === 'failed') { st.innerHTML = `<span class="err">${fin.error}</span>`; return; }
+  st.textContent = '已存入素材库 ✓ 可继续上传下一段';
+  const url = '/' + fin.results.denoised;
+  const buffer = await decode(url);
+  tray.push({ name: target(), url, dur: buffer.duration, buffer });
+  renderTray();
+  $('s4').classList.remove('hide');
+}
+function renderTray() {
+  $('s3').classList.remove('hide');
+  $('matCount').textContent = tray.length;
+  $('tray').innerHTML = tray.map((t, i) =>
+    `<div class="mat"><b>${i+1}. ${t.name}</b>
+     ${t.melody ? `<span class="note" style="color:#ff7bd5">${t.melody.key} · ${t.melody.note_count}音</span>` : `<span class="note">${t.dur.toFixed(1)}s</span>`}
+     <audio controls src="${t.url}"></audio></div>`).join('');
+}
+
+/* ───── 哼唱处理 ───── */
+async function startHum() {
+  const st = $('s2status');
+  st.textContent = '哼唱分析中（F0提取→调性量化→重合成，约10-30秒）…';
+  const j = await api('/api/jobs', { method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ type: 'hum', upload_id: uploadId }) });
+  const fin = await poll(j.job_id, p => st.textContent = `${p.stage}（${p.elapsed}s）`);
+  if (fin.status === 'failed') { st.innerHTML = `<span class="err">${fin.error}</span>`; return; }
+  const r = fin.results;
+  st.textContent = `哼唱分析完成：${r.note_count} 个音符 · 调性 ${r.key} ✓ 已入素材库`;
+  const url = '/' + r.melody;
+  const buffer = await decode(url);
+  tray.push({ name: '哼唱旋律', url, dur: buffer.duration, buffer, melody: r });
+  renderTray();
+  $('s4').classList.remove('hide');
+}
+
+/* ───── 生成音乐底 ───── */
+async function startGenerate() {
+  const st = $('s4status'); st.textContent = '生成任务已提交（约1分钟加载 + 时长×4~6秒）…';
+  const melody = tray.find(t => t.melody);
+  const env = tray.find(t => !t.melody);
+  let target = env ? env.name : 'peaceful nature';
+  if (melody) target += `, ${melody.melody.key} key, gentle melodic motif`;
+  const j = await api('/api/jobs', { method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ type: 'generate', style: $('style').value, target_en: target,
+      duration: parseFloat($('dur').value), seed: Math.floor(Math.random()*9999) }) });
+  const fin = await poll(j.job_id, p => st.textContent = `${p.stage}（${p.elapsed}s）`);
+  if (fin.status === 'failed') { st.innerHTML = `<span class="err">${fin.error}</span>`; return; }
+  st.textContent = '生成完成 ✓ 请在下方排布';
+  buildDaw('/' + fin.results.generated);
+}
+
+/* ───── DAW ───── */
+const PPS = 36;                       // 每秒像素
+const LANE_COLORS = ['#3ddc97', '#4ec9e8', '#c586f0', '#e5c07b', '#f2884b'];
+function laneColor(i) { return LANE_COLORS[i % LANE_COLORS.length]; }
+
+async function buildDaw(musicUrl) {
+  $('s5').classList.remove('hide');
+  const musicBuf = await decode(musicUrl);
+  const dur = musicBuf.duration;
+  daw = { dur, generated: musicUrl, lanes: [], playing: false, offset: 0, startedAt: 0, nodes: [] };
+  daw.lanes.push({ name: '成品混音', color: '#f5a623', type: 'final', buffer: null, muted: false, solo: false, clips: [] });
+  daw.lanes.push({ name: '生成音乐', color: '#5b8cff', type: 'music', buffer: musicBuf, muted: false, solo: false, clips: [] });
+  tray.forEach((t, i) => daw.lanes.push({
+    name: t.melody ? '哼唱旋律' : t.name, color: t.melody ? '#ff7bd5' : laneColor(i),
+    type: 'mat', matIdx: i,
+    buffer: t.buffer, muted: false, solo: false, clips: [] }));
+  // 自动散点排布：每段素材在音乐中错开出现
+  const n = tray.length;
+  tray.forEach((t, i) => {
+    const base = dur * (n === 1 ? 0.25 : 0.08 + 0.84 * i / (n - 1));
+    const jitter = (Math.random() - 0.5) * dur * 0.06;
+    const lane = daw.lanes.find(l => l.type === 'mat' && l.matIdx === i);
+    addClipToLane(lane, Math.max(0.5, Math.min(dur - 2, base + jitter)));
+  });
+  renderDaw();
+  renderTrayAdd();
+  dawRaf();
+}
+function addClipToLane(lane, start, length) {
+  const c = { start, length: length || lane.buffer.duration, lane };
+  lane.clips.push(c);
+  return c;
+}
+function renderDaw() {
+  const inner = $('dawinner');
+  inner.style.width = (daw.dur * PPS) + 'px';
+  inner.innerHTML = '<canvas id="ruler"></canvas>';
+  const ruler = $('ruler'); ruler.width = daw.dur * PPS; ruler.height = 24;
+  const g = ruler.getContext('2d');
+  g.strokeStyle = '#8a94ad'; g.fillStyle = '#8a94ad'; g.font = '10px sans-serif';
+  for (let t = 0; t <= daw.dur; t++) {
+    const x = t * PPS;
+    g.beginPath(); g.moveTo(x + .5, t % 5 === 0 ? 8 : 16); g.lineTo(x + .5, 24); g.stroke();
+    if (t % 5 === 0) g.fillText(t + 's', x + 3, 12);
+  }
+  ruler.onclick = e => { const r = ruler.getBoundingClientRect(); dawSeek((e.clientX - r.left + $('dawscroll').scrollLeft) / PPS / daw.dur); };
+  const labels = $('laneLabels');
+  labels.innerHTML = '<div class="rulerpad"></div>';
+  for (const lane of daw.lanes) {
+    const lab = document.createElement('div'); lab.className = 'lab';
+    lab.innerHTML = `<b style="color:${lane.color}">${lane.name}</b>
+      <button class="ms ghost m" onclick="dawMute('${lane.name}',this)">M</button>
+      <button class="ms ghost s" onclick="dawSolo('${lane.name}',this)">S</button>`;
+    labels.appendChild(lab);
+    const ldiv = document.createElement('div');
+    ldiv.className = 'lane' + (lane.type === 'mat' && !lane.clips.length ? ' noclip' : '');
+    inner.appendChild(ldiv); lane.el = ldiv;
+    if (lane.type === 'final' && lane.buffer) drawFullWave(lane);
+    for (const c of lane.clips) mountClip(lane, c);
+  }
+  const ph = document.createElement('div'); ph.id = 'playhead'; inner.appendChild(ph);
+}
+function drawFullWave(lane) {
+  const W = Math.max(2, Math.floor(lane.buffer.duration * PPS)), H = 74;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  cv.style.cssText = 'position:absolute;left:0;top:0;opacity:.55';
+  lane.el.appendChild(cv);
+  drawPeaksLoop(cv, lane.buffer, lane.color, lane.buffer.duration);
+}
+function mountClip(lane, c) {
+  const w = Math.max(8, Math.floor(c.length * PPS));
+  const div = document.createElement('div');
+  div.className = 'clip';
+  div.style.left = (c.start * PPS) + 'px';
+  div.style.width = w + 'px';
+  div.style.background = lane.color + '33';
+  const looping = c.length > lane.buffer.duration + 0.01;
+  div.innerHTML = `<span class="cname" style="color:${lane.color}">${lane.name}${looping ? ' ∞' : ''}</span>
+                   <span class="cx" style="color:${lane.color}">×</span>
+                   <span class="cresize" style="position:absolute;right:0;top:0;bottom:0;width:10px;cursor:ew-resize;background:${lane.color}44"></span>`;
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = 52; div.appendChild(cv);
+  drawPeaksLoop(cv, lane.buffer, lane.color, c.length);
+  const redraw = () => {
+    const w2 = Math.max(8, Math.floor(c.length * PPS));
+    div.style.width = w2 + 'px';
+    cv.width = w2;
+    drawPeaksLoop(cv, lane.buffer, lane.color, c.length);
+    div.querySelector('.cname').textContent = lane.name + (c.length > lane.buffer.duration + 0.01 ? ' ∞' : '');
+  };
+  div.querySelector('.cx').onclick = e => { e.stopPropagation();
+    lane.clips = lane.clips.filter(x => x !== c); div.remove(); };
+  div.addEventListener('pointerdown', ev => {
+    if (ev.target.className === 'cx') return;
+    ev.preventDefault(); div.setPointerCapture(ev.pointerId);
+    const resize = ev.offsetX > div.offsetWidth - 12;
+    const x0 = ev.clientX, left0 = parseFloat(div.style.left), len0 = c.length;
+    const move = e2 => {
+      if (resize) {                                  // 右缘拖动 = 调整块长（超过素材长即循环）
+        c.length = Math.max(0.5, Math.round((len0 + (e2.clientX - x0) / PPS) * 4) / 4);
+        redraw();
+      } else {                                       // 主体拖动 = 移动位置
+        let x = Math.max(0, Math.min(daw.dur * PPS - div.offsetWidth, left0 + e2.clientX - x0));
+        x = Math.round(x / (PPS/4)) * (PPS/4);
+        div.style.left = x + 'px'; c.start = x / PPS;
+      }
+    };
+    const up = () => { div.removeEventListener('pointermove', move); div.removeEventListener('pointerup', up); };
+    div.addEventListener('pointermove', move); div.addEventListener('pointerup', up);
+  });
+  lane.el.appendChild(div); c.el = div;
+}
+function drawPeaksLoop(cv, buffer, color, length) {
+  const W = cv.width, H = cv.height, g = cv.getContext('2d');
+  const data = buffer.getChannelData(0);
+  const srcW = Math.max(2, Math.floor(buffer.duration * PPS));   // 一轮素材的像素宽
+  const step = Math.max(1, Math.floor(data.length / srcW));
+  g.fillStyle = color;
+  for (let x = 0; x < W; x++) {                                   // 循环时重复绘制素材波形
+    const i = (x % srcW) * step;
+    let mx = 0;
+    for (let k = i; k < i + step && k < data.length; k += Math.max(1, step>>6))
+      mx = Math.max(mx, Math.abs(data[k]));
+    const h = mx * (H - 4);
+    g.fillRect(x, (H - h) / 2, 1, Math.max(1, h));
+  }
+}
+function renderTrayAdd() {
+  $('trayAdd').innerHTML = tray.length
+    ? '<span class="note">再加一次出现：</span>' + tray.map((t, i) =>
+        `<span class="tag" style="border-color:${laneColor(i)}"><span style="color:${laneColor(i)}">${t.name}</span>
+         <button class="ghost" onclick="trayAddOne(${i})">＋</button></span>`).join('')
+    : '';
+}
+function trayAddOne(i) {
+  const lane = daw.lanes.find(l => l.type === 'mat' && l.matIdx === i);
+  addClipToLane(lane, Math.max(0, Math.min(daw.dur - 1, daw.dur * (0.15 + 0.7 * Math.random()))));
+  renderDaw(); renderTrayAdd();
+}
+function dawMute(name, btn) { const l = daw.lanes.find(x => x.name === name); l.muted = !l.muted; btn.classList.toggle('on', l.muted); dawApplyGains(); }
+function dawSolo(name, btn) { const l = daw.lanes.find(x => x.name === name); l.solo = !l.solo; btn.classList.toggle('on', l.solo); dawApplyGains(); }
+const laneAudible = l => { const any = daw.lanes.some(x => x.solo); return any ? l.solo : !l.muted; };
+function dawApplyGains() { if (daw) for (const l of daw.lanes) if (l.gain) l.gain.gain.value = laneAudible(l) ? 1 : 0; }
+function dawToggle() { daw.playing ? dawPause() : dawPlay(); }
+function dawPlay() {
+  const ctx = getCtx(); ctx.resume();
+  daw.nodes = []; daw.startedAt = ctx.currentTime; daw.playing = true;
+  const T = daw.offset;
+  const sched = (lane, buffer, clipStart, clipLen) => {
+    const end = clipStart + Math.min(clipLen || buffer.duration, buffer.duration * 99);
+    if (end <= T) return;
+    const src = ctx.createBufferSource(); src.buffer = buffer;
+    if (clipLen && clipLen > buffer.duration + 0.01) src.loop = true;   // 块长超过素材 = 循环
+    const gain = ctx.createGain(); gain.gain.value = laneAudible(lane) ? 1 : 0;
+    src.connect(gain); gain.connect(ctx.destination);
+    src.start(ctx.currentTime + Math.max(0, clipStart - T), Math.max(0, T - clipStart));
+    const remain = Math.min(clipLen || buffer.duration, buffer.duration * 99) - Math.max(0, T - clipStart);
+    src.stop(ctx.currentTime + Math.max(0, Math.max(0, clipStart - T)) + remain);
+    lane.gain = gain; daw.nodes.push(src);
+  };
+  for (const lane of daw.lanes) {
+    if (lane.type === 'final' && lane.buffer) sched(lane, lane.buffer, 0);
+    if (lane.type === 'music') sched(lane, lane.buffer, 0);
+    if (lane.type === 'mat') for (const c of lane.clips) sched(lane, lane.buffer, c.start, c.length);
+  }
+  $('playBtn').textContent = '⏸ 暂停';
+}
+function dawPause() { daw.offset = getCtx().currentTime - daw.startedAt; dawStop(); }
+function dawSeek(frac) {
+  const was = daw.playing;
+  if (was) dawStop();
+  daw.offset = Math.max(0, Math.min(0.999, frac)) * daw.dur;
+  if (was) dawPlay();
+}
+function dawStop() {
+  for (const s of daw.nodes) { try { s.stop(); } catch(e) {} }
+  daw.nodes = []; daw.playing = false;
+  $('playBtn').textContent = '▶ 播放';
+}
+let dawRafId = null;
+function dawRaf() {
+  if (dawRafId) cancelAnimationFrame(dawRafId);
+  const upd = () => {
+    if (daw) {
+      let cur = daw.playing ? daw.offset + (getCtx().currentTime - daw.startedAt) : daw.offset;
+      if (cur >= daw.dur) { if (daw.playing) { daw.offset = 0; dawStop(); } cur = 0; }
+      $('timeLabel').textContent = `${fmt(cur)} / ${fmt(daw.dur)}`;
+      const ph = $('playhead');
+      if (ph) { ph.style.left = (cur * PPS) + 'px';
+                const sc = $('dawscroll');
+                if (daw.playing) { const x = cur * PPS; if (x < sc.scrollLeft || x > sc.scrollLeft + sc.clientWidth - 60) sc.scrollLeft = x - 60; } }
+    }
+    dawRafId = requestAnimationFrame(upd);
+  };
+  dawRafId = requestAnimationFrame(upd);
+}
+async function dawRemix() {
+  const st = $('s5status'); const btn = $('remixBtn'); btn.disabled = true;
+  const placements = [];
+  for (const lane of daw.lanes) if (lane.type === 'mat')
+    for (const c of lane.clips)
+      placements.push({ file: tray[lane.matIdx].url.slice(1), start: c.start, length: c.length });
+  if (!placements.length) { st.textContent = '没有可混音的环境声块'; btn.disabled = false; return; }
+  st.textContent = '渲染混音中…';
+  const j = await api('/api/jobs', { method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ type: 'remix', generated: daw.generated.slice(1),
+      placements, ambience_level: parseFloat($('dawLv').value),
+      duck: parseFloat($('duckSel').value) }) });
+  const fin = await poll(j.job_id, p => st.textContent = p.stage);
+  btn.disabled = false;
+  if (fin.status === 'failed') { st.innerHTML = `<span class="err">${fin.error}</span>`; return; }
+  st.textContent = '混音完成 ✓';
+  const url = '/' + fin.results.final;
+  const lane = daw.lanes.find(l => l.type === 'final');
+  lane.buffer = await decode(url);
+  renderDaw();
+}
+</script>
+</body>
+</html>
