@@ -75,6 +75,7 @@
       <button onclick="pick.click()">选择音频文件（WAV/M4A/MP3 均可）</button>
       <input type="file" id="pick" accept="audio/*" class="hide" onchange="uploadFile(this.files[0]); this.value=''">
       <button id="recBtn" class="rec" onclick="toggleRec()">● 开始录音</button>
+      <button class="ghost" onclick="restoreState()">↺ 恢复上次进度</button>
       <span id="recDot"></span><span id="recTime" class="note"></span>
     </div>
     <div id="upInfo" class="note"></div>
@@ -245,11 +246,23 @@ async function startExtract() {
   btn.disabled = false;
   if (fin.status === 'failed') { st.innerHTML = `<span class="err">${fin.error}</span>`; return; }
   st.textContent = '已存入素材库 ✓ 可继续上传下一段';
-  const url = '/' + fin.results.denoised;
-  const buffer = await decode(url);
-  tray.push({ name: target(), url, dur: buffer.duration, buffer });
-  renderTray();
+  const denUrl = '/' + fin.results.denoised;
+  const rawUrl = '/' + fin.results.extracted;
+  const buffer = await decode(denUrl);
+  tray.push({ name: target(), url: denUrl, denUrl, rawUrl, active: 'denoised', dur: buffer.duration, buffer });
+  renderTray(); saveState();
   $('s4').classList.remove('hide');
+}
+async function toggleDenoise(i) {
+  const t = tray[i];
+  t.active = t.active === 'denoised' ? 'raw' : 'denoised';
+  t.url = t.active === 'denoised' ? t.denUrl : t.rawUrl;
+  t.buffer = await decode(t.url);
+  if (daw) {                                     // DAW 已存在则同步该轨 buffer 并重绘
+    const lane = daw.lanes.find(l => l.type === 'mat' && l.matIdx === i);
+    if (lane) { lane.buffer = t.buffer; renderDaw(); }
+  }
+  renderTray(); saveState();
 }
 function renderTray() {
   $('s3').classList.remove('hide');
@@ -257,7 +270,9 @@ function renderTray() {
   $('tray').innerHTML = tray.map((t, i) =>
     `<div class="mat"><b>${i+1}. ${t.name}</b>
      ${t.melody ? `<span class="note" style="color:#ff7bd5">${t.melody.key} · ${t.melody.note_count}音</span>` : `<span class="note">${t.dur.toFixed(1)}s</span>`}
+     ${t.rawUrl ? `<button class="ghost" style="padding:3px 10px;font-size:12px" onclick="toggleDenoise(${i})">降噪:${t.active==='denoised'?'开':'关'}</button>` : ''}
      <audio controls src="${t.url}"></audio></div>`).join('');
+  saveState();
 }
 
 /* ───── 哼唱处理 ───── */
@@ -275,6 +290,32 @@ async function startHum() {
   tray.push({ name: '哼唱旋律', url, dur: buffer.duration, buffer, melody: r });
   renderTray();
   $('s4').classList.remove('hide');
+}
+
+/* ───── 状态持久化（localStorage）───── */
+function saveState() {
+  try {
+    const s = {
+      tray: tray.map(t => ({ name: t.name, url: t.url, denUrl: t.denUrl, rawUrl: t.rawUrl,
+                             active: t.active, dur: t.dur, melody: t.melody })),
+      daw: daw ? { generated: daw.generated,
+        lanes: daw.lanes.filter(l => l.type === 'mat').map(l => ({
+          name: l.name, matIdx: l.matIdx,
+          clips: l.clips.map(c => ({ start: c.start, length: c.length })) })) } : null
+    };
+    localStorage.setItem('soundtrace', JSON.stringify(s));
+  } catch (e) { /* 存储满等异常忽略 */ }
+}
+async function restoreState() {
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem('soundtrace') || 'null'); } catch (e) {}
+  if (!s || !s.tray || !s.tray.length) { alert('没有可恢复的进度'); return; }
+  for (const t of s.tray) {
+    try { t.buffer = await decode(t.url); tray.push(t); } catch (e) { console.warn('跳过失效素材', t.name); }
+  }
+  if (!tray.length) { alert('素材文件已过期（服务清理），请重新上传'); return; }
+  renderTray(); $('s4').classList.remove('hide');
+  if (s.daw && s.daw.generated) await buildDaw(s.daw.generated, s.daw.lanes);
 }
 
 /* ───── 生成音乐底 ───── */
@@ -298,7 +339,7 @@ const PPS = 36;                       // 每秒像素
 const LANE_COLORS = ['#3ddc97', '#4ec9e8', '#c586f0', '#e5c07b', '#f2884b'];
 function laneColor(i) { return LANE_COLORS[i % LANE_COLORS.length]; }
 
-async function buildDaw(musicUrl) {
+async function buildDaw(musicUrl, savedLanes) {
   $('s5').classList.remove('hide');
   const musicBuf = await decode(musicUrl);
   const dur = musicBuf.duration;
@@ -309,17 +350,24 @@ async function buildDaw(musicUrl) {
     name: t.melody ? '哼唱旋律' : t.name, color: t.melody ? '#ff7bd5' : laneColor(i),
     type: 'mat', matIdx: i,
     buffer: t.buffer, muted: false, solo: false, clips: [] }));
-  // 自动散点排布：每段素材在音乐中错开出现
-  const n = tray.length;
-  tray.forEach((t, i) => {
-    const base = dur * (n === 1 ? 0.25 : 0.08 + 0.84 * i / (n - 1));
-    const jitter = (Math.random() - 0.5) * dur * 0.06;
-    const lane = daw.lanes.find(l => l.type === 'mat' && l.matIdx === i);
-    addClipToLane(lane, Math.max(0.5, Math.min(dur - 2, base + jitter)));
-  });
+  if (savedLanes) {                              // 恢复历史排布
+    for (const sl of savedLanes) {
+      const lane = daw.lanes.find(l => l.type === 'mat' && l.matIdx === sl.matIdx);
+      if (lane) for (const c of sl.clips) addClipToLane(lane, c.start, c.length);
+    }
+  } else {                                       // 自动散点排布
+    const n = tray.length;
+    tray.forEach((t, i) => {
+      const base = dur * (n === 1 ? 0.25 : 0.08 + 0.84 * i / (n - 1));
+      const jitter = (Math.random() - 0.5) * dur * 0.06;
+      const lane = daw.lanes.find(l => l.type === 'mat' && l.matIdx === i);
+      addClipToLane(lane, Math.max(0.5, Math.min(dur - 2, base + jitter)));
+    });
+  }
   renderDaw();
   renderTrayAdd();
   dawRaf();
+  saveState();
 }
 function addClipToLane(lane, start, length) {
   const c = { start, length: length || lane.buffer.duration, lane };
@@ -354,6 +402,7 @@ function renderDaw() {
     for (const c of lane.clips) mountClip(lane, c);
   }
   const ph = document.createElement('div'); ph.id = 'playhead'; inner.appendChild(ph);
+  saveState();
 }
 function drawFullWave(lane) {
   const W = Math.max(2, Math.floor(lane.buffer.duration * PPS)), H = 74;
@@ -383,7 +432,7 @@ function mountClip(lane, c) {
     div.querySelector('.cname').textContent = lane.name + (c.length > lane.buffer.duration + 0.01 ? ' ∞' : '');
   };
   div.querySelector('.cx').onclick = e => { e.stopPropagation();
-    lane.clips = lane.clips.filter(x => x !== c); div.remove(); };
+    lane.clips = lane.clips.filter(x => x !== c); div.remove(); saveState(); };
   div.addEventListener('pointerdown', ev => {
     if (ev.target.className === 'cx') return;
     ev.preventDefault(); div.setPointerCapture(ev.pointerId);
@@ -399,7 +448,7 @@ function mountClip(lane, c) {
         div.style.left = x + 'px'; c.start = x / PPS;
       }
     };
-    const up = () => { div.removeEventListener('pointermove', move); div.removeEventListener('pointerup', up); };
+    const up = () => { div.removeEventListener('pointermove', move); div.removeEventListener('pointerup', up); saveState(); };
     div.addEventListener('pointermove', move); div.addEventListener('pointerup', up);
   });
   lane.el.appendChild(div); c.el = div;

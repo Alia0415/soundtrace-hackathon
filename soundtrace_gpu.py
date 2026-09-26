@@ -10,7 +10,7 @@
 
 启动: hackathon-env/Scripts/python.exe soundtrace_gpu.py  →  http://127.0.0.1:8090
 """
-import os, sys, gc, json, time, uuid, queue, threading, traceback
+import os, sys, gc, json, time, uuid, queue, threading, traceback, re, shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -61,10 +61,49 @@ STYLE_PROMPTS = {
 }
 STYLE_NAMES = {"lofi": "Lo-fi 慢摇", "ambient": "氛围空间", "cinematic": "电影感"}
 
+# T2: 中文查询词 → AudioSep/CLAP 英文查询词（按长度倒序匹配）
+ZH2EN = {
+    "溪流": "flowing stream", "流水": "flowing stream", "水声": "flowing stream",
+    "河水": "flowing stream", "水流": "flowing stream", "倒水": "pouring water",
+    "鸟鸣": "birds singing", "鸟叫": "birds singing", "鸟": "birds singing",
+    "虫鸣": "insects chirping", "蝉鸣": "insects chirping",
+    "风声": "wind blowing", "风": "wind blowing", "雨声": "rain", "下雨": "rain",
+    "雷声": "thunderstorm", "打雷": "thunderstorm",
+    "海浪": "ocean waves", "浪": "ocean waves", "水滴": "water drops dripping",
+    "脚步声": "footsteps walking", "脚步": "footsteps walking",
+    "车流": "city traffic", "车声": "city traffic", "马路": "city traffic",
+    "火车": "train passing", "地铁": "train passing",
+    "人声": "human speech", "说话": "human speech", "歌声": "singing", "唱歌": "singing",
+    "钟声": "church bells ringing", "狗叫": "dog barking", "狗": "dog barking",
+    "直升机": "helicopter flying", "柴火": "fire crackling", "篝火": "fire crackling",
+    "落叶": "rustling leaves", "树叶": "rustling leaves",
+}
+
+
+def zh2en(text: str):
+    """含中文时映射为英文查询词；返回 (查询词, 是否翻译)"""
+    if not re.search(r"[\u4e00-\u9fff]", text):
+        return text, False
+    for zh in sorted(ZH2EN, key=len, reverse=True):
+        if zh in text:
+            return ZH2EN[zh], True
+    return text, False
+
+
+def finalize_mix(mix, target_rms: float = 0.16):
+    """母带响度归一：RMS 对齐目标响度后再做逐采样限幅。"""
+    r = float(np.sqrt(np.mean(mix ** 2)))
+    if r > 1e-6:
+        mix = mix * (target_rms / r)
+    over = np.abs(mix) > 0.98
+    if over.any():
+        mix[over] = 0.98 * np.sign(mix[over])
+    return mix
+
 app = FastAPI(title="SoundTrace MVP")
 app.mount("/outputs", StaticFiles(directory=ROOT / "outputs"), name="outputs")
 _gpu_lock = threading.Lock()
-_models = {"audiosep": None, "clearvoice": None, "text_emb": None}
+_models = {"audiosep": None, "audiosep_cpu": None, "clearvoice": None, "text_emb": None}
 _jobs = {}
 _queue = queue.Queue()
 
@@ -72,9 +111,15 @@ _queue = queue.Queue()
 # ─────────────────────────── 模型管理（互斥显存） ───────────────────────────
 
 def load_audiosep():
-    """AudioSep + CLAP（首次约 15s；import 需在仓库目录下进行，因 CLAP 权重为相对路径）"""
+    """AudioSep + CLAP。GPU 上无实例时优先从 CPU 暂存恢复（秒级），
+    否则冷启动构建（首次约 15s）。import 需在仓库目录下进行（CLAP 权重为相对路径）。"""
     if _models["audiosep"] is not None:
         return _models["audiosep"]
+    if _models["audiosep_cpu"] is not None:
+        model = _models["audiosep_cpu"].to(DEVICE)
+        _models["audiosep"] = model
+        _models["audiosep_cpu"] = None
+        return model
     cwd = os.getcwd()
     os.chdir(AUDIOSEP_DIR)
     try:
@@ -92,9 +137,12 @@ def load_audiosep():
 
 
 def unload_audiosep():
-    if _models["audiosep"] is not None:
+    """为 ACE-Step 腾显存：移到 CPU 暂存（而不是销毁），下次加载只需 .to(cuda)。"""
+    m = _models["audiosep"]
+    if m is not None:
+        m.to("cpu")
+        _models["audiosep_cpu"] = m
         _models["audiosep"] = None
-        _models["text_emb"] = None
         gc.collect(); torch.cuda.empty_cache()
 
 
@@ -116,8 +164,11 @@ def clap_tags(wav_path: str, topk: int = 6):
     a = (a / a.norm(dim=-1, keepdim=True)).cpu()
     sims = (a @ t.T).squeeze(0)
     order = torch.argsort(sims, descending=True)[:topk]
-    return [{"en": LABELS[i][0], "zh": LABELS[i][1], "score": round(float(sims[i]), 3)}
+    tags = [{"en": LABELS[i][0], "zh": LABELS[i][1], "score": round(float(sims[i]), 3)}
             for i in order.tolist()]
+    # T2: 相对阈值过滤低分凑数项（如 top 0.20 时的 0.09 级"人声说话"）
+    top = tags[0]["score"] if tags else 0
+    return [t for t in tags if t["score"] >= max(0.05, top * 0.45)][:5]
 
 
 def audiosep_extract(in_path: str, text: str, out_path: str):
@@ -201,10 +252,7 @@ def generate_and_mix(style: str, target_en: str, duration: float, seed: int,
         amb[:fade] *= np.linspace(0, 1, fade)
         amb[-fade:] *= np.linspace(1, 0, fade)
     mix = gen + amb[:, None]
-    over = np.abs(mix) > 0.98
-    if over.any():
-        mix[over] = 0.98 * np.sign(mix[over])
-    sf.write(str(mix_path), mix, sr)
+    sf.write(str(mix_path), finalize_mix(mix), sr)
 
 
 def _resolve_media(rel_path: str) -> Optional[Path]:
@@ -272,11 +320,7 @@ def mix_placements(gen_path: Path, placements: list, level: float, out_path: Pat
             gen = gen * gain[:, None]
 
     mix = gen + amb_total[:, None]
-    # 只对超出 0.98 的个别采样做硬限幅，不做整体缩放
-    over = np.abs(mix) > 0.98
-    if over.any():
-        mix[over] = 0.98 * np.sign(mix[over])
-    sf.write(str(out_path), mix, sr)
+    sf.write(str(out_path), finalize_mix(mix), sr)
     return used
 
 
@@ -385,10 +429,61 @@ def run_job(job: dict):
             upload = UPLOAD_DIR / job["upload_id"]
             with _gpu_lock:
                 load_audiosep()
+                query, translated = zh2en(job["target_en"])
+                if translated:
+                    job["results"]["query_zh"] = job["target_en"]
+                    job["target_en"] = query
+                    job["results"]["query_en"] = query
                 job["stage"] = f"AudioSep 提取：{job['target_en']}"
                 stem = jd / "extracted.wav"
                 audiosep_extract(str(upload), job["target_en"], str(stem))
-                job["results"]["extracted"] = f"outputs/service_jobs/{job['id']}/extracted.wav"
+
+                # T1 宽频主导兜底：提取结果与输入高度相关说明目标被主导声源
+                # （水声/风声类宽频噪声）劫持。注意不能直接减去劫持结果——
+                # 它可能混有目标成分；正确做法（已验证）是按"主导声源名"重新
+                # 提取一份干净的背景，减去后在残差上重提目标。
+                mix32 = librosa.load(str(upload), sr=32000, mono=True)[0]
+                s1 = librosa.load(str(stem), sr=32000, mono=True)[0]
+                n = min(len(mix32), len(s1)); m32, s1 = mix32[:n], s1[:n]
+                c1 = float(np.corrcoef(m32, s1)[0, 1])
+                if c1 > 0.85:
+                    job["stage"] = "检测到主导噪声，执行减法二步管线"
+                    # 主导声源候选：CLAP 对劫持结果的识别 + 常见宽频声源
+                    try:
+                        dom_tags = clap_tags(str(stem), topk=3)
+                    except Exception:
+                        dom_tags = []
+                    cands = [t["en"] for t in dom_tags] + \
+                            ["sound of water flowing", "wind blowing", "city traffic"]
+                    best, best_c, best_stem = None, -1, None
+                    for q in dict.fromkeys(cands):          # 去重保序
+                        cp = jd / "dominant.wav"
+                        audiosep_extract(str(upload), q, str(cp))
+                        sc = librosa.load(str(cp), sr=32000, mono=True)[0][:n]
+                        if len(sc) < n:
+                            continue
+                        cc = float(np.corrcoef(m32, sc)[0, 1])
+                        if cc > best_c:
+                            best, best_c, best_stem = q, cc, sc
+                    if best_stem is not None:
+                        alpha = float(np.dot(m32, best_stem) / np.dot(best_stem, best_stem))
+                        residual = m32 - alpha * best_stem
+                        peak = np.abs(residual).max()
+                        if peak > 0.99:
+                            residual *= 0.99 / peak
+                        res_path = jd / "residual.wav"
+                        sf.write(str(res_path), residual, 32000)
+                        stem2 = jd / "extracted2.wav"
+                        audiosep_extract(str(res_path), job["target_en"], str(stem2))
+                        s2 = librosa.load(str(stem2), sr=32000, mono=True)[0][:n]
+                        r2 = float(np.sqrt(np.mean(s2 ** 2))) if len(s2) == n else 0.0
+                        if r2 > 1e-4:
+                            job["results"]["fallback"] = (
+                                f"broadband_subtraction (dominant='{best}' {best_c:.2f}, "
+                                f"target corr to mix {c1:.2f}->{float(np.corrcoef(m32, s2)[0,1]):.2f})")
+                            stem = stem2
+
+                job["results"]["extracted"] = f"outputs/service_jobs/{job['id']}/{stem.name}"
                 job["stage"] = "降噪增强"
                 backend = denoise(stem, job["target_en"], jd / "denoised.wav")
                 job["results"]["denoised"] = f"outputs/service_jobs/{job['id']}/denoised.wav"
@@ -441,6 +536,26 @@ def worker():
 
 
 threading.Thread(target=worker, daemon=True).start()
+
+
+def _gc_loop():
+    """T7: 每 10 分钟清理超过 24h 的上传与任务产物。"""
+    while True:
+        time.sleep(600)
+        cutoff = time.time() - 24 * 3600
+        for d in (UPLOAD_DIR, JOB_ROOT):
+            for p in list(d.iterdir()):
+                try:
+                    if p.stat().st_mtime < cutoff:
+                        if p.is_dir():
+                            shutil.rmtree(p, ignore_errors=True)
+                        else:
+                            p.unlink()
+                except OSError:
+                    pass
+
+
+threading.Thread(target=_gc_loop, daemon=True).start()
 
 
 # ─────────────────────────── API ───────────────────────────
