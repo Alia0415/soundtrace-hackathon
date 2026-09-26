@@ -558,6 +558,23 @@ def _gc_loop():
 threading.Thread(target=_gc_loop, daemon=True).start()
 
 
+def _warmup():
+    """T9: 启动 20 秒后后台预热 AudioSep（拿锁，失败静默重试），
+    让用户的首次识别请求从 ~15s 降到秒级。"""
+    for _ in range(3):
+        time.sleep(20)
+        try:
+            with _gpu_lock:
+                load_audiosep()
+            print("warmup: audiosep ready", flush=True)
+            return
+        except Exception as e:
+            print(f"warmup retry: {e}", flush=True)
+
+
+threading.Thread(target=_warmup, daemon=True).start()
+
+
 # ─────────────────────────── API ───────────────────────────
 
 class JobReq(BaseModel):

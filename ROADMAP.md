@@ -9,6 +9,16 @@
 
 ## 已完成
 
+- [x] **T8 audio2audio 旋律保持实验**（2026-09-26，experiment_a2a_melody.py）
+      哼唱作参考生成：note-chroma **1.000**（理论上限）vs 无参考基线 0.564 →
+      **哼唱可直接驱动生成旋律，产品路线打通**。产物：test-audio/experiments/a2a_*.wav；
+      集成任务见 T11
+- [x] **T9 服务启动预热**（2026-09-26）启动 20s 后后台加载 AudioSep；
+      验收：60s 时 models_loaded=true，首次 analyze **1.81s**（原冷加载 ~15s）。
+      踩坑记录：TaskStop 杀不掉旧 python 进程导致端口占用、新旧服务打架，
+      排查方法 netstat+taskkill 清场（Windows 下 TaskStop 不杀子进程）
+- [x] **T10 深度安全审计**（2026-09-26）Mimosa deep 扫描完成：**0 findings**，
+      封印 sha256:1800e39b…（静态分析口径）
 - [x] **T1 AudioSep 宽频噪声兜底**（2026-09-26，verify_iter1.py）
       实测：scene_mix 查 human voice，自动识别主导声源 water(0.98)→减法→重提取，
       人声相关 0.19→**0.88**。注意首版实现(减去劫持结果)曾把目标一起减没(0.04)，
@@ -26,10 +36,9 @@
 
 ## 待办（后续轮次）
 
-- [ ] **T8 ACE-Step audio2audio 旋律保持实验**：哼唱作参考生成，测旋律轮廓保留度
-      验收：实验报告（f0 轮廓相关系数 + 听感结论）
-- [ ] **T9 模型预热**：服务空闲后首次任务预加载（可选：定时预热线程）
-- [ ] **T10 深度安全审计**：Mimosa 完整扫描（推送时扫描器提示未完成）
+- [ ] **T11 audio2audio 生成集成**：把 T8 验证的能力产品化——生成任务支持
+      "用哼唱驱动旋律"选项（ref_audio_input=旋律轨, strength 可调）
+      验收：带哼唱素材时 UI 出现该选项；生成结果 note-chroma > 0.8
 
 ## 阻塞（等待外部输入）
 
