@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#42594e">
+<title>声迹 SoundTrace · 我的记忆空间</title>
+<style>
+:root{--paper:#f5f0e7;--ink:#27342f;--muted:#77817b;--green:#315d50;--orange:#d87348;--gold:#ecc46c;--line:rgba(39,52,47,.14);--shadow:0 18px 45px rgba(18,31,25,.24)}
+*{box-sizing:border-box}body{margin:0;background:#4f6559;color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;min-height:100vh}button{font:inherit;cursor:pointer}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.22) 0 1px,transparent 1px 6px)}
+header{height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,calc((100vw - 1180px)/2));position:relative;color:white}.brand{display:flex;align-items:center;gap:10px;font-weight:800}.brand i{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--paper);color:var(--green);font-style:normal}.brand small{display:block;font-size:9px;letter-spacing:.2em;opacity:.7}.nav{display:flex;gap:8px}.nav a{color:white;text-decoration:none;border:1px solid rgba(255,255,255,.23);padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.08)}
+main{max-width:1180px;margin:auto;padding:42px 24px 120px;position:relative}.head{display:flex;justify-content:space-between;gap:25px;align-items:end;margin-bottom:45px;color:white}.head h1{font:500 clamp(42px,6vw,70px)/1.05 Georgia,"Songti SC",serif;letter-spacing:-.05em;margin:0 0 12px}.head p{margin:0;color:#d5dfd9;line-height:1.7}.weather{text-align:right;color:#d5dfd9}.weather b{display:block;color:white;font:36px Georgia,serif}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px}.filters button{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:white;border-radius:999px;padding:9px 15px}.filters button.on{background:var(--paper);color:var(--green)}
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:34px 27px;align-items:start}.pin{position:relative}.pin:before{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:#df6c4c;left:50%;top:-6px;z-index:3;box-shadow:0 2px 4px rgba(0,0,0,.3)}.memory{background:#fffdf7;padding:12px 12px 18px;box-shadow:var(--shadow);cursor:grab;user-select:none;touch-action:none;transition:.2s}.pin:nth-child(4n+1){transform:rotate(-3deg)}.pin:nth-child(4n+2){transform:rotate(2.5deg) translateY(13px)}.pin:nth-child(4n+3){transform:rotate(-1deg) translateY(-5px)}.pin:nth-child(4n){transform:rotate(3deg) translateY(8px)}.pin:hover{transform:translateY(-7px) rotate(0)}
+.photo{height:185px;display:grid;place-items:center;font-size:44px;position:relative;overflow:hidden}.lake{background:linear-gradient(#a5c7c9 0 44%,#578f91 45% 68%,#55755b 69%)}.train{background:linear-gradient(145deg,#e3d4aa,#a77b5e)}.campus{background:linear-gradient(145deg,#b7c69d,#d9ad76)}.rain{background:linear-gradient(155deg,#8ba0aa,#546a72)}.photo:after{content:"?";position:absolute;right:9px;bottom:8px;width:29px;height:29px;border-radius:50%;display:grid;place-items:center;color:white;background:rgba(39,52,47,.76);font-size:14px}.memory h3{font:17px Georgia,"Songti SC",serif;margin:12px 3px 4px}.memory p{color:var(--muted);font-size:11px;margin:0 3px}.vinyl-wrap{background:#e8dfd0;padding:22px 8px}.vinyl{width:148px;height:148px;margin:auto;border-radius:50%;background:repeating-radial-gradient(#17251f 0 3px,#2a3a34 4px 7px);position:relative}.vinyl:before{content:"";position:absolute;inset:45px;border-radius:50%;background:var(--orange)}.vinyl:after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#eee6d9;inset:0;margin:auto}.new-card{height:286px;border:1px dashed rgba(255,255,255,.38);border-radius:8px;display:grid;place-items:center;text-align:center;color:#d7e1db;text-decoration:none}.new-card b{display:block;font-size:30px;margin-bottom:7px}
+.dragging{position:fixed!important;z-index:50!important;pointer-events:none;transform:rotate(4deg) scale(.88)!important;opacity:.92}.dock{position:fixed;z-index:45;bottom:22px;left:50%;transform:translate(-50%,140%);transition:.3s}.dock.show{transform:translate(-50%,0)}.mailbox{width:285px;padding:18px 25px;border-radius:26px 26px 13px 13px;text-align:center;background:var(--orange);border:3px solid #f5b99a;color:white;font-weight:800;box-shadow:0 20px 50px rgba(24,17,12,.35)}.mailbox.hot{transform:scale(1.06);background:#b94f31}
+.modal{position:fixed;z-index:60;inset:0;display:none;place-items:center;padding:20px;background:rgba(20,31,26,.55);backdrop-filter:blur(7px)}.modal.show{display:grid}.letter{width:min(480px,100%);background:#fffdf7;padding:34px;border-radius:25px;text-align:center;box-shadow:var(--shadow)}.stamp{width:58px;height:68px;border:2px dashed var(--orange);display:grid;place-items:center;margin:0 auto 16px;color:var(--orange);font-size:24px}.letter h2{font:29px Georgia,"Songti SC",serif;margin:0 0 8px}.letter p{color:var(--muted);line-height:1.7}.send{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:22px 0}.send button,.close{padding:16px 10px;border:1px solid var(--line);border-radius:14px;background:white;color:var(--ink)}.close{padding:10px 15px;border-radius:999px}.toast{position:fixed;z-index:80;top:22px;left:50%;transform:translate(-50%,-100px);background:#17251f;color:white;padding:12px 18px;border-radius:999px;transition:.3s;font-size:13px}.toast.show{transform:translate(-50%,0)}
+@media(max-width:850px){main{padding:25px 16px 110px}.board{display:flex;overflow-x:auto;padding:12px 7px 40px}.pin{min-width:230px}.head{align-items:start;flex-direction:column}.weather{text-align:left}.nav .wide{display:none}}
+@media(max-width:640px){
+  body{padding-bottom:env(safe-area-inset-bottom)}
+  header{height:64px;padding:0 14px}
+  .brand i{width:32px;height:32px}
+  .brand small{font-size:8px}
+  .nav{gap:5px}.nav a{padding:8px 10px;font-size:12px;white-space:nowrap}
+  main{padding:24px 14px calc(100px + env(safe-area-inset-bottom))}
+  .head{gap:16px;margin-bottom:24px}
+  .head h1{font-size:42px;margin-bottom:9px}
+  .head p{font-size:13px}
+  .weather{display:flex;align-items:baseline;gap:8px}
+  .weather b{font-size:28px}
+  .filters{flex-wrap:nowrap;overflow-x:auto;margin:0 -14px 26px;padding:0 14px 8px;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .filters button{flex:0 0 auto;min-height:42px}
+  .board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 12px;overflow:visible;padding:8px 2px 36px}
+  .pin{min-width:0!important;transform:none!important}
+  .pin:nth-child(odd){transform:rotate(-1.5deg)!important}
+  .pin:nth-child(even){transform:rotate(1.5deg) translateY(7px)!important}
+  .memory{padding:8px 8px 13px}
+  .photo{height:128px;font-size:34px}
+  .memory h3{font-size:14px;margin:9px 2px 3px}
+  .memory p{font-size:10px;margin:0 2px}
+  .vinyl-wrap{padding:13px 4px}
+  .vinyl{width:112px;height:112px}
+  .vinyl:before{inset:34px}
+  .new-card{height:210px;grid-column:1/-1}
+  .dock{bottom:calc(14px + env(safe-area-inset-bottom));width:calc(100% - 24px)}
+  .mailbox{width:100%;padding:16px 18px}
+  .modal{padding:14px}
+  .letter{padding:28px 20px;border-radius:21px}
+  .send{grid-template-columns:1fr}
+  .send button{min-height:52px}
+}
+@media(max-width:370px){
+  .head h1{font-size:37px}
+  .photo{height:112px}
+  .vinyl{width:98px;height:98px}
+  .vinyl:before{inset:30px}
+  .memory h3{font-size:13px}
+}</style>
+</head>
+<body>
+<div class="toast" id="toast">已寄出</div>
+<header><div class="brand"><i>&#12349;</i><span>声迹<small>SOUNDTRACE</small></span></div><nav class="nav"><a href="home.html">返回创作台</a><a class="wide" href="index.html">专业模式</a></nav></header>
+<main>
+  <div class="head"><div><h1>我的记忆空间</h1><p>一些地方会离开视线，但它们的声音仍然留在这里。<br>长按任意照片或唱片，拖到底部的信箱即可寄出。</p></div><div class="weather"><b>12 枚</b>收藏的声音记忆</div></div>
+  <div class="filters"><button class="on">全部记忆</button><button>云南散记</button><button>毕业季</button><button>声音唱片</button></div>
+  <div class="board" id="board">
+    <div class="pin"><article class="memory drag" data-name="洱海的风" data-kind="有声照片"><div class="photo lake">&#9729;</div><h3>洱海的风</h3><p>2026.09.24 · 大理</p></article></div>
+    <div class="pin"><article class="memory drag" data-name="去丽江的火车" data-kind="有声照片"><div class="photo train">&#128646;</div><h3>去丽江的火车</h3><p>2026.09.25 · 丽江</p></article></div>
+    <div class="pin"><article class="memory drag" data-name="毕业那天下午" data-kind="有声照片"><div class="photo campus">&#8962;</div><h3>毕业那天下午</h3><p>2026.06.18 · 校园</p></article></div>
+    <div class="pin" id="recordPin"><article class="memory drag" id="record" data-name="风从洱海来" data-kind="记忆唱片"><div class="vinyl-wrap"><div class="vinyl"></div></div><h3>风从洱海来</h3><p>3 段现场声音 · AI 编曲</p></article></div>
+    <div class="pin"><article class="memory drag" data-name="昆明的一场雨" data-kind="有声照片"><div class="photo rain">&#9730;</div><h3>昆明的一场雨</h3><p>2026.09.22 · 昆明</p></article></div>
+    <a class="new-card" href="home.html"><span><b>＋</b>记录一段新的声音</span></a>
+  </div>
+</main>
+<div class="dock" id="dock"><div class="mailbox" id="mailbox">&#9993; 松手，把这份记忆寄出去</div></div>
+<div class="modal" id="modal"><div class="letter"><div class="stamp">&#12349;</div><h2>寄出这份声音</h2><p id="copy">让一段来自云南的风，抵达另一个人的今天。</p><div class="send"><button onclick="send('random')">&#127757; 随机寄往远方</button><button onclick="send('friend')">&#9786; 寄给一位朋友</button></div><button class="close" onclick="closeModal()">先留在我的册子里</button></div></div>
+<audio id="audio" preload="metadata"></audio>
+<script>
+var $=function(s){return document.querySelector(s)},drag=null,origin=null;
+function toast(m){var e=$('#toast');e.textContent=m;e.classList.add('show');setTimeout(function(){e.classList.remove('show')},2200)}
+try{var saved=JSON.parse(localStorage.getItem('soundtrace_latest_record')||'null');if(saved){var r=$('#record');r.dataset.name=saved.title;r.querySelector('h3').textContent=saved.title;r.querySelector('p').textContent=(saved.materials||'环境声音')+' · AI 编曲';$('#audio').src=saved.audio||'/outputs/soundtrace_demo.wav'}}catch(e){}
+document.querySelectorAll('.filters button').forEach(function(b){b.onclick=function(){document.querySelectorAll('.filters button').forEach(function(x){x.classList.remove('on')});b.classList.add('on')}});
+document.querySelectorAll('.drag').forEach(function(el){
+  el.onpointerdown=function(e){drag=el;var r=el.getBoundingClientRect();origin={css:el.style.cssText,dx:e.clientX-r.left,dy:e.clientY-r.top};el.style.width=r.width+'px';el.style.height=r.height+'px';el.style.left=r.left+'px';el.style.top=r.top+'px';el.classList.add('dragging');el.setPointerCapture(e.pointerId);$('#dock').classList.add('show')};
+  el.onpointermove=function(e){if(drag!==el)return;el.style.left=(e.clientX-origin.dx)+'px';el.style.top=(e.clientY-origin.dy)+'px';var r=$('#mailbox').getBoundingClientRect();$('#mailbox').classList.toggle('hot',e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top-55)};
+  el.onpointerup=function(e){if(drag!==el)return;var r=$('#mailbox').getBoundingClientRect(),sent=e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top-60;el.classList.remove('dragging');el.style.cssText=origin.css;$('#dock').classList.remove('show');$('#mailbox').classList.remove('hot');if(sent)openModal(el);else if(el.dataset.kind==='记忆唱片'){var a=$('#audio');if(!a.src)a.src='/outputs/soundtrace_demo.wav';a.paused?a.play():a.pause()}drag=null}
+});
+function openModal(el){$('#copy').textContent='把「'+el.dataset.name+'」寄出去，让另一双耳朵听见这段'+(el.dataset.kind==='记忆唱片'?'旅程。':'现场。');$('#modal').classList.add('show')}
+function closeModal(){$('#modal').classList.remove('show')}
+function send(kind){closeModal();toast(kind==='random'?'已投入漂流信箱，等待远方签收':'分享卡片已经准备好')}
+</script>
+</body>
+</html>

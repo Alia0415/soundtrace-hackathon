@@ -642,7 +642,20 @@ def get_job(job_id: str):
 
 
 @app.get("/")
+@app.get("/home.html")
 def index():
+    return HTMLResponse((ROOT / "webapp" / "home.html").read_text(encoding="utf-8"))
+
+
+@app.get("/memories")
+@app.get("/memories.html")
+def memories():
+    return HTMLResponse((ROOT / "webapp" / "memories.html").read_text(encoding="utf-8"))
+
+
+@app.get("/studio")
+@app.get("/index.html")
+def studio():
     return HTMLResponse((ROOT / "webapp" / "index.html").read_text(encoding="utf-8"))
 
 
