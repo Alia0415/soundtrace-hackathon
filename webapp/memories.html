@@ -77,7 +77,7 @@ main{max-width:1180px;margin:auto;padding:42px 24px 120px;position:relative}.hea
 <script>
 var $=function(s){return document.querySelector(s)},drag=null,origin=null;
 function toast(m){var e=$('#toast');e.textContent=m;e.classList.add('show');setTimeout(function(){e.classList.remove('show')},2200)}
-try{var saved=JSON.parse(localStorage.getItem('soundtrace_latest_record')||'null');if(saved){var r=$('#record');r.dataset.name=saved.title;r.querySelector('h3').textContent=saved.title;r.querySelector('p').textContent=(saved.materials||'环境声音')+' · AI 编曲';$('#audio').src=saved.audio||'/outputs/soundtrace_demo.wav'}}catch(e){}
+try{var saved=JSON.parse(localStorage.getItem('soundtrace_latest_record')||'null');if(saved){var r=$('#record');r.dataset.name=saved.title;r.querySelector('h3').textContent=saved.title;r.querySelector('p').textContent=(saved.materials||'环境声音')+' · '+(saved.creation||'AI 编曲');$('#audio').src=saved.audio||'/outputs/soundtrace_demo.wav'}}catch(e){}
 document.querySelectorAll('.filters button').forEach(function(b){b.onclick=function(){document.querySelectorAll('.filters button').forEach(function(x){x.classList.remove('on')});b.classList.add('on')}});
 document.querySelectorAll('.drag').forEach(function(el){
   el.onpointerdown=function(e){drag=el;var r=el.getBoundingClientRect();origin={css:el.style.cssText,dx:e.clientX-r.left,dy:e.clientY-r.top};el.style.width=r.width+'px';el.style.height=r.height+'px';el.style.left=r.left+'px';el.style.top=r.top+'px';el.classList.add('dragging');el.setPointerCapture(e.pointerId);$('#dock').classList.add('show')};
