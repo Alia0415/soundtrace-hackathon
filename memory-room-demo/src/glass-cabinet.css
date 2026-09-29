@@ -1,0 +1,61 @@
+/* Clear, full-height cabinet: the room stays visible through every glass plane. */
+.scene-cabinet{background:#accac9}
+.scene-cabinet .world-image{filter:blur(1px) brightness(1.12) saturate(.83);scale:1.08}
+.scene-cabinet .scene-shade{background:linear-gradient(#6d999920,transparent 50%,#dceee732)}
+.scene-cabinet .peripheral-shadow{background:radial-gradient(ellipse,transparent 48%,#335c6333)}
+.first-person-cabinet{min-height:calc(100svh - 145px)}
+.cabinet-camera{height:clamp(375px,calc(100svh - 205px),900px);width:auto;aspect-ratio:.68;max-width:65vw;margin:30px auto 40px;perspective:1300px;perspective-origin:50% 45%}
+.cabinet-volume{filter:drop-shadow(4px 8px 10px #476b7130)}
+.cabinet-whisper{font-size:11px;top:-2px;text-shadow:0 1px 8px #21464cd4}
+.cabinet-back{inset:3% 6% 3%;border:2px solid #f8ffed90;background:linear-gradient(115deg,#f8fff929 3%,transparent 26%,#fffbe343 28%,transparent 31%,transparent 60%,#f1fff559 64%,transparent 69%),linear-gradient(95deg,#accfc934,#f9fff418 60%,#bad8d236);box-shadow:inset 2px 0 2px #ffffffc9,inset -3px 0 3px #acc9c67d,0 0 0 2px #e6f4e72e;backdrop-filter:blur(1px) saturate(1.1)}
+.cabinet-back:after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(ellipse at 40% 5%,transparent 0 27px,#fffde841 28px 29px,transparent 32px 62px);mask-image:linear-gradient(120deg,#000b,transparent 45%,#0005);opacity:.7}
+.cabinet-back>span{color:#476b6890;font-size:6px;letter-spacing:3px}
+.cabinet-wall{width:9%;border:1px solid #fffeebaa;background:linear-gradient(90deg,#ffffedaa,#b1d5d438 20%,#ffffff65 48%,#6a9fa33d 78%,#f7ffefb5);box-shadow:inset 2px 0 2px #fff9}
+.wall-right{background:linear-gradient(90deg,#f8ffedb2,#a7c7c43a 22%,#fffff74c 65%,#5e878f40 80%,#fffdebb8)}
+.cabinet-ceiling{height:4%;background:linear-gradient(170deg,#ffffecbb,#b3cfcd2b 45%,#fbffee99 52%,#dbeee24d);border:1px solid #fffce7;box-shadow:0 3px 4px #ffffff8c}
+.shelf-collection{inset:7% 8% 17%}
+.shelf-lamp{height:1px;background:#fffeecb8;box-shadow:0 3px 9px 1px #faffd880;opacity:.8}
+.shelf-bottles{inset:0 0 16px}
+.shelf-place .bottle.memory-glass{width:clamp(35px,5.5vw,88px);height:clamp(53px,8.25vw,132px);min-height:0;max-height:calc((100svh - 320px)/3);filter:brightness(1.18) saturate(.72) drop-shadow(2px 4px 3px #59787630)}
+.shelf-place .memory-object{filter:none}
+.shelf-caption{color:#345c5be0;text-shadow:0 1px 4px #ffffef;font-size:7px;letter-spacing:.3px}
+.shelf-board{height:12px;border:1px solid #fffef1c9;background:linear-gradient(#fffee2e0 0 1px,#afcfca4d 2px,#f9ffe9a6 4px,#86afb34d 6px,#f9fff7b3 9px,#bed5d158);box-shadow:0 5px 6px #355f6729,inset 0 -1px 1px #fffbed}
+.shelf-board:before{height:22px;background:linear-gradient(170deg,#e3f4dc15,#f5ffe951 45%,#8bb7b233 48%,#ffffff75);border-top:1px solid #f8fff380}
+.shelf-board>span{color:#567570;background:#eeffe426;border:1px solid #ffffe9ab;font-size:6px;line-height:8px;width:18px;left:calc(50% - 9px)}
+.empty-vessel{opacity:.75;filter:brightness(1.22) saturate(.6)}
+.cabinet-frame{background:linear-gradient(90deg,#ffffeac9,#729d9d3b 12%,#f6ffeaa1 23%,#e6edcc3d 42%,#fffcead9 50%,#81a8a354 67%,#fffdeba8 86%,#ffffffeb);border:1px solid #fffef0d9;box-shadow:2px 0 2px #779c9f80,inset -2px 0 2px #fffef6,0 0 4px #fff8;border-radius:3px}
+.frame-left,.frame-right{width:11px}
+.frame-top{height:12px;background:linear-gradient(#fff8e5d9,#a7c2b764 22%,#ffffe9c9 44%,#80a9ad6b 64%,#fffdf3e6 86%,#dff2e490)}
+.frame-bottom{height:12px;bottom:-3px;background:linear-gradient(#ffffe8,#9bbab766 30%,#f4ffe999 50%,#82a6a982 70%,#f9ffe9c2)}
+.cabinet-door{top:11px;bottom:0;border:4px solid #edfae4a8;border-radius:4px;background:linear-gradient(110deg,#ffffff13,#c4e5db1c 65%,#e5fae419);box-shadow:inset 0 0 0 1px #6c979776,inset 0 0 0 3px #fffde99c,inset 5px 0 5px #e1f9e654,0 2px 5px #365d6829;color:#547b76}
+.cabinet-door:before{border:1px solid #fffef0d9;inset:-4px;box-shadow:inset -2px 0 1px #bad7cfb0}
+.door-glazing{inset:4px;border:1px solid #fffdecc2;background:linear-gradient(118deg,transparent 15%,#ffffe965 16%,#ffffef13 23%,transparent 26%,transparent 51%,#faffef45 53%,#fffff008 62%,transparent 65%),linear-gradient(80deg,#d0f1e616,transparent 40%,#c9e0d812);box-shadow:inset 0 0 20px #fffff212}
+.door-glazing:before,.door-glazing:after{height:2px;background:linear-gradient(#fffeedb0,#779e9a36);opacity:.55}
+.door-engraving{font-size:7px;opacity:.35;letter-spacing:4px}
+.cabinet-handle{width:8px;height:65px;border:1px solid #fffdee;background:linear-gradient(90deg,#66868a9e,#eff9ded9 35%,#fffff3 49%,#8dadabc4 65%,#ffffffd9);box-shadow:3px 3px 3px #42656950,inset 1px 0 1px white}
+.hinge{width:9px;height:19px;border:1px solid #fffdefb2;border-radius:3px;background:linear-gradient(90deg,#bed3ca9c,#ffffe7c9,#a1beb7b0,#fffdebe0)}
+.glass-plinth{position:absolute;bottom:0;left:1%;right:1%;height:15%;border:2px solid #fbffeb9e;background:linear-gradient(115deg,#d7f1e322,transparent 35%,#fff9dd42 37%,transparent 44%,#ecfae91f);box-shadow:inset 0 0 0 3px #c1ddd33d,inset 0 -4px 5px #faffef8c;pointer-events:none}
+.plinth-inset{position:absolute;inset:18% 12% 17%;border:3px ridge #f5ffe49c;border-radius:3px;transform:perspective(300px) rotateX(-10deg);background:linear-gradient(135deg,#ffffe21c,transparent 40%,#fffde43d 42%,#d3eee524);box-shadow:4px 3px 2px #91aca943,inset 0 0 0 1px #779f9a40}
+.glass-foot{position:absolute;bottom:-17px;width:19px;height:18px;background:linear-gradient(90deg,#769b976e,#f9ffe5e0 35%,#c3dbcd4d 60%,#f7ffeed9);border:1px solid #fffdeab8;border-radius:0 0 3px 3px;box-shadow:0 4px 2px #52726e55}
+.foot-left{left:4%}.foot-right{right:4%}
+.cabinet-floor{position:absolute;left:-38%;right:-38%;bottom:-44px;height:66px;transform:rotateX(62deg);background:radial-gradient(ellipse,#5a82804d 0 25%,#c9e8d637 48%,transparent 70%);filter:blur(3px);pointer-events:none}
+.cabinet-floor:after{content:'';position:absolute;top:50%;height:150%;left:18%;right:18%;border:5px solid #efffe536;background:linear-gradient(#ecffe647,transparent);mask-image:linear-gradient(black,transparent)}
+.glass-sparkles{position:absolute;inset:0;pointer-events:none;z-index:7}.glass-sparkles i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fffdec;box-shadow:0 0 5px 2px #fff8d780;animation:glass-glimmer 5s ease-in-out infinite}
+.glass-sparkles i:nth-child(3n):after{content:'';position:absolute;left:-3px;top:1px;width:9px;height:1px;background:#fffde0c0}
+.cabinet-hands{position:absolute;bottom:8px;right:1%;margin:0;width:min(330px,56vw);height:78px;border-bottom:3px solid #e0f1d990;background:linear-gradient(140deg,#ecffe761,#e8faed26 45%,#d9eee16b);border-top:1px solid #ffffeb87;box-shadow:0 10px 18px #325d6430;backdrop-filter:blur(2px)}
+.hand-bottles{inset:-18px 8% 21px}.hand-slot .bottle.memory-glass{width:42px;height:63px;filter:brightness(1.12)}.hand-slot small{color:#375f60;text-shadow:0 1px 3px #ffffed;font-size:7px}
+.carry-caption{color:#355b5b;font-size:8px;letter-spacing:2px}
+.cabinet-footnotes{position:absolute;left:2%;bottom:9px;display:flex;flex-direction:column;align-items:start;gap:4px;width:38%;color:#385a5b;text-shadow:0 1px 4px #fffff0}.cabinet-footnotes .text-button{color:#365b5d;font-size:9px;text-shadow:0 1px 4px #fffde9}
+.cabinet-to-pool{bottom:105px;right:0;width:17%}
+@keyframes glass-glimmer{0%,100%{opacity:.2;scale:.7}45%{opacity:.95;scale:1.15}}
+@media(max-width:760px){.cabinet-camera{width:auto;max-width:62vw;aspect-ratio:.66;height:clamp(365px,calc(100svh - 205px),760px);margin-top:30px;margin-bottom:38px}.first-person-cabinet{min-height:calc(100svh - 145px)}.shelf-place .bottle.memory-glass{width:clamp(28px,7.5vw,60px);height:clamp(42px,11.25vw,90px);max-height:calc((100svh - 330px)/3)}.shelf-caption{font-size:6px}.cabinet-hands{height:70px;bottom:1px;right:0;width:54vw}.hand-slot .bottle.memory-glass{width:35px;height:53px}.cabinet-footnotes{bottom:3px;font-size:7px;left:0}.cabinet-footnotes .text-button{font-size:8px}.cabinet-whisper{font-size:9px;letter-spacing:1px}.frame-left,.frame-right{width:9px}.cabinet-door{border-width:3px}.cabinet-handle{height:48px;width:6px}.glass-plinth{height:14%}.cabinet-to-pool{bottom:88px}.cabinet-to-pool .object-hint{font-size:8px}.door-engraving{font-size:6px}}
+@media(prefers-reduced-motion:reduce){.glass-sparkles i{animation:none}}
+.scene-cabinet .world-image{filter:blur(3px) brightness(.94) saturate(.7)}
+.scene-cabinet header,.scene-cabinet .cabinet-whisper,.scene-cabinet .back{color:#faffee;text-shadow:0 1px 5px #224a4e,0 0 14px #284f59}
+.cabinet-camera{aspect-ratio:.72}
+.cabinet-back{background-color:#678d8b24;backdrop-filter:blur(2px) saturate(.8)}
+.shelf-bottles{grid-template-columns:repeat(3,1fr)}
+.shelf-place .bottle.memory-glass{width:clamp(45px,7vw,95px);height:clamp(67px,10.5vw,142px)}
+.cabinet-frame:after{content:'';position:absolute;width:6px;height:6px;top:2px;left:1px;border:1px solid #d9e5d5;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fffdeb,#71919088 60%,#fffdeac7);box-shadow:0 0 3px #faffdf}
+.shelf-place .memory-object.taken{opacity:.13}
+@media(max-width:760px){.cabinet-camera{aspect-ratio:.72}.shelf-place .bottle.memory-glass{width:clamp(38px,10vw,70px);height:clamp(57px,15vw,105px)}}

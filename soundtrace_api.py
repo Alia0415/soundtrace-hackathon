@@ -81,6 +81,26 @@ class Handler(BaseHTTPRequestHandler):
         elif path.startswith("/v1/jobs/"):
             job = STORE.get(path.rsplit("/", 1)[-1])
             self._json(HTTPStatus.OK, asdict(job)) if job else self._json(HTTPStatus.NOT_FOUND, {"error": "job_not_found"})
+        elif path.startswith("/outputs/jobs/"):
+            # Only expose files explicitly published by a completed job.
+            parts = path.split("/")
+            job = STORE.get(parts[3]) if len(parts) == 5 else None
+            outputs = (job.result or {}).get("outputs", {}) if job else {}
+            if not job or job.status != "succeeded" or path[1:] not in outputs.values():
+                self._json(HTTPStatus.NOT_FOUND, {"error": "output_not_found"})
+                return
+            root = JOB_OUTPUTS.resolve()
+            output = (root / job.id / parts[4]).resolve()
+            if not output.is_relative_to(root) or not output.is_file():
+                self._json(HTTPStatus.NOT_FOUND, {"error": "output_not_found"})
+                return
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-Type", "audio/wav")
+            self.send_header("Content-Length", str(output.stat().st_size))
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.end_headers()
+            with output.open("rb") as stream:
+                shutil.copyfileobj(stream, self.wfile)
         else: self._json(HTTPStatus.NOT_FOUND, {"error": "not_found"})
     def do_POST(self) -> None:
         if urlparse(self.path).path != "/v1/demo-jobs":
@@ -88,7 +108,14 @@ class Handler(BaseHTTPRequestHandler):
             return
         try:
             size = int(self.headers.get("Content-Length", "0"))
+            if size < 0:
+                raise ValueError("Content-Length must not be negative")
+            if size > 65536:
+                self._json(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"error": "request_too_large"})
+                return
             body = json.loads(self.rfile.read(size) or b"{}")
+            if not isinstance(body, dict):
+                raise ValueError("request body must be a JSON object")
             duration = float(body.get("duration", 42))
             target = str(body.get("target", "birds")).strip()[:120] or "birds"
             if not 30 <= duration <= 60: raise ValueError("duration must be between 30 and 60 seconds")

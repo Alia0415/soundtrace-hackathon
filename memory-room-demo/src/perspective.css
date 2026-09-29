@@ -1,0 +1,48 @@
+/* A fixed scene plane and a separate HUD create a first-person, 2.5D view. */
+.scene{background:#71918f;overflow-x:clip;--look-x:0px;--look-y:0px}
+.world{position:fixed;inset:0;z-index:-3;overflow:hidden;pointer-events:none}
+.world-image{position:absolute;inset:-3%;background:var(--scene) center/cover;transform:translate3d(var(--look-x),var(--look-y),0) scale(1.025);transition:transform 1.2s cubic-bezier(.2,.7,.2,1);animation:arrive 1.3s ease-out}
+.scene-cabinet .world-image{background-position:35% center;transform:translate3d(var(--look-x),var(--look-y),0) scale(1.16)}
+.scene-pool .world-image{transform:translate3d(var(--look-x),var(--look-y),0) scale(1.08)}
+.peripheral-shadow{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 42%,transparent 35%,#123b3e66 100%)}
+.scene-shade{position:fixed;pointer-events:none}
+.air-particles{position:absolute;inset:0;transform:translate3d(calc(var(--look-x)*-1.4),calc(var(--look-y)*-1.4),0);transition:transform 1.6s ease-out}
+.air-particles i{position:absolute;width:4px;height:4px;border-radius:50%;background:#fffbd7;box-shadow:0 0 13px 3px #fff9c655;animation:drift 9s ease-in-out infinite;opacity:.5}
+.motion-toggle{position:fixed;right:30px;bottom:52px;font-size:10px;padding:8px 13px;z-index:4;color:white;background:#234b4e6b}
+.journey{position:fixed;inset:0;z-index:20;overflow:hidden;pointer-events:all;perspective:850px;background:transparent;animation:journey-light 1.5s both}
+.previous-scene{position:absolute;inset:-3%;background:var(--previous) center/cover;animation:walk-forward 1.5s cubic-bezier(.4,0,.2,1) both}
+.journey-cabinet .previous-scene{transform-origin:25% 45%}
+.journey-pool .previous-scene{transform-origin:78% 50%;animation-name:turn-to-pool}
+.journey-orb .previous-scene{transform-origin:50% 65%;animation-name:look-up}
+.journey span{position:absolute;bottom:13%;left:0;right:0;text-align:center;color:#fff;font-size:13px;letter-spacing:4px;text-shadow:0 2px 12px #183f43;animation:journey-caption 1.5s both}
+.door-leaf{display:none}.from-door .door-leaf{display:block;position:absolute;top:-5%;height:110%;width:50%;background:linear-gradient(100deg,#e3eee66b,#fff9d944);border:1px solid #fff7;box-shadow:inset 0 0 80px #dff8ed55;backdrop-filter:blur(2px)}
+.from-door .left{left:0;transform-origin:left center;animation:door-left 1.2s ease-in both}.from-door .right{right:0;transform-origin:right center;animation:door-right 1.2s ease-in both}
+.travelling>section,.travelling>header,.travelling>.back{pointer-events:none}
+.room-content{position:relative;width:min(1120px,92%);min-height:65vh;padding:4vh 0;margin:auto}
+.room-heading{text-align:center}.room-heading h1{font-size:32px}.room-heading p{font-size:12px}
+.destinations{display:flex;justify-content:space-between;align-items:center;min-height:33vh;margin-top:4vh;gap:12vw}
+.destinations>button{position:relative;background:#20484855;border:1px solid #ffffff70;backdrop-filter:blur(6px);border-radius:50% 50% 18px 18px;padding:30px 26px 20px;min-width:230px;text-align:center;box-shadow:0 0 40px #eaffec20}
+.destinations>button:before{content:'✧';display:block;font-size:36px;color:#f6ffde;text-shadow:0 0 20px #e5ffc9;animation:beacon 3s ease-in-out infinite}
+.destinations>button:nth-child(2){margin-top:80px}.destinations h2{font-size:24px}.destinations i{display:none}.destinations p{font-size:10px}.saved-orb{display:block;margin:0 auto;background:#20484855}
+.scene-pool .pour-tray{perspective:650px}.scene-pool .pour-bottle{background:linear-gradient(#ffffff15,#eaffed85);border-color:#ffffff70;transform:rotateX(9deg);transform-origin:bottom;border-radius:50% 50% 16px 16px;box-shadow:0 25px 40px #173d4140}
+.scene-pool .pour-bottle .bottle{transform:scale(1.3);margin:14px 0}.scene-pool .pour-bottle.pouring .bottle{animation:first-person-pour 1.4s both}
+.scene-pool .pool-magic .magic-orb{opacity:0}.scene-pool .pool-magic.forming .magic-orb{animation:orb-emerge 1.8s both}
+.scene-orb .orb-play{animation:orb-arrival 1.8s ease-out,hover-orb 5s 1.8s ease-in-out infinite}
+.still .world-image{transform:scale(1.025);transition:none;animation:none}.still .air-particles,.still .peripheral-shadow{transform:none}.still *{animation:none!important;transition:none!important}
+@keyframes walk-forward{0%{opacity:1;transform:scale(1)}25%{transform:scale(1.07) translateY(5px)}55%{opacity:1;filter:blur(1px);transform:scale(1.3) translateY(-3px)}100%{opacity:0;filter:blur(7px);transform:scale(1.65)}}
+@keyframes turn-to-pool{0%{opacity:1;transform:scale(1)}50%{opacity:.9;transform:scale(1.25) translateX(-8%);filter:blur(2px)}100%{opacity:0;transform:scale(1.5) translateX(-20%);filter:blur(8px)}}
+@keyframes look-up{0%{opacity:1;transform:scale(1)}70%{opacity:.5;transform:scale(1.25) translateY(9%)}100%{opacity:0;transform:scale(1.4) translateY(15%);filter:blur(6px)}}
+@keyframes arrive{from{filter:blur(4px);scale:1.1}to{filter:blur(0);scale:1}}
+@keyframes journey-light{45%{background:#e7fff033}100%{background:transparent}}
+@keyframes journey-caption{0%,100%{opacity:0}35%,70%{opacity:1}}
+@keyframes door-left{to{transform:rotateY(-100deg);opacity:0}}
+@keyframes door-right{to{transform:rotateY(100deg);opacity:0}}
+@keyframes drift{50%{translate:18px -45px;opacity:.85}}
+@keyframes beacon{50%{opacity:.55;transform:translateY(-5px)}}
+@keyframes first-person-pour{0%{transform:scale(1.3)}35%,65%{transform:translate(-35px,-90px) scale(2) rotate(-65deg)}100%{transform:translateY(15px) scale(1.1);opacity:.2}}
+@keyframes orb-emerge{0%{opacity:0;transform:translateY(80px) scale(.1)}50%{opacity:1;transform:translateY(0) scale(1.3)}100%{opacity:1;transform:translateY(-65px) scale(2);box-shadow:0 0 100px 30px #edffda99}}
+@keyframes orb-arrival{from{opacity:0;transform:translateY(100px) scale(.2)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes hover-orb{50%{translate:0 -9px}}
+@media(max-width:760px){.motion-toggle{right:14px;bottom:35px;font-size:9px}.room-content{padding-top:35px}.room-heading h1{font-size:28px}.destinations{gap:16px;min-height:40vh}.destinations>button{min-width:0;width:48%;padding:22px 10px 16px}.destinations h2{font-size:19px}.destinations span{font-size:8px;letter-spacing:1px}.destinations p{font-size:9px;line-height:1.7}.destinations>button:nth-child(2){margin-top:100px}.journey span{font-size:11px;letter-spacing:2px}.scene-pool .pour-bottle .bottle{transform:scale(1.1)}}
+@media(prefers-reduced-motion:reduce){.world-image,.air-particles{transform:none!important;transition:none!important}.journey{display:none}}
+.destinations>button{border-radius:14px;background:#20484840;padding:18px 22px;min-width:210px}.destinations>button:before{font-size:28px}.destinations h2{margin:10px 0}.destinations>button:hover:not(:disabled){background:#20484880;box-shadow:0 0 45px #f0ffdb44}@media(max-width:760px){.destinations>button{min-width:0;padding:16px 10px}.destinations h2{font-size:19px}}

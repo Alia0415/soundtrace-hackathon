@@ -1,5 +1,1 @@
-export function App() {
-  return (
-    <main></main>
-  );
-}
+export { App } from './MemoryRoom.jsx';
