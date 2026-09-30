@@ -1,0 +1,17 @@
+.bottle.memory-glass{width:76px;height:114px;display:block;filter:drop-shadow(0 8px 6px #173d3945);perspective:500px}
+.memory-glass svg{width:100%;height:100%;overflow:visible;transform:rotateY(-9deg) rotateZ(-2deg);transition:transform .5s,filter .5s}
+.memory-object:hover .memory-glass svg,.memory-object:focus-visible .memory-glass svg{transform:rotateY(10deg) rotateZ(2deg);filter:drop-shadow(0 0 5px #e6ffc680)}
+.held .memory-glass svg{transform:rotateY(-16deg) rotateZ(9deg)}
+.jar-star{animation:jar-glow 4s ease-in-out infinite}.jar-star-1{animation-delay:-1.5s}.jar-star-2{animation-delay:-2.8s}
+.jar-stardust{animation:jar-drift 7s ease-in-out infinite;transform-origin:90px 175px}.jar-fern{animation:jar-sway 6s ease-in-out infinite;transform-origin:90px 231px}
+.pool-inventory .memory-object .bottle.memory-glass{width:clamp(88px,12vw,145px);height:clamp(132px,18vw,218px);scale:1;transform-origin:bottom}
+.carried-slot .bottle.memory-glass{width:58px;height:87px;scale:1}
+.cabinet-slot .bottle.memory-glass{width:55px;height:83px;scale:1}
+.pool-inventory .pouring-object .memory-glass{animation:jar-pour 1.4s ease-in-out both}
+.still .jar-star,.still .jar-stardust,.still .jar-fern,.still .pouring-object .memory-glass{animation:none}
+@keyframes jar-glow{0%,100%{opacity:.72;scale:.94}50%{opacity:1;scale:1.07}}
+@keyframes jar-drift{50%{transform:translateY(-3px) rotate(3deg)}}
+@keyframes jar-sway{50%{transform:skewX(3deg)}}
+@keyframes jar-pour{35%,65%{transform:translateY(-35px) rotate(-55deg)}100%{transform:translateY(0) rotate(0)}}
+@media(max-width:760px){.cabinet-slot .bottle.memory-glass{width:44px;height:66px}.pool-inventory .memory-object .bottle.memory-glass{width:90px;height:135px}}
+@media(prefers-reduced-motion:reduce){.jar-star,.jar-stardust,.jar-fern,.pouring-object .memory-glass{animation:none}.memory-glass svg{transition:none}}
