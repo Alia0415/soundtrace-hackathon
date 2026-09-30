@@ -1,5 +1,9 @@
 # Prototype Instructions
 
+Cabinet alignment: artwork and interactive targets must share a fixed-aspect-ratio stage. Never position cabinet hotspots relative to a viewport-cover background. Keep memory labels under their own memory objects and the tray below the art, without covering shelf targets.
+
+User direction (2026-09-30): mobile-first portrait application. Unify every scene with the approved blue-green gouache cabinet mockup: visible broad brushwork, cream daylight, small orange goldfish, ordinary painted furniture and wide-mouth glass jars. This supersedes previous highly reflective crystal styling. Keep the three-memory tray thumb-friendly and all real audio interactions functional.
+
 Product direction: preserve the dreamlike room assets and the door → memory bottles → pool → playable orb journey. Bottles represent recorded sound materials. Let users audition and carry materials, pour them with animation, and hear an output derived from their selections. Label local mixing honestly until AI generation is connected.
 
 Run the local server yourself and open the preview in the browser available to this environment. Do not give the user server-start instructions when you can run it.
@@ -14,3 +18,5 @@ User direction: avoid button-card navigation. Use scene objects as interaction t
 User direction: bottles should resemble dimensional glass jars with thick refractive rims, curved reflections, tiny plants and glowing stars, inspired by the supplied forest jar reference. Avoid flat icon-like bottles.
 User direction: the cabinet must be a first-person spatial scene. Approach it, swing both doors outward, and persist in the open state with many bottles resting on shelves. Do not overlay bottles on a closed cabinet illustration.
 User direction: retain the luminous clear-glass cabinet style from the reference, with refractive glass edges and transparent shelves. It must be a tall floor-standing cabinet with a visible base and floor contact; avoid opaque green frames.
+
+User direction (2026-09-30, latest and superseding bottle/jar directions): use the supplied bright seaside open-cabinet composition, but make cassette tapes the single memory carrier everywhere. The cabinet must show exactly nine front-facing illustrated cassettes in a 3 x 3 shelf grid; the carry tray, pool interaction, animations, accessibility text, and product copy must also say and depict cassettes, never jars or bottles. Preserve the cream daylight, weathered blue wood, blue-green seaside palette, orange accents, and visible gouache brushwork.

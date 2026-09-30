@@ -3,24 +3,24 @@ import { loadLibrary, saveLibrary, mixMemories, decodeAudio, saveRecord, loadRec
 import './room.css';
 import './perspective.css';
 import {Door, Room, Pool} from './SceneObjects.jsx';
-import Cabinet from './FirstPersonCabinet.jsx';
-import entrance from '../assets/entrance.png';
-import room from '../assets/memory-room.png';
-import cabinet from '../assets/memory-cabinet.png';
-import pool from '../assets/memory-pool.png';
-import orb from '../assets/memory-orb.png';
+import Cabinet from './PaintedCabinet.jsx';
+import entrance from '../assets/painted-entrance.png';
+import room from '../assets/painted-room.png';
+import pool from '../assets/painted-pool.png';
+import orb from '../assets/painted-orb.png';
+import paintedCabinet from '../assets/painted-cassette-cabinet.png';
 import rain from '../assets/rain.wav';
 import sea from '../assets/sea.wav';
 import melody from '../assets/melody.wav';
+import './painted.css';
 const examples = [
   { id:'rain', name:'窗边的雨', kind:'环境', caption:'把那天下午，装进一场雨里。', url:rain, color:'#a8dfea' },
   { id:'sea', name:'海风来信', kind:'环境', caption:'潮汐退去，夏天还留在耳边。', url:sea, color:'#b8e3ce' },
   { id:'melody', name:'未完成的哼唱', kind:'旋律', caption:'还没有名字，却一直记得的旋律。', url:melody, color:'#eed7ac' },
 ];
-const backgrounds={door:entrance,room,cabinet:room,pool,orb};
+const backgrounds={door:entrance,room,cabinet:paintedCabinet,pool,orb};
 const chapters={door:'序章 · 一扇门',room:'01 · 记忆之室',cabinet:'02 · 收藏声音',pool:'03 · 记忆交汇',orb:'04 · 留住回响'};
 function initialSelection(){try{const v=JSON.parse(localStorage.getItem('soundtrace-room-selection')||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string').slice(0,3):[];}catch{return [];}}
-function Bottle({color,small=false}){return <span className={'bottle '+(small?'small':'')} style={{'--bottle-color':color}} aria-hidden="true"><span className="cork"/><span className="glass-bottle"><span className="liquid"/><span className="bottle-star">✦</span></span></span>;}
 export function App(){
   const [view,setView]=useState('door'),[library,setLibrary]=useState(examples),[ready,setReady]=useState(false);
   const [selected,setSelected]=useState(initialSelection),[focused,setFocused]=useState('rain');
@@ -64,12 +64,12 @@ export function App(){
     audio.onended=()=>{if(player.current===audio)setPlaying(null);};
     try{await audio.play();if(player.current===audio)setPlaying(item.id);}catch{if(player.current===audio)setNotice('这段声音暂时无法播放，请重新导入或重试。');}
   }
-  function choose(id){if(selected.includes(id))setSelected(selected.filter(x=>x!==id));else if(selected.length<3)setSelected([...selected,id]);else setNotice('托盘已经装满了。先放回一瓶，再选择新的记忆。');}
+  function choose(id){if(selected.includes(id))setSelected(selected.filter(x=>x!==id));else if(selected.length<3)setSelected([...selected,id]);else setNotice('随身盒已经装满了。先放回一盒，再选择新的记忆。');}
   async function importFiles(event){const files=Array.from(event.target.files||[]);event.target.value='';if(!files.length)return;setBusy(true);setNotice('正在收好你的声音…');const rows=[],failures=[];
     for(const file of files){try{if(file.size>25*1024*1024)throw new Error('超过 25 MB');const buffer=await decodeAudio(file);if(buffer.duration>180||buffer.duration<.1)throw new Error('请选择 0.1–180 秒的声音');
       const item={id:crypto.randomUUID(),name:file.name.replace(/\.[^.]+$/,''),kind:'我的录音',caption:`${buffer.duration.toFixed(1)} 秒 · 保存在此浏览器`,color:'#dabfe8',blob:file};await saveLibrary(item);const url=URL.createObjectURL(file);urls.current.push(url);rows.push({...item,url});
     }catch(e){failures.push(`${file.name}：${e.message}`);}}
-    setLibrary(old=>[...old,...rows]);if(rows.length)setFocused(rows[0].id);setNotice(failures.length?failures.join('；'):`已保存 ${rows.length} 瓶新记忆。点击瓶子即可试听。`);setBusy(false);
+    setLibrary(old=>[...old,...rows]);if(rows.length)setFocused(rows[0].id);setNotice(failures.length?failures.join('；'):`已保存 ${rows.length} 盒新记忆。点击磁带即可试听。`);setBusy(false);
   }
   function enterPool(){if(travelling.current)return;stop();setPoured([]);setPouring(null);setNotice('');go('pool');}
   async function finishMix(items){setBusy(true);setNotice('正在把你选择的声音编织在一起…');try{const [blob]=await Promise.all([mixMemories(items),new Promise(resolve=>later(resolve,still?0:1800))]),url=URL.createObjectURL(blob);urls.current.push(url);setResult({blob,url,names:items.map(x=>x.name),title:'属于此刻的回响'});setTitle('属于此刻的回响');setSaved(false);setNotice('');go('orb');}catch(e){setNotice(`声音融合失败：${e.message}。可以重试，或返回更换素材。`);}finally{setBusy(false);lock.current=false;}}
