@@ -1,0 +1,188 @@
+{
+  "generator": "built-in image_gen",
+  "style": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image.",
+  "assets": [
+    {
+      "id": "mood-calm",
+      "title": "平静",
+      "subject": "A small cream and blue wooden sailboat resting on a few calm painted turquoise water ripples, restful and still. Keep water as a small isolated motif, not a whole sea scene.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Subject: A small cream and blue wooden sailboat resting on a few calm painted turquoise water ripples, restful and still. Keep water as a small isolated motif, not a whole sea scene.",
+      "transparent_background": true
+    },
+    {
+      "id": "mood-happy",
+      "title": "开心",
+      "subject": "A little fresh bouquet of cream-white daisies and golden flowers, blue wrapping paper and sage leaves, bright joyful feeling.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A little fresh bouquet of cream-white daisies and golden flowers, blue wrapping paper and sage leaves, bright joyful feeling.",
+      "transparent_background": true
+    },
+    {
+      "id": "mood-excited",
+      "title": "兴奋",
+      "subject": "One cream paper airplane soaring upward with two small loosely painted blue motion strokes, buoyant hopeful energy.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: One cream paper airplane soaring upward with two small loosely painted blue motion strokes, buoyant hopeful energy.",
+      "transparent_background": true
+    },
+    {
+      "id": "mood-missing",
+      "title": "思念",
+      "subject": "One slightly open ivory envelope with a blank letter peeking out, a tiny warm golden lamp glow beside it, tender longing, no writing.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: One slightly open ivory envelope with a blank letter peeking out, a tiny warm golden lamp glow beside it, tender longing, no writing.",
+      "transparent_background": true
+    },
+    {
+      "id": "mood-sad",
+      "title": "低落",
+      "subject": "One small blue window frame with a few rain droplets on glass and one little pale flower in a cream vase on its sill, gently wistful, transparent outside the frame.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: One small blue window frame with a few rain droplets on glass and one little pale flower in a cream vase on its sill, gently wistful, transparent outside the frame.",
+      "transparent_background": true
+    },
+    {
+      "id": "mood-tired",
+      "title": "疲惫",
+      "subject": "A soft cream cushion with worn blue stripes and one small blue teacup beside it, cozy rest and quiet fatigue.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A soft cream cushion with worn blue stripes and one small blue teacup beside it, cozy rest and quiet fatigue.",
+      "transparent_background": true
+    },
+    {
+      "id": "mood-hopeful",
+      "title": "期待",
+      "subject": "A tiny sage seedling growing beside a warm golden rising sun motif and short blue horizon stroke, optimism and beginnings, isolated cohesive icon.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A tiny sage seedling growing beside a warm golden rising sun motif and short blue horizon stroke, optimism and beginnings, isolated cohesive icon.",
+      "transparent_background": true
+    },
+    {
+      "id": "mood-nostalgic",
+      "title": "怀念",
+      "subject": "One small old instant film photo showing a softly painted seaside memory, leaning against a deep blue vinyl record partly in a cream sleeve, nostalgic tactile edges, no text.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: One small old instant film photo showing a softly painted seaside memory, leaning against a deep blue vinyl record partly in a cream sleeve, nostalgic tactile edges, no text.",
+      "transparent_background": true
+    },
+    {
+      "id": "weather-sunny",
+      "title": "晴天",
+      "subject": "A golden sun with a few short brushstroke rays and one small cream-white cloud crossing its lower edge.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A golden sun with a few short brushstroke rays and one small cream-white cloud crossing its lower edge.",
+      "transparent_background": true
+    },
+    {
+      "id": "weather-cloudy",
+      "title": "多云",
+      "subject": "Three softly overlapping cream-white and pale blue clouds, gentle shaded volume, isolated clouds only.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: Three softly overlapping cream-white and pale blue clouds, gentle shaded volume, isolated clouds only.",
+      "transparent_background": true
+    },
+    {
+      "id": "weather-rainy",
+      "title": "下雨",
+      "subject": "One open sea-blue umbrella with a cream wooden handle and a few clear blue rain droplets, cohesive compact silhouette.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: One open sea-blue umbrella with a cream wooden handle and a few clear blue rain droplets, cohesive compact silhouette.",
+      "transparent_background": true
+    },
+    {
+      "id": "weather-snowy",
+      "title": "下雪",
+      "subject": "One tiny cream cottage with a blue roof capped with soft white snow, two sparse snowflake motifs nearby, calm snowy atmosphere.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: One tiny cream cottage with a blue roof capped with soft white snow, two sparse snowflake motifs nearby, calm snowy atmosphere.",
+      "transparent_background": true
+    },
+    {
+      "id": "weather-foggy",
+      "title": "有雾",
+      "subject": "A small cluster of sage-green pine trees partly veiled by a few soft ivory and powder-blue horizontal mist strokes, isolated vignette.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A small cluster of sage-green pine trees partly veiled by a few soft ivory and powder-blue horizontal mist strokes, isolated vignette.",
+      "transparent_background": true
+    },
+    {
+      "id": "weather-windy",
+      "title": "有风",
+      "subject": "Three sage and golden leaves drifting along a curved airy sky-blue brushstroke, light wind and movement.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: Three sage and golden leaves drifting along a curved airy sky-blue brushstroke, light wind and movement.",
+      "transparent_background": true
+    },
+    {
+      "id": "weather-night",
+      "title": "夜晚",
+      "subject": "One warm ivory crescent moon with three tiny soft golden stars and a restrained deep blue curved accent, peaceful nighttime.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: One warm ivory crescent moon with three tiny soft golden stars and a restrained deep blue curved accent, peaceful nighttime.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-work",
+      "title": "工作",
+      "subject": "A small cream desk with a blue laptop and a warmly lit brass desk lamp, focused work, compact clean silhouette.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A small cream desk with a blue laptop and a warmly lit brass desk lamp, focused work, compact clean silhouette.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-study",
+      "title": "学习",
+      "subject": "An open cream book with blank pages, one blue pencil and a small sage bookmark, thoughtful learning, no writing.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: An open cream book with blank pages, one blue pencil and a small sage bookmark, thoughtful learning, no writing.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-walk",
+      "title": "散步",
+      "subject": "A pair of cream walking shoes with sky-blue trim beside a short winding sandy path motif and two small sage leaves, leisurely stroll, no person.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A pair of cream walking shoes with sky-blue trim beside a short winding sandy path motif and two small sage leaves, leisurely stroll, no person.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-hike",
+      "title": "徒步",
+      "subject": "A sky-blue hiking backpack in front of two small sage and ivory mountain peaks, outdoor adventure, isolated compact vignette.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A sky-blue hiking backpack in front of two small sage and ivory mountain peaks, outdoor adventure, isolated compact vignette.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-date",
+      "title": "约会",
+      "subject": "Two small blue and cream coffee cups beside a single white flower in a tiny vase, intimate shared moment, no people.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: Two small blue and cream coffee cups beside a single white flower in a tiny vase, intimate shared moment, no people.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-travel",
+      "title": "旅行",
+      "subject": "A small vintage sky-blue suitcase with ivory straps, a blank luggage tag and a tiny golden compass beside it, setting off on a journey.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A small vintage sky-blue suitcase with ivory straps, a blank luggage tag and a tiny golden compass beside it, setting off on a journey.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-commute",
+      "title": "通勤",
+      "subject": "A compact blue train window frame containing a softly painted passing landscape of sage hills and a golden sky, daily journey, transparent outside the window.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A compact blue train window frame containing a softly painted passing landscape of sage hills and a golden sky, daily journey, transparent outside the window.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-home",
+      "title": "独处",
+      "subject": "A cozy cream armchair with a blue cushion beside a small potted sage plant, quiet time alone, no room background.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A cozy cream armchair with a blue cushion beside a small potted sage plant, quiet time alone, no room background.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-exercise",
+      "title": "运动",
+      "subject": "One pair of cream running shoes with blue accents beside a small sea-blue water bottle, energetic exercise, clean silhouette.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: One pair of cream running shoes with blue accents beside a small sea-blue water bottle, energetic exercise, clean silhouette.",
+      "transparent_background": true
+    },
+    {
+      "id": "activity-gathering",
+      "title": "聚会",
+      "subject": "A small round cream table with three tiny blue and cream cups and a short arch of softly glowing golden string lights, friendly gathering, no people.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A small round cream table with three tiny blue and cream cups and a short arch of softly glowing golden string lights, friendly gathering, no people.",
+      "transparent_background": true
+    },
+    {
+      "id": "other",
+      "title": "其他",
+      "subject": "A small ivory blank notebook partly open with a sea-blue fountain pen resting diagonally across it, open possibilities, no writing.",
+      "prompt": "Use case: stylized-concept. Asset type: one standalone SoundTrace mobile UI choice illustration, square 1024x1024 master. Warm hand-painted gouache and watercolor with expressive broken brush strokes, creamy ivory highlights, sea-sky blue, restrained golden sunlight and sage accents. Soft natural light from upper left, gently dimensional forms, charming adult storybook mood, simplified details legible at 68px. A single centered cohesive object composition occupying 65–70% of canvas with ample empty margin on every side, clean isolated silhouette and genuinely transparent background, no ground plane, no rectangular scenery backdrop. Not a UI screen, not a collage or asset sheet. No words, letters, numbers, labels, borders, buttons, checkmarks or watermarks. Important framing: keep all foreground inside the central 70% of the square canvas; at least 15% truly empty transparent margin on all FOUR edges. Small UI illustration, not a close-up filling the image. Subject: A small ivory blank notebook partly open with a sea-blue fountain pen resting diagonally across it, open possibilities, no writing.",
+      "transparent_background": true
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+/* SoundTrace collection as a frameless, horizontally browsed Mineradio scene. */
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.st-album .topbar{background:#03090dd9!important;border:0!important;box-shadow:none!important}
+.st-album main{max-width:none!important;padding:15px 0 95px!important}
+.album-intro{display:flex;align-items:end;justify-content:space-between;gap:20px;width:min(1390px,calc(100% - 55px));margin:12px auto 20px}
+.album-intro h1{font:750 clamp(33px,3.5vw,54px)/1.1 Inter,"Noto Sans SC",sans-serif!important;margin:8px 0 0;letter-spacing:-.06em}
+.album-intro .eyebrow{margin:0;color:#b0dcd2!important}
+.album-intro .stage-entry{background:transparent!important;border:0!important;border-bottom:1px solid #b9e5da85!important;border-radius:0!important;padding:10px 2px!important;box-shadow:none!important;color:#eff7f1;font-size:14px;letter-spacing:.1em}
+.album-intro .stage-entry:hover{box-shadow:none!important;transform:translateX(3px)}
+.st-album .room.scene-carousel{--scene-card-width:min(84vw,1180px);width:100%;height:min(73vh,750px);min-height:560px;aspect-ratio:auto!important;overflow-x:auto!important;overflow-y:hidden!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;touch-action:pan-x pan-y;cursor:grab}
+.st-album .room.scene-carousel::-webkit-scrollbar{display:none}.st-album .room.scene-carousel.is-dragging{cursor:grabbing;scroll-snap-type:none;scroll-behavior:auto}
+.scene-track{display:flex;align-items:center;gap:clamp(12px,1.8vw,28px);width:100%;height:100%;padding-inline:calc((100% - var(--scene-card-width))/2);perspective:1300px;perspective-origin:center}
+.scene-slide{position:relative;flex:0 0 var(--scene-card-width);height:92%;overflow:hidden;border-radius:13px;background-color:#142c36;background-size:cover;background-position:center;scroll-snap-align:center;scroll-snap-stop:always;box-shadow:0 26px 55px #0009;filter:saturate(.67) brightness(.56);transform:rotateY(var(--scene-turn,0deg)) scale(var(--scene-scale,.95));transform-style:preserve-3d;transition:filter .45s,transform .14s linear,box-shadow .45s;user-select:none}
+.scene-slide.is-active{filter:none;box-shadow:0 35px 75px #000b}
+.scene-slide::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#030b15a8,transparent 35%,#06182432);z-index:1}
+.room-content{position:absolute;inset:0;z-index:2}.scene-slide:not(.is-active) .room-content{pointer-events:none}
+.scene-slide-label{position:absolute;z-index:3;top:23px;left:27px;color:#fff;font:700 12px Inter,"Microsoft YaHei",sans-serif;letter-spacing:.14em;text-shadow:0 2px 12px #001a29}
+.st-album .room-shade{background:linear-gradient(0deg,#06172849,transparent 42%)}
+.st-album .photo-line{top:12%;left:9%;right:9%;scrollbar-width:none}.st-album .photo-line::-webkit-scrollbar,.st-album .cabinet-objects::-webkit-scrollbar{display:none}
+.st-album .memory-object .object-title{position:absolute;top:100%;left:50%;transform:translateX(-50%);max-width:160px;opacity:0;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none;color:#fff!important;text-shadow:0 2px 8px #001;transition:opacity .2s;pointer-events:none}
+.st-album .memory-object:hover .object-title,.st-album .memory-object:focus-within .object-title{opacity:1}
+.st-album .memory-object .send-shortcut{background:#071821c9;color:#e4faf1;border:1px solid #b2dcd55e}
+.st-album .cabinet-label{display:none}.st-album .cabinet{bottom:0;height:27%}.st-album .cabinet-objects{bottom:80%;scrollbar-width:none}
+.scene-position{display:flex;align-items:center;gap:17px;width:min(1180px,84%);margin:8px auto 0;color:#c4d8d3;font-size:12px;letter-spacing:.12em}.scene-position #sceneIndex{color:#96b6b6;font:700 11px Inter,sans-serif}.scene-progress{display:flex;gap:6px;margin-left:auto}.scene-progress span{display:block;width:24px;height:2px;background:#ffffff32;transition:width .3s,background .3s}.scene-progress span.active{width:48px;background:#c9e8dd}
+.st-album .drop-zone{border:0!important;border-radius:0 17px 17px 0;background:#09242be8!important;box-shadow:5px 15px 35px #0009}.st-album .drop-zone strong{color:#fff!important}
+/* The original Mineradio particles and player remain the visible listening artwork. */
+.listening-stage{background:#020509}.listening-stage::after{background:linear-gradient(0deg,#02050988,transparent 34%),linear-gradient(90deg,#0205099c,transparent 31%,#02050977)}
+.listening-stage .stage-content{max-width:none;min-height:100vh;padding:0!important;pointer-events:none}
+.listening-stage .stage-header{position:absolute;z-index:12;top:23px;right:clamp(18px,3vw,52px);width:auto;min-height:0;pointer-events:none}
+.listening-stage .stage-header .stage-icon-button{width:45px;height:45px;margin:0;border:1px solid #ffffff80;background:#08131ca3;color:#fff;pointer-events:auto}
+.listening-stage .stage-body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px 22vw 135px 4vw!important;gap:0}
+.listening-stage .stage-description{display:none!important}
+.listening-stage .stage-shelf-3d{position:absolute;z-index:5;right:3vw;top:50%;transform:translateY(-54%);display:flex;width:min(24vw,340px);height:min(64vh,600px);min-height:390px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none;pointer-events:auto}
+.listening-stage .stage-shelf-3d::before,.listening-stage .stage-shelf-viewport::after{display:none}.listening-stage .stage-shelf-viewport{margin:0;flex:1}
+.listening-stage .stage-shelf-tabs{justify-content:center;gap:13px;padding:0 0 12px}.listening-stage .stage-shelf-tabs button{flex:none;width:37px;height:37px;padding:0;border:0;border-radius:50%;background:transparent;color:#b9cfca;font-size:19px}.listening-stage .stage-shelf-tabs button.active{background:#cbe8dc20;color:#e7f8ed;box-shadow:0 0 18px #b3e4d84d}
+.listening-stage .stage-shelf-foot{display:flex;justify-content:center;margin:0;padding:10px 0 0;border:0}.listening-stage .stage-shelf-nav{gap:16px}.listening-stage .stage-shelf-nav button{border:0;background:#0a1a22a1;color:#ebf8f0}
+.listening-stage.engine-ready .stage-bottom{display:none!important}.listening-stage:not(.engine-ready) .stage-bottom{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:min(800px,95%);border:0;background:#07141bbd;pointer-events:auto}.listening-stage:not(.engine-ready) .stage-shelf{max-width:100%;margin-top:10px}
+body.stage-open .st-dock{display:none!important}
+@media(max-width:900px){.st-album .room.scene-carousel{--scene-card-width:88vw;height:min(67vh,650px);min-height:500px}.scene-slide{height:94%}.scene-slide-label{top:16px;left:16px}.st-album .photo-line{left:3%;right:3%}.listening-stage .stage-body{padding:80px 4vw 130px!important;align-items:start}.listening-stage .stage-art-frame{width:min(68vw,430px)!important;margin:7vh auto}.listening-stage .stage-shelf-3d{top:auto;bottom:125px;right:2vw;transform:none;width:38vw;height:31vh;min-height:230px}}
+@media(max-width:600px){.album-intro{width:calc(100% - 28px);margin:7px auto 10px}.album-intro h1{font-size:30px}.st-album .room.scene-carousel{--scene-card-width:89vw;height:min(125vw,610px);min-height:455px}.scene-slide{height:96%;border-radius:8px}.scene-position{width:89%}.scene-progress span{width:11px}.scene-progress span.active{width:22px}.st-album .photo-line{top:16%}.listening-stage .stage-art-frame{width:min(84vw,390px)!important;margin:8vh auto}.listening-stage .stage-shelf-3d{bottom:137px;right:0;width:46vw;height:27vh;min-height:210px;opacity:.9}.listening-stage .stage-shelf-tabs{gap:3px}.listening-stage .stage-shelf-tabs button{width:30px;height:30px;font-size:15px}}
+@media(prefers-reduced-motion:reduce){.scene-slide,.scene-progress span,.listening-stage .stage-art-glow,.listening-stage .stage-art-reflection{transition:none}.listening-stage .stage-art-frame img.is-turning{animation:none}.st-album .room.scene-carousel{scroll-behavior:auto}}

@@ -1,0 +1,263 @@
+[
+  {
+    "design": "01-home-mobile",
+    "device": "mobile",
+    "title": "01 · 此刻 · 手机",
+    "status": "主体已用",
+    "screenshot": "home-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/01-home-mobile.png",
+    "implemented": true
+  },
+  {
+    "design": "02-home-desktop",
+    "device": "desktop",
+    "title": "02 · 此刻 · 桌面",
+    "status": "主体已用",
+    "screenshot": "home-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/02-home-desktop.png",
+    "implemented": true
+  },
+  {
+    "design": "03-capture-idle",
+    "device": "mobile",
+    "title": "03 · 快速录音 · 待录音",
+    "status": "部分应用",
+    "screenshot": "capture-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/03-capture-idle.png",
+    "implemented": true
+  },
+  {
+    "design": "04-capture-recording",
+    "device": "mobile",
+    "title": "04 · 快速录音 · 录音中",
+    "status": "部分应用",
+    "screenshot": "recording-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/04-capture-recording.png",
+    "implemented": true
+  },
+  {
+    "design": "05-capture-permission",
+    "device": "mobile",
+    "title": "05 · 快速录音 · 权限失败",
+    "status": "未按稿落地",
+    "screenshot": "permission-error-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/05-capture-permission.png",
+    "implemented": true
+  },
+  {
+    "design": "07-raw-success",
+    "device": "mobile",
+    "title": "07 · 原声保存成功",
+    "status": "新流程替代",
+    "screenshot": "raw-success-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/07-raw-success.png",
+    "implemented": true
+  },
+  {
+    "design": "08-library-mobile",
+    "device": "mobile",
+    "title": "08 · 声音素材库 · 手机",
+    "status": "部分应用",
+    "screenshot": "library-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/08-library-mobile.png",
+    "implemented": true
+  },
+  {
+    "design": "09-library-desktop",
+    "device": "desktop",
+    "title": "09 · 声音素材库 · 桌面",
+    "status": "部分应用",
+    "screenshot": "library-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/09-library-desktop-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "10-sample-states",
+    "device": "mobile",
+    "title": "10 · 示例音频 · 上传、复用与失败",
+    "status": "新流程替代",
+    "screenshot": "studio-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/10-sample-states.png",
+    "implemented": true
+  },
+  {
+    "design": "12-editor-desktop",
+    "device": "desktop",
+    "title": "12 · 音乐编辑 · 桌面",
+    "status": "部分应用",
+    "screenshot": "editor-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/12-editor-desktop.png",
+    "implemented": true
+  },
+  {
+    "design": "13-editor-mobile",
+    "device": "mobile",
+    "title": "13 · 音乐编辑 · 手机",
+    "status": "部分应用",
+    "screenshot": "editor-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/13-editor-mobile-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "14-editor-advanced",
+    "device": "desktop",
+    "title": "14 · 音乐编辑 · 细调与 AI 条件状态",
+    "status": "部分应用",
+    "screenshot": "editor-advanced-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/14-editor-advanced-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "15-music-save",
+    "device": "mobile",
+    "title": "15 · 音乐日记保存",
+    "status": "部分应用",
+    "screenshot": "music-save-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/15-music-save-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "17-collection-mobile",
+    "device": "mobile",
+    "title": "17 · 我的收藏间 · 手机",
+    "status": "主体已用",
+    "screenshot": "album-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/17-collection-mobile.png",
+    "implemented": true
+  },
+  {
+    "design": "20-profile-edit",
+    "device": "mobile",
+    "title": "20 · 编辑个人资料",
+    "status": "未按稿落地",
+    "screenshot": "profile-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/20-profile-edit.png",
+    "implemented": true
+  },
+  {
+    "design": "21-listening-desktop",
+    "device": "desktop",
+    "title": "21 · 沉浸聆听 · 桌面",
+    "status": "未按稿落地",
+    "screenshot": "listening-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/21-listening-desktop.png",
+    "implemented": true
+  },
+  {
+    "design": "22-listening-mobile",
+    "device": "mobile",
+    "title": "22 · 沉浸聆听 · 手机",
+    "status": "未按稿落地",
+    "screenshot": "listening-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/22-listening-mobile.png",
+    "implemented": true
+  },
+  {
+    "design": "23-map-mobile",
+    "device": "mobile",
+    "title": "23 · 声音地图 · 手机",
+    "status": "部分应用",
+    "screenshot": "map-detail-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/23-map-mobile.png",
+    "implemented": true
+  },
+  {
+    "design": "24-map-desktop",
+    "device": "desktop",
+    "title": "24 · 声音地图 · 桌面",
+    "status": "部分应用",
+    "screenshot": "map-detail-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/24-map-desktop.png",
+    "implemented": true
+  },
+  {
+    "design": "25-community-mobile",
+    "device": "mobile",
+    "title": "25 · 社区 · 手机",
+    "status": "部分应用",
+    "screenshot": "community-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/25-community-mobile.png",
+    "implemented": true
+  },
+  {
+    "design": "26-community-desktop",
+    "device": "desktop",
+    "title": "26 · 社区 · 桌面",
+    "status": "部分应用",
+    "screenshot": "community-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/26-community-desktop.png",
+    "implemented": true
+  },
+  {
+    "design": "27-community-composer",
+    "device": "desktop",
+    "title": "27 · 社区 · 发布与回应",
+    "status": "部分应用",
+    "screenshot": "composer-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/27-community-composer-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "27-community-composer",
+    "device": "mobile",
+    "title": "27 · 社区 · 发布与回应",
+    "status": "部分应用",
+    "screenshot": "composer-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/27-community-composer-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "28-mailbox-send",
+    "device": "desktop",
+    "title": "28 · 信箱 · 来信与寄出预留状态",
+    "status": "部分应用",
+    "screenshot": "inbox-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/28-mailbox-send-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "28-mailbox-send",
+    "device": "mobile",
+    "title": "28 · 信箱 · 来信与寄出预留状态",
+    "status": "部分应用",
+    "screenshot": "inbox-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/28-mailbox-send-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "29-account-auth",
+    "device": "desktop",
+    "title": "29 · 账号 · 登录与注册",
+    "status": "未按稿落地",
+    "screenshot": "login-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/29-account-auth-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "29-account-auth",
+    "device": "mobile",
+    "title": "29 · 账号 · 登录与注册",
+    "status": "未按稿落地",
+    "screenshot": "login-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/29-account-auth-v2.png",
+    "implemented": true
+  },
+  {
+    "design": "31-password-delete",
+    "device": "desktop",
+    "title": "31 · 修改密码与删除确认",
+    "status": "未按稿落地",
+    "screenshot": "delete-confirm-desktop.jpg",
+    "reference": "/assets/ui-doodle-v1/31-password-delete.png",
+    "implemented": true
+  },
+  {
+    "design": "31-password-delete",
+    "device": "mobile",
+    "title": "31 · 修改密码与删除确认",
+    "status": "未按稿落地",
+    "screenshot": "delete-confirm-mobile.jpg",
+    "reference": "/assets/ui-doodle-v1/31-password-delete.png",
+    "implemented": true
+  }
+]

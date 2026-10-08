@@ -1,0 +1,54 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      SOUNDTRACE_PUBLIC_URL: https://${SOUNDTRACE_DOMAIN:?请设置正式域名}
+      SOUNDTRACE_DATA_DIR: /data
+      SOUNDTRACE_USER_QUOTA_MB: ${SOUNDTRACE_USER_QUOTA_MB:-1024}
+      SOUNDTRACE_AMAP_KEY: ${SOUNDTRACE_AMAP_KEY:-}
+      SOUNDTRACE_AMAP_SECURITY_CODE: ${SOUNDTRACE_AMAP_SECURITY_CODE:-}
+      SOUNDTRACE_AMAP_STYLE: ${SOUNDTRACE_AMAP_STYLE:-amap://styles/normal}
+      SOUNDTRACE_MUSIC_PROVIDER: ${SOUNDTRACE_MUSIC_PROVIDER:-mureka}
+      SOUNDTRACE_MUREKA_KEY: ${SOUNDTRACE_MUREKA_KEY:-}
+      SOUNDTRACE_MUREKA_MODEL: ${SOUNDTRACE_MUREKA_MODEL:-mureka-9.5}
+      SOUNDTRACE_ACE_URL: ${SOUNDTRACE_ACE_URL:-}
+      SOUNDTRACE_ACE_KEY: ${SOUNDTRACE_ACE_KEY:-}
+      SOUNDTRACE_ACE_MODEL: ${SOUNDTRACE_ACE_MODEL:-acestep-v15-xl-sft}
+      SOUNDTRACE_ACE_LM: ${SOUNDTRACE_ACE_LM:-acestep-5Hz-lm-4B}
+      SOUNDTRACE_MUSIC_DAILY_LIMIT: ${SOUNDTRACE_MUSIC_DAILY_LIMIT:-5}
+      SOUNDTRACE_ARK_KEY: ${SOUNDTRACE_ARK_KEY:-}
+      SOUNDTRACE_IMAGE_MODEL: ${SOUNDTRACE_IMAGE_MODEL:-doubao-seedream-5-0-pro-260628}
+      SOUNDTRACE_IMAGE_DAILY_LIMIT: ${SOUNDTRACE_IMAGE_DAILY_LIMIT:-5}
+    volumes:
+      - soundtrace_data:/data
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os,urllib.request; r=urllib.request.Request('http://127.0.0.1:8080/api/health',headers={'Host':os.environ['SOUNDTRACE_PUBLIC_URL'].split('://')[1]}); urllib.request.urlopen(r,timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+  proxy:
+    image: caddy:2
+    restart: unless-stopped
+    environment:
+      SOUNDTRACE_DOMAIN: ${SOUNDTRACE_DOMAIN:?请设置正式域名}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+volumes:
+  soundtrace_data:
+  caddy_data:
+  caddy_config:

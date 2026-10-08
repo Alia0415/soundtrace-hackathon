@@ -1,0 +1,317 @@
+{
+  "capture-recording": [
+    "04-capture-recording.png",
+    [
+      0,
+      510,
+      853,
+      1160
+    ]
+  ],
+  "capture-permission": [
+    "05-capture-permission.png",
+    [
+      0,
+      580,
+      853,
+      1130
+    ]
+  ],
+  "raw-saved": [
+    "07-raw-success.png",
+    [
+      100,
+      240,
+      810,
+      754
+    ]
+  ],
+  "library-hero": [
+    "09-library-desktop-v2.png",
+    [
+      393,
+      320,
+      1040,
+      604
+    ]
+  ],
+  "library-footer": [
+    "09-library-desktop-v2.png",
+    [
+      0,
+      840,
+      1505,
+      970
+    ]
+  ],
+  "editor-hero": [
+    "12-editor-desktop.png",
+    [
+      682,
+      125,
+      1503,
+      477
+    ]
+  ],
+  "editor-context": [
+    "13-editor-mobile-v2.png",
+    [
+      48,
+      194,
+      357,
+      365
+    ]
+  ],
+  "auth-speaker": [
+    "29-account-auth-v2.png",
+    [
+      1130,
+      132,
+      1290,
+      414
+    ]
+  ],
+  "import-empty": [
+    "10-sample-states.png",
+    [
+      103,
+      428,
+      473,
+      693
+    ]
+  ],
+  "import-error": [
+    "10-sample-states.png",
+    [
+      1165,
+      430,
+      1495,
+      681
+    ]
+  ],
+  "auth-left": [
+    "29-account-auth-v2.png",
+    [
+      0,
+      532,
+      280,
+      980
+    ]
+  ],
+  "auth-right": [
+    "29-account-auth-v2.png",
+    [
+      1292,
+      210,
+      1605,
+      930
+    ]
+  ],
+  "password-art": [
+    "31-password-delete.png",
+    [
+      231,
+      167,
+      730,
+      385
+    ]
+  ],
+  "delete-art": [
+    "31-password-delete.png",
+    [
+      950,
+      154,
+      1322,
+      385
+    ]
+  ],
+  "profile-background": [
+    "20-profile-edit.png",
+    [
+      34,
+      166,
+      819,
+      330
+    ]
+  ],
+  "profile-empty": [
+    "20-profile-edit.png",
+    [
+      310,
+      1390,
+      573,
+      1575
+    ]
+  ],
+  "profile-stats": [
+    "20-profile-edit.png",
+    [
+      70,
+      1081,
+      234,
+      1210
+    ]
+  ],
+  "send-stats": [
+    "20-profile-edit.png",
+    [
+      482,
+      1081,
+      663,
+      1203
+    ]
+  ],
+  "listening-top": [
+    "21-listening-desktop.png",
+    [
+      331,
+      0,
+      1450,
+      153
+    ]
+  ],
+  "listening-left": [
+    "21-listening-desktop.png",
+    [
+      0,
+      268,
+      323,
+      770
+    ]
+  ],
+  "listening-mobile-footer": [
+    "22-listening-mobile.png",
+    [
+      0,
+      1515,
+      853,
+      1688
+    ]
+  ],
+  "avatar-0": [
+    "20-profile-edit.png",
+    [
+      75,
+      721,
+      215,
+      861
+    ]
+  ],
+  "avatar-1": [
+    "20-profile-edit.png",
+    [
+      266,
+      721,
+      406,
+      861
+    ]
+  ],
+  "avatar-2": [
+    "20-profile-edit.png",
+    [
+      459,
+      721,
+      599,
+      861
+    ]
+  ],
+  "avatar-3": [
+    "20-profile-edit.png",
+    [
+      648,
+      721,
+      788,
+      861
+    ]
+  ],
+  "avatar-4": [
+    "20-profile-edit.png",
+    [
+      75,
+      882,
+      215,
+      1022
+    ]
+  ],
+  "avatar-5": [
+    "20-profile-edit.png",
+    [
+      266,
+      882,
+      406,
+      1022
+    ]
+  ],
+  "avatar-6": [
+    "20-profile-edit.png",
+    [
+      459,
+      882,
+      599,
+      1022
+    ]
+  ],
+  "avatar-7": [
+    "20-profile-edit.png",
+    [
+      648,
+      882,
+      788,
+      1022
+    ]
+  ],
+  "sea-window": [
+    "27-community-composer-v2.png",
+    [
+      283,
+      435,
+      417,
+      552
+    ]
+  ],
+  "rainy-city": [
+    "27-community-composer-v2.png",
+    [
+      445,
+      435,
+      579,
+      552
+    ]
+  ],
+  "autumn-lake": [
+    "27-community-composer-v2.png",
+    [
+      607,
+      435,
+      741,
+      552
+    ]
+  ],
+  "snow-mountain": [
+    "27-community-composer-v2.png",
+    [
+      283,
+      616,
+      417,
+      733
+    ]
+  ],
+  "spring-meadow": [
+    "27-community-composer-v2.png",
+    [
+      445,
+      616,
+      579,
+      733
+    ]
+  ],
+  "desert-dusk": [
+    "27-community-composer-v2.png",
+    [
+      607,
+      616,
+      741,
+      733
+    ]
+  ]
+}

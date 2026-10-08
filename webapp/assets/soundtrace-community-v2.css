@@ -1,0 +1,71 @@
+/* A continuous, quiet feed: the scene paintings carry the color. */
+.st-community{background:#fff!important;color:#173a50!important}
+.community-symbols{position:absolute;width:0;height:0;overflow:hidden}
+.community-page{width:min(700px,100%);margin:0 auto;padding-bottom:112px}
+.community-head{height:76px;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.community-head h1{margin:0;color:#153a52;font-size:28px;line-height:1.2;font-weight:750;letter-spacing:-.045em}
+.st-community .community-write{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:90px;min-height:38px;padding:0 14px;border:1px solid #78c9ef;border-radius:999px;background:#effaff;color:#087cb1;font-size:13px;font-weight:700;cursor:pointer}
+.community-write svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.community-tabs{position:sticky;top:0;z-index:30;display:flex;gap:30px;height:49px;padding:0 24px;background:#fff;border-bottom:1px solid #e7eff3}
+.st-community .community-tab{position:relative;min-width:44px;height:49px;padding:0 2px;border:0!important;border-radius:0!important;background:none!important;color:#8a9ba4!important;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.st-community .community-tab:hover{color:#2689b3;transform:none}
+.community-tab.is-active{color:#183b52!important;font-weight:750!important}
+.community-tab.is-active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;border-radius:3px;background:#55c7ed}
+.community-feed{display:block;columns:auto;margin:0;padding:0}
+.community-post{padding:23px 24px 18px;border-bottom:8px solid #f7fafb;background:#fff;scroll-margin-top:58px}
+.community-post-head{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+.community-avatar{width:39px;height:39px;border-radius:50%;border:1px solid #daeaf0;object-fit:cover;flex:none}
+.community-byline{display:flex;flex-direction:column;gap:2px;min-width:0}
+.community-byline strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#294b5c;font-size:13px;font-weight:700}
+.community-byline time{color:#94a4ab;font-size:11px}
+.community-post-text{margin:0 0 15px;color:#1e333e;font-size:16px;font-weight:500;line-height:1.68;letter-spacing:.005em;white-space:pre-wrap;overflow-wrap:anywhere}
+.community-post-media{display:grid;gap:4px;margin:0 0 15px;overflow:hidden;border-radius:8px}
+.community-post-media img{display:block;width:100%;max-height:410px;aspect-ratio:1.78;object-fit:cover;background:#eef4f5}
+.community-post-media.is-grid{grid-template-columns:repeat(3,minmax(0,1fr));border-radius:6px}
+.community-post-media.is-grid img{max-height:none;aspect-ratio:1;object-fit:cover}
+.community-player{display:grid;gap:5px;margin:0 0 12px}
+.community-player>span{color:#7093a4;font-size:11px;letter-spacing:.05em}
+.community-player audio{display:block;width:min(100%,410px);height:38px;accent-color:#4ab9e8}
+.community-topic{display:inline-flex;align-items:center;min-height:29px;margin:0 0 13px;padding:0 11px;border-radius:999px;background:#e8faff;color:#1885ad;text-decoration:none;font-size:12px;font-weight:650}
+.community-topic:hover{background:#d7f3ff}
+.community-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:3px}
+.st-community .community-action{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:84px;min-height:42px;padding:5px 8px;border:0!important;background:transparent!important;color:#92a2aa!important;font-size:12px;cursor:pointer}
+.community-action svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.community-action:hover{color:#1588b9!important;transform:none!important}
+.community-action.is-liked{color:#169ec8!important}
+.community-action.is-liked svg{fill:#bfeeff;stroke:#1193bc}
+.community-empty{padding:58px 24px;text-align:center;color:#8198a6;font-size:14px}
+.community-empty button{margin-left:10px;padding:6px 15px;border:1px solid #9dd6ef;background:#f2fbff;color:#1680ad;cursor:pointer}
+
+.community-compose{padding:19px 24px 22px;border-bottom:8px solid #f7fafb;background:#fafdff;scroll-margin-top:50px}
+.compose-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;color:#234c61;font-size:15px}
+.st-community .compose-top button{border:0!important;background:none!important;color:#7793a3!important;font-size:12px;cursor:pointer}
+.community-compose textarea{display:block;width:100%;min-height:115px;padding:13px 14px;border:1px solid #d0e4ed!important;border-radius:9px;resize:vertical;background:#fff!important;color:#1f455b!important;font-size:14px;line-height:1.6}
+.compose-label{margin:15px 0 8px;color:#7b95a3;font-size:11px}
+.community-compose .compose-covers{display:flex;gap:8px;margin:0;overflow-x:auto;padding:2px 2px 7px;scrollbar-width:thin}
+.community-compose .cover-pick{position:relative;flex:none;width:64px;height:58px;padding:0;border:2px solid transparent!important;border-radius:7px!important;overflow:hidden;background:#eef6f9!important;cursor:pointer}
+.community-compose .cover-pick img{display:block;width:100%;height:100%;aspect-ratio:auto;object-fit:cover}
+.community-compose .cover-pick.is-selected{border-color:#45bde9!important;box-shadow:0 0 0 2px #45bde929}
+.compose-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:13px}
+.compose-bottom>span{min-height:20px;color:#527488;font-size:12px}
+.st-community .compose-submit{min-width:82px;min-height:37px;padding:0 18px;border:1px solid #5bbfe8;background:#e8f8ff;color:#087ab0;font-size:13px;font-weight:700;cursor:pointer}
+.compose-submit:disabled{opacity:.55;cursor:wait}
+.community-notice{position:fixed;left:50%;bottom:92px;z-index:95;transform:translateX(-50%);padding:9px 16px;border:1px solid #b9dce9;border-radius:999px;background:#fff;box-shadow:0 10px 26px #41667b24;color:#28607a;font-size:12px;white-space:nowrap}
+
+@media (max-width:700px){
+  .community-page{width:100%}
+  .community-head{height:65px;padding:0 17px}
+  .community-head h1{font-size:23px}
+  .community-tabs{gap:27px;height:47px;padding:0 17px}
+  .st-community .community-tab{height:47px;font-size:13px}
+  .community-post{padding:19px 17px 13px}
+  .community-post-text{font-size:15px}
+  .community-post-media img{max-height:340px;aspect-ratio:1.35}
+  .community-compose{padding:17px}
+}
+@media (prefers-reduced-motion:reduce){.community-compose{scroll-behavior:auto}}
+/* Replies use the same quiet, open layout as the community feed. */
+.community-replies{padding:16px 0 0;color:#173a50}
+.community-replies p{font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.community-replies textarea{display:block;width:100%;min-height:72px;padding:12px;border:1px solid #c9e4ef!important;border-radius:12px;background:#fff!important;color:#173a50!important;font:14px system-ui}
+.community-replies button{min-height:40px;margin:8px 8px 0 0;padding:8px 14px;background:#eef9ff;color:#155978;border:1px solid #8ed0ef;font:600 12px system-ui}

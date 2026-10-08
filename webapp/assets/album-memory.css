@@ -1,0 +1,6 @@
+.memory-object .object-art{position:relative}
+.memory-object .cover-print{position:absolute;display:block;background-position:center;background-size:cover;box-shadow:0 1px 3px #173a5070;pointer-events:none}
+.memory-object.vinyl .cover-print{left:19%;top:18%;width:43%;height:22%;transform:rotate(5deg) skewY(2deg);border-radius:2px;mix-blend-mode:multiply}
+.memory-object.tape .cover-print{left:23%;top:17%;width:52%;height:18%;transform:rotate(5deg) skewX(-9deg);border-radius:2px;mix-blend-mode:multiply}
+.stage-memory-video{position:absolute;inset:-5%;z-index:-2;width:110%;height:110%;object-fit:cover;opacity:.32;filter:blur(18px) saturate(.8);pointer-events:none}
+.stage-memory-video[hidden]{display:none}

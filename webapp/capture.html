@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<script src="/assets/soundtrace-raster.js?v=5" defer></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>声迹 · 录一段声音</title>
+<script src="/assets/soundtrace-shell.js" defer></script>
+<style>
+  .cap-wrap{width:min(760px,calc(100% - 42px));margin:0 auto;padding:90px 0 130px;animation:st-rise .42s var(--st-ease) both}
+  .cap-wrap h1{font-size:clamp(26px,4vw,38px);letter-spacing:-.03em;color:#153a52;margin:0 0 6px}
+  .cap-sub{color:#547083;font-size:14px;margin:0 0 26px}
+  .rec-stage{display:flex;flex-direction:column;align-items:center;gap:18px;padding:38px 20px;border:1px solid #dcebf2;border-radius:24px;background:#fff}
+  .rec-orb{width:120px;height:120px;border-radius:50%;border:none;background:#59bdf0;color:#073e59;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 14px 34px #173a502e;transition:transform .18s var(--st-ease);animation:st-breathe 2.4s ease-in-out infinite}
+  .rec-orb:active{transform:scale(.94)}
+  .rec-orb.recording{background:#a71d30;color:#fff;box-shadow:0 14px 34px #3a212940}
+  .rec-hint{color:#547083;font-size:13px}
+  .rec-help{display:none;color:#0a6b99;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+  .rec-help.visible{display:inline}
+  .rec-time{font:700 30px Inter,monospace;color:#153a52;min-height:36px}
+  .player-row{width:100%;display:none}
+  .player-row audio{width:100%}
+  /* 保存弹窗 */
+  .save-mask{position:fixed;inset:0;background:#0a253455;z-index:70;display:flex;align-items:center;justify-content:center;padding:16px}
+  .save-card{background:#fff;border-radius:22px;width:min(560px,95vw);max-height:90vh;overflow:auto;padding:24px;animation:st-pop .24s var(--st-ease) both}
+  .save-card h2{margin:0 0 4px;font-size:19px;color:#153a52}
+  .save-card .q{color:#547083;font-size:13px;margin:0 0 16px}
+  .field{margin:14px 0}
+  .field label{display:block;font-size:12px;font-weight:700;color:#40606f;margin-bottom:6px}
+  .field input[type=text],.field textarea{width:100%;border:1px solid #b5d6e5;border-radius:12px;padding:11px 13px;font-size:14px;font-family:inherit}
+  .field textarea{min-height:64px;resize:vertical}
+  .mood-row{display:flex;gap:8px;flex-wrap:wrap}
+  .mood-chip{border:1px solid #cfe6f2;background:#fff;border-radius:999px;padding:8px 15px;font-size:13px;cursor:pointer;color:#40606f}
+  .mood-chip.on{background:#e8f7ff;border-color:#59bdf0;color:#0a6b99;font-weight:700}
+  .upload-zone{border:1.5px dashed #91cce6;border-radius:14px;padding:18px;text-align:center;color:#547083;font-size:13px;cursor:pointer}
+  .upload-zone:hover{background:#f4fbff}
+  .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .thumbs img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid #dcebf2}
+  .voice-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid #75c3e8;background:#e8f7ff;color:#0a6b99;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-weight:700}
+  .voice-btn.rec{background:#ffe9ec;border-color:#ef9fb0;color:#b3364a}
+  .meta-row{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:#547083}
+  .meta-row span{border:1px solid #dcebf2;border-radius:999px;padding:5px 12px;background:#fff}
+  .save-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+  .save-actions button{border-radius:999px;padding:12px 24px;cursor:pointer;font-size:14px;font-weight:700;border:1px solid #75c3e8;background:#59bdf0;color:#073e59}
+  .save-actions .ghost{background:#fff;color:#547083;border-color:#cfe6f2}
+  .done-card{text-align:center}
+  .done-covers{display:flex;gap:14px;justify-content:center;margin:18px 0}
+  .done-covers img{width:46%;max-width:220px;border-radius:14px;border:1px solid #dcebf2}
+  .skipnote{font-size:11px;color:#8aa3b2;margin-top:6px}
+</style>
+<link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
+<link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
+</head>
+<body class="st-capture">
+<header class="doodle-header"><a class="doodle-brand" href="/">声迹</a></header>
+<div class="cap-wrap">
+  <h1>留下一段声音</h1>
+  <p class="cap-sub">录下此刻，留下它的名字。</p>
+
+  <div class="rec-stage" id="recStage">
+    <div class="rec-time" id="recTime">0:00</div>
+    <div class="capture-doodle" data-raster="microphone" aria-hidden="true"></div>
+    <div class="capture-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <a class="capture-import" href="/studio#rec">导入已有音频</a>
+    <button class="rec-orb" id="recBtn" type="button">点击录音</button>
+    <div class="rec-hint" id="recHint">点击开始 · 再点结束并保存</div>
+    <a class="rec-help" id="recHelp" href="/studio">或者导入已有音频</a>
+    <div class="player-row" id="playerRow"><audio controls id="preview"></audio></div>
+  </div>
+</div>
+
+<div class="save-mask" id="saveMask" hidden>
+  <div class="save-card" id="saveCard"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let recording = false, capture = null, recStart = 0, timer = null, audioBlob = null;
+let mood = '', images = [];
+
+/* ── 录音 ── */
+$('recBtn').addEventListener('click', () => recording ? stopRec() : startRec());
+async function openCapture() {
+  if (!navigator.mediaDevices?.getUserMedia || !window.AudioWorkletNode)
+    throw new Error('请使用 HTTPS 或 localhost 打开，并使用支持录音的浏览器；也可前往工作台导入音频。');
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  const ctx = new AudioContext();
+  try {
+    await ctx.resume();
+    await ctx.audioWorklet.addModule('/assets/studio-recorder.js');
+    const source = ctx.createMediaStreamSource(stream);
+    const node = new AudioWorkletNode(ctx, 'soundtrace-recorder');
+    const silent = ctx.createGain(); silent.gain.value = 0;
+    source.connect(node); node.connect(silent); silent.connect(ctx.destination);
+    const chunks = [];
+    let resolveStop, stopped = false;
+    node.port.onmessage = ({data}) => {
+      if (data.samples) { chunks.push(data.samples); const energy=data.samples.reduce((n,v)=>n+v*v,0)/Math.max(1,data.samples.length); $('recStage').style.setProperty('--capture-level',Math.min(1,Math.sqrt(energy)*8)); }
+      if (data.done) {
+        stream.getTracks().forEach(t => t.stop());
+        source.disconnect(); node.disconnect(); silent.disconnect();
+        ctx.close().catch(() => {});
+        const len = chunks.reduce((n,c) => n + c.length, 0), pcm = new Float32Array(len);
+        let offset = 0;
+        for (const chunk of chunks) { pcm.set(chunk, offset); offset += chunk.length; }
+        resolveStop?.(encodeWav(pcm, ctx.sampleRate));
+      }
+    };
+    return { stop: () => new Promise(resolve => { resolveStop = resolve; if (!stopped) { stopped = true; node.port.postMessage('stop'); } }),
+      abort: () => { stream.getTracks().forEach(t => t.stop()); node.disconnect(); ctx.close().catch(() => {}); } };
+  } catch(error) { stream.getTracks().forEach(t => t.stop()); ctx.close().catch(() => {}); throw error; }
+}
+async function microphoneErrorMessage(error) {
+  if (error.name === 'NotAllowedError' || error.name === 'SecurityError') {
+    if (document.permissionsPolicy?.allowsFeature('microphone') === false || document.featurePolicy?.allowsFeature('microphone') === false)
+      return '当前页面被浏览器策略禁止使用麦克风，请在独立浏览器打开本页。';
+    const state = await navigator.permissions?.query({name:'microphone'}).then(p => p.state).catch(() => 'unknown');
+    if (state === 'denied') return '此浏览器已阻止麦克风。请在站点设置中允许本页使用麦克风，然后刷新；内置预览中可改用 Chrome 或 Edge 打开本页。';
+    if (state === 'granted') return '站点权限显示已允许，但浏览器未提供麦克风输入。请检查系统麦克风设置；若在内置预览中，请改用 Chrome 或 Edge 打开本页。';
+    return '浏览器未能取得麦克风权限。请检查权限提示；若内置预览没有提示，请用 Chrome 或 Edge 打开本页并允许麦克风。';
+  }
+  if (error.name === 'NotFoundError') return '没有找到可用的麦克风。请连接输入设备后重试。';
+  if (error.name === 'NotReadableError') return '麦克风当前无法读取。请关闭占用它的应用后重试。';
+  return error.message || '录音无法启动，请重试。';
+}
+async function startRec() {
+  $('recBtn').disabled = true; $('recHint').textContent = '正在请求麦克风权限…'; $('recHelp').classList.remove('visible');
+  try { capture = await openCapture(); }
+  catch(error) {
+    $('recHint').textContent = await microphoneErrorMessage(error);
+    $('recHelp').classList.add('visible');
+    $('recBtn').disabled = false; $('recBtn').textContent = '重试录音'; return;
+  }
+  recording = true; recStart = Date.now();
+  $('recBtn').textContent = '结束并保存'; $('recBtn').classList.add('recording');
+  $('recBtn').disabled = false; $('recHint').textContent = '正在录音，再点一次结束';
+  timer = setInterval(() => {
+    const s = Math.floor((Date.now() - recStart) / 1000);
+    $('recTime').textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  }, 300);
+}
+async function stopRec() {
+  if (!capture) return;
+  $('recBtn').disabled = true;
+  clearInterval(timer);
+  try { audioBlob = await capture.stop(); }
+  catch(error) { $('recHint').textContent = '录音未能完成，请重试。'; $('recBtn').disabled = false; return; }
+  capture = null;
+  recording = false;
+  $('recBtn').textContent = '重新录音'; $('recBtn').classList.remove('recording');
+  $('recBtn').disabled = false;
+  if (audioBlob.size < 48) { $('recHint').textContent = '声音太短，请再录一次。'; return; }
+  $('preview').src = URL.createObjectURL(audioBlob);
+  $('playerRow').style.display = 'block';
+  openSaveDialog();                                   // 录完立即弹出保存表单
+}
+function encodeWav(samples, sr) {
+  const buf = new ArrayBuffer(44 + samples.length * 2), v = new DataView(buf);
+  const ws = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+  ws(0,'RIFF'); v.setUint32(4, 36 + samples.length*2, true); ws(8,'WAVE');
+  ws(12,'fmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+  ws(36,'data'); v.setUint32(40, samples.length*2, true);
+  let p = 44;
+  for (let i = 0; i < samples.length; i++, p += 2) {
+    const s = Math.max(-1, Math.min(1, samples[i]));
+    v.setInt16(p, s < 0 ? s*0x8000 : s*0x7FFF, true);
+  }
+  return new Blob([buf], { type: 'audio/wav' });
+}
+
+/* ── 保存弹窗：这是什么声音 + 图片 + 时间/天气/心情/地点（可跳过/可部分填） ── */
+const MOODS = ['宁静','思念','雀跃','忧郁','治愈','冒险'];
+let autoMeta = { time: Date.now() / 1000, weather: '未获取', coords: null };
+function openSaveDialog() {
+  // 自动捕获：时间 + 地理位置 + 天气（open-meteo 免费无key）
+  autoMeta = { time: Date.now() / 1000, weather: '未获取', coords: null };
+  if (navigator.geolocation) navigator.geolocation.getCurrentPosition(async p => {
+    autoMeta.coords = { lat: +p.coords.latitude.toFixed(5), lng: +p.coords.longitude.toFixed(5) };
+    try {
+      const w = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${autoMeta.coords.lat}&longitude=${autoMeta.coords.lng}&current_weather=true`).then(r => r.json());
+      const c = w.current_weather || {};
+      autoMeta.weather = `${Math.round(c.temperature || 0)}°C 风${Math.round(c.windspeed || 0)}km/h`;
+    } catch (_) {}
+    renderAutoMeta();
+  }, () => {}, { timeout: 6000 });
+
+  $('saveCard').innerHTML = `
+    <button class="save-close" type="button" aria-label="关闭保存窗口" onclick="document.getElementById('saveMask').hidden=true">×</button><h2>这是什么声音？</h2>
+    <p class="q">说一说或写一写这段录音——填什么都行，也可以跳过。</p>
+    <div class="field">
+      <label>回答（可语音输入 🎤）</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="fTitle" placeholder="例如：雨夜的巷口，自行车铃">
+        <button class="voice-btn" id="voiceBtn" type="button">🎤 说话</button>
+      </div>
+    </div>
+    <div class="field"><label>此刻的心情（可跳过）</label>
+      <div class="mood-row">${MOODS.map(m => `<span class="mood-chip" data-m="${m}">${m}</span>`).join('')}</div>
+    </div>
+    <div class="field"><label>在哪里录的？（可跳过）</label>
+      <input type="text" id="fLoc" placeholder="例如：大理·洱海边"></div>
+    <div class="field"><label>补充几句笔记（可跳过）</label>
+      <textarea id="fNotes" placeholder="当时发生了什么…"></textarea></div>
+    <div class="field"><label>照片或图片（可多选；不上传则白底黑字）</label>
+      <div class="upload-zone" id="upZone">📷 点击选择图片</div>
+      <input type="file" id="fImgs" accept="image/*" multiple hidden>
+      <div class="thumbs" id="thumbs"></div></div>
+    <div class="field"><label for="fVideos">补充视频（选填）</label><input type="file" id="fVideos" accept="video/mp4,video/webm,video/quicktime" multiple></div>
+    <div class="field"><label for="fAudioFiles">补充音频（选填）</label><input type="file" id="fAudioFiles" accept="audio/*" multiple></div>
+    <div class="meta-row" id="autoMeta"></div>
+    <label class="field"><input type="checkbox" id="fShare"> 同时分享到社区</label>
+    <p id="saveError" class="q" role="alert"></p>
+    <div class="save-actions">
+      <button class="ghost" id="saveSkip" type="button">跳过直接保存</button>
+      <button id="saveGo" type="button">保存这段记忆</button>
+    </div>
+    <div class="skipnote">时间/天气/位置为自动获取；全部字段都可以留空。</div>`;
+  $('saveMask').hidden = false;
+  renderAutoMeta();
+
+  document.querySelectorAll('.mood-chip').forEach(c => c.addEventListener('click', () => {
+    document.querySelectorAll('.mood-chip').forEach(x => x.classList.remove('on'));
+    if (mood === c.dataset.m) { mood = ''; } else { c.classList.add('on'); mood = c.dataset.m; }
+  }));
+  $('upZone').addEventListener('click', () => $('fImgs').click());
+  $('fImgs').addEventListener('change', e => {
+    images = [...e.target.files];
+    $('thumbs').innerHTML = images.map(f => `<img src="${URL.createObjectURL(f)}">`).join('');
+  });
+  $('voiceBtn').addEventListener('click', voiceInput);
+  $('saveGo').addEventListener('click', () => doSave(false));
+  $('saveSkip').addEventListener('click', () => doSave(true));
+}
+function renderAutoMeta() {
+  const m = $('autoMeta'); if (!m) return;
+  const d = new Date(autoMeta.time * 1000);
+  const parts = [`🕒 ${d.toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`, `🌤 ${autoMeta.weather}`];
+  if (autoMeta.coords) parts.push(`📍 ${autoMeta.coords.lat}, ${autoMeta.coords.lng}`);
+  m.replaceChildren(...parts.map(part => { const span = document.createElement('span'); span.textContent = part; return span; }));
+}
+
+/* ── 语音识别输入：录 6 秒 → 服务端 faster-whisper ── */
+let voiceRec = false;
+async function voiceInput() {
+  const btn = $('voiceBtn');
+  if (voiceRec) return;
+  voiceRec = true; btn.classList.add('rec'); btn.textContent = '请说…';
+  let inputCapture;
+  try {
+    inputCapture = await openCapture();
+    await new Promise(r => setTimeout(r, 6000));
+    const blob = await inputCapture.stop();
+    const fd = new FormData(); fd.append('file', new File([blob], 'ask.wav', { type: 'audio/wav' }));
+    const response = await fetch('/api/transcribe', { method: 'POST', body: fd });
+    const r = await response.json();
+    if (!response.ok) throw new Error(r.detail || '识别服务暂时不可用');
+    if (r.text) { $('fTitle').value = r.text; }
+    else { $('saveError').textContent = '没听清，请再试或直接打字。'; }
+  } catch (e) { inputCapture?.abort(); $('saveError').textContent = e.name === 'NotAllowedError' ? `${await microphoneErrorMessage(e)} 也可以直接打字。` : '语音识别暂不可用，请直接打字。'; }
+  voiceRec = false; btn.classList.remove('rec'); btn.textContent = '🎤 说话';
+}
+
+/* ── 保存 ── */
+async function doSave(skip) {
+  if (!audioBlob) return;
+  const fd = new FormData();
+  fd.append('audio', new File([audioBlob], 'rec.wav', { type: 'audio/wav' }));
+  if (!skip) {
+    fd.append('title', $('fTitle').value.trim());
+    fd.append('notes', $('fNotes').value.trim());
+    fd.append('mood', mood);
+    fd.append('location', $('fLoc').value.trim());
+    images.forEach((f, i) => fd.append('images', f));
+    fd.append('share', String($('fShare').checked));
+    [...$('fVideos').files].forEach(f => fd.append('videos', f));
+    [...$('fAudioFiles').files].forEach(f => fd.append('audio_files', f));
+  }
+  fd.append('captured_at', autoMeta.time);
+  fd.append('weather', autoMeta.weather);
+  if (autoMeta.coords) { fd.append('lat', autoMeta.coords.lat); fd.append('lng', autoMeta.coords.lng); }
+  $('saveGo').disabled = true; $('saveSkip').disabled = true;
+  $('saveCard').querySelector('.save-close').disabled = true;
+  $('saveError').textContent = '正在保存原声与记忆…';
+  try {
+    const response = await fetch('/api/memories', { method: 'POST', body: fd });
+    const r = await response.json();
+    if (!response.ok) throw new Error(r.detail || '保存失败，请重试');
+    $('saveCard').innerHTML = `
+      <div class="done-card">
+        <h2>原声已存入素材库 ✓</h2>
+        <p class="q" id="savedTitle"></p>
+        <div class="done-covers">
+          <span class="saved-raster raster-object raster-tape" role="img" aria-label="磁带封面"></span>
+        </div>
+        <p class="q">原声已收进磁带。生成专属旋律后，这段记忆还可以成为唱片。</p>
+        <div class="save-actions" style="justify-content:center">
+          <button id="generateDiary" type="button">生成音乐日记 →</button>
+          <button onclick="location='/album'">去收藏间看看</button>
+          <button class="ghost" onclick="location.reload()">再录一段</button>
+          <button class="ghost" onclick="location='/'">回首页</button>
+        </div>
+      </div>`;
+    $('savedTitle').textContent = [r.title,r.weather].filter(Boolean).join(' · ');
+    $('generateDiary').onclick = () => {location.href = '/studio?memory=' + encodeURIComponent(r.id) + '#rec';};
+  } catch (e) {
+    $('saveError').textContent = e.message || '保存失败，请重试。';
+    $('saveGo').disabled = false; $('saveSkip').disabled = false;
+    $('saveCard').querySelector('.save-close').disabled = false;
+  }
+}
+</script>
+</body>
+</html>

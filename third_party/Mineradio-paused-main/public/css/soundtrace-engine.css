@@ -1,0 +1,21 @@
+/* SoundTrace integration: conceal MineRadio's navigation while retaining its
+   original particle renderer, cover visuals, and player control effects. */
+#splash,#search-area,#top-right,#empty-home,#hint,#fx-panel,#fx-fab,#fx-fab-hide-btn,
+#playlist-panel,#thumb-wrap,#visual-guide,#trial-banner,#source-fallback-notice,
+#desktop-titlebar,#fullscreen-diy-zone,#update-panel,#login-modal,#user-modal,
+#drop-overlay,#toast,#bottom-handle,#local-beat-modal{display:none!important}
+html,body,#desktop-window-shell{background:transparent!important}
+#canvas-container{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important}
+#bottom-bar{z-index:900!important;bottom:15px!important}
+#bottom-bar.visible{opacity:1!important;pointer-events:auto!important}
+body{overflow:hidden!important}
+/* Keep the original glass player and transport on one usable mobile row. */
+@media(max-width:620px){
+  #bottom-bar,#bottom-bar.stage-mode,body.simple-mode #bottom-bar,body.diy-mode #bottom-bar,body.diy-mode #bottom-bar.stage-mode{width:calc(100vw - 24px)!important;padding:8px 13px 9px!important;gap:7px!important;border-radius:27px!important}
+  #progress-bar{width:calc(100% - 24px)!important;margin:3px auto 0!important}
+  #controls,body.simple-mode #controls,body.diy-mode #controls{display:flex!important;justify-content:center!important;gap:0!important}
+  .control-cluster.actions,.control-cluster.modes{display:none!important}
+  .control-cluster.transport{grid-column:auto!important;order:0!important;width:auto!important;height:54px!important;gap:clamp(7px,2.2vw,13px)!important}
+  #cuefield-automix-btn,#mini-queue-btn{display:none!important}
+  #play-btn{width:50px!important;height:50px!important}
+}

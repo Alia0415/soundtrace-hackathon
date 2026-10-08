@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<script src="/assets/soundtrace-raster.js?v=6" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>声迹 · 社区</title>
+  <link rel="stylesheet" href="/assets/soundtrace-community-v2.css">
+  <script src="/assets/soundtrace-shell.js?v=4" defer></script>
+  <script src="/assets/soundtrace-audio-card.js?v=3" defer></script>
+<script src="/assets/soundtrace-community-v2.js?v=5" defer></script>
+<link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
+<link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
+<link rel="stylesheet" href="/assets/soundtrace-map-v3.css?v=4">
+<link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=1">
+</head>
+<body class="st-community">
+  <svg class="community-symbols" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="community-heart" viewBox="0 0 24 24"><path d="M20.8 8.1c0 4.5-5.5 8.7-8.8 11-3.3-2.3-8.8-6.5-8.8-11a4.8 4.8 0 0 1 8.8-2.6 4.8 4.8 0 0 1 8.8 2.6Z"/></symbol>
+    <symbol id="community-reply" viewBox="0 0 24 24"><path d="M20.5 11.5a8.5 8.5 0 0 1-8.5 8.5 8.7 8.7 0 0 1-3.5-.7L3 20.5l1.2-5.3a8.5 8.5 0 1 1 16.3-3.7Z"/></symbol>
+    <symbol id="community-share" viewBox="0 0 24 24"><path d="M12 15V3m0 0 4 4m-4-4L8 7M4 13v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/></symbol>
+    <symbol id="community-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  </svg>
+
+  <header class="doodle-header"><a class="doodle-brand" href="/">声迹</a></header>
+<div class="community-page"><aside class="community-art" aria-hidden="true"><span data-raster="community-left"></span></aside><aside class="community-art-right" aria-hidden="true"><span data-raster="community-right"></span></aside>
+    <header class="community-head">
+      <h1>社区</h1>
+      <button id="openCompose" class="community-write" type="button" aria-controls="communityCompose" aria-expanded="false">
+        <svg aria-hidden="true"><use href="#community-plus"></use></svg><span>分享</span>
+      </button>
+    </header>
+
+    <nav class="community-tabs" aria-label="动态分类">
+      <button class="community-tab is-active" type="button" data-filter="all" aria-current="page">全部</button>
+      <button class="community-tab" type="button" data-filter="audio">可聆听</button>
+      <button class="community-tab" type="button" data-filter="visual">图文</button>
+    </nav>
+
+    <section id="communityCompose" class="community-compose" aria-label="分享一段经历" hidden>
+      <div class="compose-top"><strong id="composeHeading">分享一段经历</strong><button id="composeCancel" type="button" aria-label="关闭编辑区">取消</button></div>
+      <textarea id="composeText" maxlength="500" placeholder="这一刻，你听到了什么？" aria-label="分享内容"></textarea>
+      <div class="compose-label">为这段经历选一幅风景</div>
+      <div class="compose-covers" id="composeCovers" aria-label="选择风景"></div>
+      <div class="compose-bottom">
+        <span id="composeStatus" role="status" aria-live="polite"></span>
+        <button id="composeSubmit" class="compose-submit" type="button">发布</button>
+      </div>
+    </section>
+
+    <main id="feed" class="community-feed" aria-live="polite">
+      <div class="community-empty">正在载入大家的声音…</div>
+    </main>
+  </div>
+</body>
+</html>

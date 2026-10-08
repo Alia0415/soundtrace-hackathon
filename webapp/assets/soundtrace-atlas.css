@@ -1,0 +1,50 @@
+/* A spatial soundscape dial beside the real, geocoded memory map. */
+.st-map{min-height:100vh;overflow:hidden}
+.st-map .st-map-header{position:relative;z-index:5;width:100%;max-width:none;margin:0!important;padding:22px clamp(18px,3vw,48px)!important;background:#030a0ec9!important;border-bottom:1px solid #b6ddd326!important}
+.st-map .st-map-header h1{font-size:clamp(27px,3vw,42px)!important}
+.st-map .st-map-header .sub{margin-top:7px;font-size:11px;letter-spacing:.09em}
+.atlas-mode-switch{display:flex!important;flex:0 0 auto!important;align-items:center;gap:22px;width:auto!important}
+.atlas-mode-switch button{position:relative;margin:0!important;padding:10px 0 12px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:#94a9aa!important;font-size:12px;white-space:nowrap}
+.atlas-mode-switch button[aria-pressed=true]{color:#eff8f2!important}
+.atlas-mode-switch button[aria-pressed=true]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#bcebdd;box-shadow:0 0 13px #a5e8d4}
+.st-map.mode-atlas #playRoute,.st-map.mode-atlas #stopBtn,.st-map.mode-atlas .st-map-list{display:none!important}
+.st-map.mode-footprint #soundscapeAtlas{opacity:0;visibility:hidden;pointer-events:none}
+.st-map.mode-atlas #geoMap{opacity:0;pointer-events:none}
+.st-map #map{position:relative;flex:1;min-height:420px!important;margin:0!important;overflow:hidden;background:#030b12!important;border:0!important;border-radius:0!important}
+.st-map #map::before{display:none}
+#geoMap,#soundscapeAtlas{position:absolute;inset:0;transition:opacity .5s,visibility .5s}
+#geoMap{z-index:1}
+#soundscapeAtlas{z-index:2;overflow:hidden;touch-action:none;cursor:grab;isolation:isolate;background:radial-gradient(circle at 50% 52%,color-mix(in srgb,var(--atlas-accent,#5eaac2),transparent 82%),transparent 35%),radial-gradient(ellipse at 52% 65%,#15415070,transparent 66%),#030b12}
+#soundscapeAtlas.is-dragging{cursor:grabbing}
+#soundscapeAtlas::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:radial-gradient(circle,#d4f0e5 0 1px,transparent 1.8px),radial-gradient(circle,#a4c4d9 0 .7px,transparent 1.5px);background-size:143px 137px,211px 183px;background-position:17px 29px,82px 46px}
+#soundscapeAtlas::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 23%,#01060bc4 100%)}
+.atlas-ring{position:absolute;z-index:0;left:50%;top:50%;width:min(74vmin,610px);aspect-ratio:1;border:1px solid #a9e0d03d;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 0 1px #c1eee30c,0 0 85px color-mix(in srgb,var(--atlas-accent,#69bdd0),transparent 88%)}
+.atlas-ring-one::before,.atlas-ring-two::before{content:"";position:absolute;inset:17%;border:1px solid #c4ece227;border-radius:50%}
+.atlas-ring-two{width:min(52vmin,420px);border-color:#9bdac221}
+.atlas-sweep{position:absolute;z-index:0;left:50%;top:50%;width:min(74vmin,610px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;background:conic-gradient(from 12deg,transparent 0 71%,#aee8d318 86%,transparent 100%);animation:atlas-sweep 18s linear infinite}
+.atlas-core{position:absolute;z-index:2;left:50%;top:50%;width:min(39vmin,315px);aspect-ratio:1;transform:translate(-50%,-50%);border:1px solid #d9f5e267;border-radius:50%;overflow:hidden;box-shadow:0 0 0 8px #b3e7d00b,0 22px 60px #000b,0 0 65px color-mix(in srgb,var(--atlas-accent,#69bdd0),transparent 68%);background:#122e3b;transition:box-shadow .4s}
+.atlas-core-image{position:absolute;inset:0;background:center/cover no-repeat;transition:opacity .25s,transform .8s;transform:scale(1.08)}
+.atlas-core::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#020b12ed 0%,#020b1290 26%,transparent 70%)}
+.atlas-core-content{position:absolute;z-index:2;left:0;right:0;bottom:11%;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;text-shadow:0 3px 13px #000}
+.atlas-core-content span{font:700 10px Inter,sans-serif;letter-spacing:.18em;color:#d1efe5}
+.atlas-core-content strong{font:700 clamp(19px,2vw,28px) "Noto Sans SC","Microsoft YaHei",sans-serif;color:#fff}
+.atlas-core-content a{padding:7px 2px;border-bottom:1px solid #c8ebdb;color:#fff;text-decoration:none;font-size:12px;pointer-events:auto}
+.atlas-core-content a:hover{color:#bff0df}
+#atlasSignals{position:absolute;z-index:3;inset:0;pointer-events:none}
+.atlas-signal{position:absolute;display:grid;place-items:center;width:clamp(55px,8vmin,82px);height:clamp(55px,8vmin,82px);padding:0!important;border:1px solid #ffffff9c!important;border-radius:50%!important;background:#17394b!important;box-shadow:0 7px 25px #000b,0 0 0 5px #bfeadc11;transform:translate(-50%,-50%);cursor:pointer;pointer-events:auto;transition:width .25s,height .25s,box-shadow .25s,border-color .25s}
+.atlas-signal::after{content:"";position:absolute;inset:-9px;border:1px solid #b7e8d347;border-radius:50%;animation:atlas-pulse 2.8s ease-out infinite}
+.atlas-signal img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.atlas-signal span{position:absolute;left:50%;top:calc(100% + 10px);transform:translateX(-50%);white-space:nowrap;color:#f1faf4;font-size:11px;text-shadow:0 2px 12px #000;opacity:.73}
+.atlas-signal.is-active{width:clamp(64px,9vmin,94px);height:clamp(64px,9vmin,94px);border-color:#fff!important;box-shadow:0 0 0 5px #c9ecda34,0 0 33px color-mix(in srgb,var(--atlas-accent),transparent 30%)}
+.atlas-signal.is-active span{opacity:1;font-weight:700}
+.atlas-signal:focus-visible{outline:3px solid #ffe1a0!important;outline-offset:8px!important}
+.st-map.mode-atlas .leaflet-container{visibility:hidden}
+.st-map.mode-footprint #geoMap{opacity:1;pointer-events:auto}
+.st-map.mode-footprint .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(1.38) contrast(.68) saturate(.55)}
+.st-map.mode-footprint .st-map-list{display:block;max-height:28vh;padding:13px clamp(18px,3vw,48px) 95px;border-top:1px solid #a8dacc33}
+.st-map.mode-footprint .st-map-list .work{margin:0;padding:14px 4px!important}
+@keyframes atlas-sweep{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes atlas-pulse{0%{transform:scale(.9);opacity:.7}80%,100%{transform:scale(1.45);opacity:0}}
+@media(max-width:760px){.st-map .st-map-header{flex-wrap:wrap;padding:15px 17px!important;gap:10px}.st-map .st-map-header h1{font-size:27px!important}.atlas-mode-switch{gap:17px;margin-left:auto}.atlas-mode-switch button{font-size:11px}.st-map #map{min-height:450px!important}.atlas-ring{width:min(91vw,520px)}.atlas-ring-two{width:min(65vw,390px)}.atlas-sweep{width:min(91vw,520px)}.atlas-core{width:min(46vw,250px)}.atlas-core-content{bottom:9%;gap:4px}.atlas-core-content strong{font-size:17px}.atlas-core-content a{font-size:10px;padding:4px 2px}.atlas-signal{width:58px;height:58px}.atlas-signal.is-active{width:68px;height:68px}.atlas-signal span{font-size:9px;top:calc(100% + 7px)}.st-map.mode-footprint .st-map-list{max-height:33vh;padding-bottom:85px}}
+@media(max-width:450px){.st-map .st-map-header>div:first-child{flex:1 0 100%}.atlas-mode-switch{margin-left:0}.st-map .st-map-header #playRoute,.st-map .st-map-header #stopBtn{margin-left:auto}.atlas-core{width:min(48vw,210px)}.atlas-signal{width:52px;height:52px}.atlas-signal.is-active{width:60px;height:60px}}
+@media(prefers-reduced-motion:reduce){.atlas-sweep,.atlas-signal::after{animation:none}.atlas-signal,.atlas-core-image,#geoMap,#soundscapeAtlas{transition:none}}
