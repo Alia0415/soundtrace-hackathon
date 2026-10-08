@@ -9,6 +9,27 @@
 
 ## 已完成
 
+- [x] **U1 交互重定义落地·网页端**（2026-09-27，全 API+页面验收 PASS）
+      新定义见 docs/NORTH_STAR.md 顶部。交付：首页（顶栏用户/登录/签到+三入口+
+      地图+底部导航）；唱片册（侧栏/照片墙/唱片架/磁带/拖拽信箱匿名交换/收件箱/
+      联系方式交换）；社区；我的。新端点 user/checkin/photos/materials/exchange/feed。
+      验收：6 页面 200、中文提取归档磁带、签到/寄出/社区同步全 PASS。
+      踩坑：_seed_demo 调用先于定义致启动失败（移至 __main__）
+- [x] **T12 作品元数据**（2026-09-26，verify_iter4.py）job.metadata（标题/地点/
+      坐标/心情/故事）+ works.json 作品索引 + /api/works + UI 表单（📍一键坐标）
+- [x] **T13 情绪→prompt**（2026-09-26）六情绪映射，prompt_used 透明化。
+      验收：宁静→"peaceful, serene, calm" 进 prompt ✓
+- [x] **T14 节拍对齐**（2026-09-26）/api/analyze-beat（实测 117.5 BPM/26 拍）
+      + DAW「🥁节拍吸附」。踩坑：librosa 0.11 tempo 返回数组需 atleast_1d
+- [x] **T15 小程序端最小闭环**（2026-09-26，代码级）miniprogram/ 完整可导入
+      （录音→提取→生成→播放/转发）；服务改绑 0.0.0.0 支持真机；README 含步骤
+- [x] **T16 声音地图 Web 版**（2026-09-26）/map 暗色地图（Leaflet+carto 免key）
+      + 作品打点（故事/心情/试听弹窗）+ 时间序路线连线 + 路线连播。验收 200 ✓
+- [x] **T17 移动端适配**（2026-09-26，代码级）≤720px 媒体查询
+- [x] **T11 audio2audio 生成集成**（2026-09-26，verify_iter3.py）生成任务支持
+      melody_ref/ref_strength；UI 哼唱复选框+强度选择（素材库含旋律时自动可选）。
+      全链路 API 验收：hum→generate note-chroma **1.000**（>0.8）。
+      产品意义：**"哼唱成为作品主旋律"正式上线**
 - [x] **T8 audio2audio 旋律保持实验**（2026-09-26，experiment_a2a_melody.py）
       哼唱作参考生成：note-chroma **1.000**（理论上限）vs 无参考基线 0.564 →
       **哼唱可直接驱动生成旋律，产品路线打通**。产物：test-audio/experiments/a2a_*.wav；
@@ -36,7 +57,7 @@
 
 ## 待办（后续轮次）
 
-- [ ] **T11 audio2audio 生成集成**：把 T8 验证的能力产品化——生成任务支持
+
       "用哼唱驱动旋律"选项（ref_audio_input=旋律轨, strength 可调）
       验收：带哼唱素材时 UI 出现该选项；生成结果 note-chroma > 0.8
 

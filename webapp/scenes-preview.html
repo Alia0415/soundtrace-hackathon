@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>声迹 · 记忆背景场景</title>
+<link rel="stylesheet" href="assets/visual-v1/tokens.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f8f5e9;color:var(--ink);font:15px/1.55 var(--font-body)}button{font:inherit;cursor:pointer}.wrap{max-width:1280px;margin:auto;padding:24px 24px 70px}header{display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:1px solid #adc8c8;padding-bottom:16px}.brand{font:700 20px Georgia,serif;letter-spacing:.11em}header a{color:var(--ink);text-decoration:none;border:1px solid #9fc4c7;border-radius:50px;padding:7px 14px}h1,h2{font-family:var(--font-display);font-weight:600}h1{font-size:clamp(32px,4.5vw,55px);line-height:1.2;margin:34px 0 8px}.lead{color:var(--muted);max-width:790px;margin:0 0 24px}.main{position:relative;overflow:hidden;border-radius:25px;background:#d9e9e3;box-shadow:0 22px 50px #285f6a2b}.main img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}.topline{position:absolute;top:16px;left:18px;background:#fff9eadd;border:1px solid #fff;border-radius:99px;padding:7px 14px;font-size:13px;color:var(--ink);backdrop-filter:blur(6px)}.overlay{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);width:min(650px,88%);padding:20px 25px;text-align:center;background:#fff9e9e8;border:1px solid #fff;box-shadow:0 12px 24px #2f5b6d25;border-radius:22px;backdrop-filter:blur(8px)}.overlay h2{font-size:clamp(22px,3.2vw,34px);margin:0 0 4px}.overlay p{margin:0;color:var(--muted)}.overlay button{border:0;background:var(--ink);color:#fff;border-radius:50px;padding:8px 23px;margin-top:13px}.overlay button:focus-visible,.choice:focus-visible,#toggle:focus-visible{outline:3px solid var(--sun);outline-offset:2px}.hide-overlay .overlay{display:none}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:20px 0 12px}.toolbar p{margin:0;color:var(--muted);font-size:13px}.toolbar button{border:1px solid #9bbdc1;border-radius:99px;background:#fff9ee;padding:8px 13px;color:var(--ink)}.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.choice{width:100%;text-align:left;background:#fffdf3;border:2px solid transparent;border-radius:17px;padding:8px;display:flex;align-items:center;gap:12px;color:var(--ink);box-shadow:0 6px 18px #285f6a12}.choice[aria-pressed="true"]{border-color:var(--sea);background:#eaf5f1}.choice img{width:104px;aspect-ratio:16/9;object-fit:cover;border-radius:10px}.choice span{font-weight:650}.choice small{display:block;font-weight:400;color:var(--muted);margin-top:2px}.footer{font-size:12px;color:var(--muted);margin:20px 0 0}@media(max-width:800px){.choices{grid-template-columns:repeat(2,minmax(0,1fr))}.overlay{bottom:4%;padding:12px}.overlay p{font-size:12px}.overlay button{display:none}}@media(max-width:520px){.wrap{padding:16px 12px 40px}.choices{gap:7px}.choice{padding:5px;display:block}.choice img{width:100%}.choice span{display:block;padding:4px 5px 0;font-size:13px}.choice small{display:none}.main img{aspect-ratio:4/3}.overlay{width:91%;padding:8px}.overlay h2{font-size:18px}.overlay p{display:none}.topline{top:8px;left:8px;font-size:11px;padding:4px 8px}}@media(prefers-reduced-motion:no-preference){.choice{transition:transform .18s,background .18s}.choice:hover{transform:translateY(-2px)}}
+</style>
+</head>
+<body><div class="wrap"><header><div class="brand">SOUNDTRACE <span style="font-family:var(--font-display)">声迹</span></div><a href="visual-preview.html">四件记忆载体 →</a></header>
+<h1>每一扇窗，都通向一段声音。</h1><p class="lead">同一间可以收藏记忆的小屋，望出去是不同的季节与远方。切换六套背景，查看照片墙、落地窗和柜体如何共同承载内容。</p>
+<div class="main" id="stage"><img id="scene" src="assets/scenes-v1/sea-window.png" alt="海港午后的照片墙、落地窗和蓝色柜体"><div class="topline" id="badge">01 / 06 · 海港午后</div><div class="overlay"><h2>收藏你的声音记忆</h2><p>那些听见过的风景，会在这里重新响起。</p><button type="button">浏览我的收藏</button></div></div>
+<div class="toolbar"><p>点击场景切换 · 内容卡片仅用于检查可读性</p><button type="button" id="toggle" aria-pressed="true">隐藏内容预览</button></div>
+<div class="choices" id="choices"></div><p class="footer">当前为横版设计母图。图中的照片是插画元素；用户照片在实际页面中需作为独立可点击内容叠加。</p>
+</div><script>
+const scenes=[
+ {file:'sea-window.png',name:'海港午后',note:'海蓝 · 奶油白',alt:'海港午后的照片墙、落地窗和蓝色柜体'},
+ {file:'rainy-city.png',name:'雨夜城市',note:'靛蓝 · 琥珀',alt:'雨夜城市的照片墙、落地窗和紫色柜体'},
+ {file:'autumn-lake.png',name:'秋日湖畔',note:'赭红 · 苔绿',alt:'秋日湖畔的照片墙、落地窗和绿色柜体'},
+ {file:'snow-mountain.png',name:'雪山清晨',note:'冰蓝 · 浅紫',alt:'雪山清晨的照片墙、落地窗和浅蓝柜体'},
+ {file:'spring-meadow.png',name:'春日花野',note:'薄荷绿 · 浅桃',alt:'春日花野的照片墙、落地窗和浅绿柜体'},
+ {file:'desert-dusk.png',name:'沙漠黄昏',note:'珊瑚橙 · 紫影',alt:'沙漠黄昏的照片墙、落地窗和暖色柜体'}
+];
+const base='assets/scenes-v1/',stage=document.getElementById('stage'),img=document.getElementById('scene'),badge=document.getElementById('badge'),box=document.getElementById('choices');
+box.innerHTML=scenes.map((s,i)=>`<button type="button" class="choice" data-index="${i}" aria-pressed="${i===0}"><img src="${base+s.file}" alt="" loading="lazy"><span>${s.name}<small>${s.note}</small></span></button>`).join('');
+function select(i){const s=scenes[i];img.src=base+s.file;img.alt=s.alt;badge.textContent=String(i+1).padStart(2,'0')+' / 06 · '+s.name;box.querySelectorAll('.choice').forEach((b,j)=>b.setAttribute('aria-pressed',String(i===j)))}
+box.addEventListener('click',e=>{const b=e.target.closest('.choice');if(b)select(Number(b.dataset.index))});
+document.getElementById('toggle').addEventListener('click',e=>{const hidden=stage.classList.toggle('hide-overlay');e.currentTarget.setAttribute('aria-pressed',String(!hidden));e.currentTarget.textContent=hidden?'显示内容预览':'隐藏内容预览'});
+</script></body></html>

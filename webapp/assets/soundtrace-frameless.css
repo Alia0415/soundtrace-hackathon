@@ -1,0 +1,52 @@
+/* Open surfaces and direct manipulation across the SoundTrace experience. */
+.st-panel,.step,.postbox,.post,.card,.msec,.work{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important}
+.st-panel:hover,.entry:hover,.post:hover{border-color:transparent!important}
+.st-pagehead p,.st-step-copy{display:none!important}
+
+/* Home: artwork and type carry the hierarchy; paths are open rows. */
+.st-home-hero{gap:0}
+.st-home-lead{border:0;border-radius:0;background:transparent;box-shadow:none;padding-left:clamp(12px,4vw,60px)}
+.st-home-lead::after{opacity:.35}
+.st-home-visual{border:0;border-radius:0;box-shadow:none;clip-path:polygon(5% 0,100% 0,100% 100%,0 100%)}
+.st-home-grid{gap:0;margin-top:35px;border-top:1px solid #b7dad33d;border-bottom:1px solid #b7dad33d}
+.st-home-path{min-height:130px;border:0;border-right:1px solid #b7dad333;border-radius:0;background:transparent;box-shadow:none;padding:25px 25px 20px}
+.st-home-path:last-child{border-right:0}
+.st-home-path:hover{background:#9cd7c909;transform:translateY(-3px)}
+.st-home-path h2{margin:17px 0 0}.st-home-path p{display:none}
+.st-home-bottom{gap:35px;margin-top:34px}
+.st-home-bottom .st-panel{padding:12px 3px!important}
+.st-home-bottom .st-panel + .st-panel{padding-left:36px!important;border-left:1px solid #b7dad333!important}
+.st-home-bottom .st-panel p:not(#userSummary){display:none}
+
+/* Studio: a sequence of work surfaces, with only functional inputs framed. */
+.st-studio .step{margin:0!important;padding:34px 12px 40px!important;border-top:1px solid #b7dad33d!important;overflow:visible}
+.st-studio .step::after{display:none}
+.st-studio .step h2{margin-bottom:25px!important}
+.st-studio input[type=text],.st-studio select,.st-community textarea,.st-profile-name-edit input{border:0!important;border-bottom:1px solid #b7dad365!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.st-studio input[type=text]:focus,.st-studio select:focus,.st-community textarea:focus,.st-profile-name-edit input:focus{border-bottom-color:#d8eee8!important}
+.st-studio .mat,.st-studio .trayline .tag{border:0!important;border-bottom:1px solid #b7dad333!important;border-radius:0!important;background:transparent!important}
+
+/* Community: handwritten feed and a single open compose area. */
+.st-community-layout,.st-profile-layout{gap:48px}
+.st-community-main,.st-community-side,.st-profile-main,.st-profile-side{gap:30px}
+.st-composer,.st-feed-card,.st-community-guide,.st-profile-latest,.st-me .sent,.st-me .st-profile-card{padding:12px 0 24px!important}
+.st-community .st-composer h2{margin:18px 0 20px}
+.st-community .st-composer>p:not(.st-inline-status){display:none}
+.st-community textarea{min-height:110px;padding:16px 0!important}
+.st-community-feed{gap:0}
+.st-feed-card{border-top:1px solid #b7dad33b!important}
+.st-feed-note{padding:0;border:0;background:none}
+.st-community-guide{border-top:1px solid #b7dad33b!important}
+.st-community-feature,.st-profile-feature{border:0;border-radius:0;box-shadow:none}
+
+/* Personal archive and map: thin separators instead of containers. */
+.st-me .sent,.st-profile-latest{border-top:1px solid #b7dad33b!important}
+.st-me .sent h3{display:none}
+.st-profile-card .stat div{border-left:1px solid #b7dad33b!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.st-profile-card .stat div:first-child{border-left:0!important}
+.st-profile-name-edit input{padding-left:0!important}
+.st-map #map{border:0!important;border-radius:0!important;box-shadow:none!important}
+.st-map .work{border:0!important;border-bottom:1px solid #b7dad33b!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+
+@media(max-width:900px){.st-home-hero{gap:0}.st-home-visual{clip-path:none}.st-community-layout,.st-profile-layout{gap:22px}}
+@media(max-width:640px){.st-home-lead{padding:26px 12px}.st-home-grid{margin-top:20px}.st-home-path{min-height:85px;padding:19px 10px;border-right:0;border-bottom:1px solid #b7dad333}.st-home-path:last-child{border-bottom:0}.st-home-path h2{margin:9px 0 0}.st-home-bottom{gap:12px}.st-home-bottom .st-panel + .st-panel{padding-left:3px!important;border-left:0!important;border-top:1px solid #b7dad333!important}.st-studio .step{padding:28px 4px 34px!important}.st-community-layout,.st-profile-layout{gap:18px}.st-community-main,.st-community-side,.st-profile-main,.st-profile-side{gap:20px}.st-composer,.st-feed-card,.st-community-guide,.st-profile-latest,.st-me .sent,.st-me .st-profile-card{padding:12px 0 22px!important}}

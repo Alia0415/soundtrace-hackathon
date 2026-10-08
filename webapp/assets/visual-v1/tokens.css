@@ -1,0 +1,15 @@
+:root {
+  --ink: #174e68;
+  --sea: #2789b6;
+  --sky: #82c6e9;
+  --paper: #fff8e9;
+  --white: #fffef8;
+  --sun: #e5ad52;
+  --leaf: #718f69;
+  --muted: #567486;
+  --font-display: "Songti SC", STSong, SimSun, serif;
+  --font-body: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --radius-card: 24px;
+  --radius-control: 999px;
+  --space-unit: 8px;
+}

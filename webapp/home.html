@@ -1,189 +1,56 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f4f0e7">
-<title>声迹 SoundTrace · 声音创作台</title>
-<style>
-:root{--paper:#f4f0e7;--ink:#26322e;--muted:#78817c;--green:#315d50;--green2:#dce8df;--orange:#d87348;--gold:#edc46b;--card:#fffdf8;--line:rgba(38,50,46,.14);--shadow:0 18px 55px rgba(48,60,53,.11)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif}button,input{font:inherit}button{cursor:pointer}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.14'/%3E%3C/svg%3E")}
-.shell{max-width:1160px;margin:auto;padding:0 24px 100px}header{height:76px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;font-weight:800}.brand i{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:white;font-style:normal;box-shadow:inset 0 0 0 6px rgba(255,255,255,.16)}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.22em}.nav{display:flex;gap:8px}.ghost,.nav a{border:1px solid var(--line);background:rgba(255,255,255,.45);padding:9px 15px;border-radius:999px;color:var(--ink);text-decoration:none}
-.hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:48px;padding:48px 0 64px;min-height:420px}.eyebrow{font-size:12px;color:var(--green);font-weight:800;letter-spacing:.15em}.eyebrow:before{content:"";display:inline-block;width:28px;height:1px;background:var(--green);vertical-align:middle;margin-right:9px}.hero h1{font:500 clamp(46px,6.5vw,76px)/1.06 Georgia,"Songti SC",serif;letter-spacing:-.055em;margin:17px 0 21px}.hero p{max-width:560px;color:#5e6863;line-height:1.9;font-size:17px}.hero-art{position:relative;height:320px}.sun{position:absolute;width:190px;height:190px;border-radius:50%;background:var(--gold);right:20px;top:0}.mountain{position:absolute;inset:70px 0 0;background:linear-gradient(145deg,#779589,#315d50);clip-path:polygon(0 100%,14% 56%,28% 75%,50% 13%,67% 62%,79% 38%,100% 100%);border-radius:20px}.water{position:absolute;left:0;right:0;height:80px;bottom:-4px;background:#7a9ca3;border-radius:50% 50% 15px 15px;opacity:.9}.float{position:absolute;background:rgba(255,253,248,.88);backdrop-filter:blur(8px);border:1px solid white;border-radius:15px;padding:11px 14px;box-shadow:var(--shadow);font-size:12px}.f1{left:-15px;top:34px;transform:rotate(-5deg)}.f2{right:-8px;bottom:20px;transform:rotate(3deg)}
-.flowbar{position:sticky;top:12px;z-index:12;display:grid;grid-template-columns:repeat(3,1fr);max-width:660px;margin:0 auto 34px;padding:6px;background:rgba(255,253,248,.86);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.8);border-radius:999px;box-shadow:0 10px 30px rgba(50,60,54,.1)}.flowbar a{padding:10px 14px;text-align:center;text-decoration:none;color:var(--muted);border-radius:999px;font-size:13px}.flowbar a:hover{background:var(--green2);color:var(--green)}
-.section{margin:0 0 62px;scroll-margin-top:90px}.head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:20px}.head h2{font:500 34px Georgia,"Songti SC",serif;margin:0 0 5px}.head p{margin:0;color:var(--muted)}.badge{font-size:11px;background:#e5e1d8;color:#657069;padding:7px 11px;border-radius:999px}
-.card{background:rgba(255,253,248,.87);border:1px solid rgba(255,255,255,.9);border-radius:28px;box-shadow:var(--shadow);overflow:hidden}.capture{display:grid;grid-template-columns:.9fr 1.1fr;min-height:380px}.capture-art{position:relative;background:linear-gradient(155deg,#91b2aa,#d6c58e 56%,#c4794e);overflow:hidden}.capture-art:before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:#efc76d;right:-50px;top:-70px}.capture-art:after{content:"";position:absolute;left:-15%;right:-15%;bottom:-25%;height:68%;border-radius:50% 50% 0 0;background:#315d50;box-shadow:0 -55px 0 rgba(255,255,255,.15)}.capture-copy{position:absolute;z-index:2;left:28px;right:28px;bottom:26px;color:white}.capture-copy b{display:block;font:500 30px Georgia,"Songti SC",serif}.capture-copy small{opacity:.82}.capture-panel{padding:38px;display:flex;flex-direction:column;justify-content:center}.step{color:var(--orange);font-size:11px;font-weight:900;letter-spacing:.18em}.capture-panel h3,.compose-form h3{font-size:25px;margin:10px 0}.capture-panel p{color:var(--muted);line-height:1.75;margin:0 0 20px}.row{display:flex;gap:10px;flex-wrap:wrap}.primary,.record{border:0;border-radius:999px;padding:13px 20px;color:white;font-weight:800}.primary{background:var(--green)}.record{background:var(--orange)}.record.live{animation:pulse 1.2s infinite}@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(216,115,72,.13)}}.upload{position:relative;overflow:hidden}.upload input{position:absolute;inset:0;opacity:0;cursor:pointer}.status{min-height:22px;color:var(--green);font-size:13px;margin-top:14px;line-height:1.6}
-.detect{display:none;padding:30px;border-top:1px solid var(--line)}.detect.show{display:block}.detect h3{margin:7px 0}.detect>p{margin:0 0 18px;color:var(--muted)}.sound-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.sound{position:relative;text-align:left;min-height:110px;padding:16px;border:1px solid var(--line);border-radius:17px;background:white;color:var(--ink);transition:.18s}.sound.on{background:var(--green2);border-color:#82a08f;transform:translateY(-2px)}.sound strong{display:block;margin:8px 0 3px}.sound small{color:var(--muted)}.check{position:absolute;right:11px;top:11px;width:20px;height:20px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center}.sound.on .check{background:var(--green);color:white}.wave{height:20px;display:flex;align-items:center;gap:2px}.wave i{display:block;width:2px;background:currentColor;opacity:.5;border-radius:3px}.detect-foot{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:20px}
-.library{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.empty{grid-column:1/-1;padding:46px;text-align:center;border:1px dashed #aab1ac;border-radius:22px;color:var(--muted)}.asset{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 10px 28px rgba(48,60,53,.07)}.asset-top{display:flex;justify-content:space-between;gap:12px}.asset-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--green2);color:var(--green);font-size:20px}.asset h3{font-size:15px;margin:2px 0 4px}.asset p{font-size:11px;color:var(--muted);margin:0}.asset audio{width:100%;height:32px;margin-top:14px}.asset button{border:0;background:none;color:var(--muted)}
-.compose{display:grid;grid-template-columns:.95fr 1.05fr}.compose-form{padding:38px;border-right:1px solid var(--line)}.label{font-size:13px;font-weight:800;display:block;margin:21px 0 10px}.hum{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px;border:1px dashed #98a19c;background:transparent;border-radius:14px;color:var(--ink)}.styles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.style{padding:12px 7px;border:1px solid var(--line);border-radius:14px;background:white;color:var(--ink)}.style.on{border-color:var(--orange);background:#fff5ed;color:var(--orange)}.title-input{width:100%;padding:13px;border:1px solid var(--line);border-radius:13px;background:#fffdfa;color:var(--ink)}.compose-preview{padding:38px;background:#263c35;color:white;position:relative;overflow:hidden}.compose-preview:after{content:"";position:absolute;width:260px;height:260px;border:42px solid rgba(237,196,107,.14);border-radius:50%;right:-100px;top:-100px}.disc{width:235px;height:235px;border-radius:50%;margin:5px auto 25px;background:repeating-radial-gradient(#14211d 0 3px,#263630 4px 7px);box-shadow:0 22px 45px #101b17;position:relative}.disc:before{content:"云南散记";position:absolute;inset:68px;border-radius:50%;display:grid;place-items:center;background:var(--orange);font:16px Georgia,"Songti SC",serif}.disc:after{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:var(--paper);inset:0;margin:auto}.disc.spin{animation:spin 5s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.track{position:relative;z-index:2}.track h3{font:26px Georgia,"Songti SC",serif;margin:0}.track p{color:#bdcbc4;font-size:13px}.player{display:flex;align-items:center;gap:12px;margin-top:24px}.play{width:44px;height:44px;border:0;border-radius:50%;background:var(--gold);color:#243630}.timeline{height:3px;background:rgba(255,255,255,.2);flex:1}.timeline i{display:block;height:100%;width:0;background:var(--gold)}.finish{display:none;margin-top:16px}.finish.show{display:flex;gap:9px}.finish a{text-decoration:none;text-align:center;flex:1}.toast{position:fixed;z-index:50;left:50%;top:20px;transform:translate(-50%,-90px);background:var(--ink);color:white;border-radius:999px;padding:12px 18px;font-size:13px;transition:.3s}.toast.show{transform:translate(-50%,0)}
-@media(max-width:800px){.shell{padding:0 15px 90px}.hero{grid-template-columns:1fr;padding-top:25px}.hero-art{height:260px}.capture,.compose{grid-template-columns:1fr}.capture-art{min-height:290px}.compose-form{border-right:0;border-bottom:1px solid var(--line)}.sound-grid{grid-template-columns:1fr 1fr}.library{grid-template-columns:1fr}.head{align-items:start;flex-direction:column}.nav .studio{display:none}.flowbar{top:8px}.hero h1{font-size:48px}}
-@media(max-width:640px){
-  html{scroll-padding-top:76px}
-  body{padding-bottom:env(safe-area-inset-bottom)}
-  .shell{padding:0 14px calc(82px + env(safe-area-inset-bottom))}
-  header{height:64px}
-  .brand i{width:32px;height:32px}
-  .brand small{font-size:8px}
-  .nav{gap:5px}
-  .nav a{padding:8px 10px;font-size:12px;white-space:nowrap}
-  .hero{min-height:auto;padding:26px 0 38px;gap:18px}
-  .hero h1{font-size:clamp(40px,13vw,52px);margin:14px 0 16px}
-  .hero p{font-size:14px;line-height:1.75;margin-bottom:0}
-  .hero-art{height:215px;margin:0 5px}
-  .sun{width:125px;height:125px;right:12px}
-  .mountain{inset:47px 0 0}
-  .water{height:58px}
-  .float{padding:8px 10px;font-size:10px}
-  .f1{left:2px;top:20px}.f2{right:0;bottom:10px}
-  .flowbar{top:calc(6px + env(safe-area-inset-top));width:calc(100% - 4px);margin-bottom:28px;padding:4px}
-  .flowbar a{padding:10px 5px;font-size:11px}
-  .section{margin-bottom:48px}
-  .head{gap:8px;margin-bottom:15px}
-  .head h2{font-size:28px}
-  .head p{font-size:13px;line-height:1.6}
-  .badge{font-size:10px;padding:6px 9px}
-  .card{border-radius:22px}
-  .capture-art{min-height:220px}
-  .capture-copy{left:20px;right:20px;bottom:20px}
-  .capture-copy b{font-size:25px}
-  .capture-panel{padding:26px 20px}
-  .capture-panel h3,.compose-form h3{font-size:22px}
-  .capture-panel p{font-size:14px}
-  .row{display:grid;grid-template-columns:1fr 1fr}
-  .row button,.row label{min-height:46px;display:grid;place-items:center;text-align:center}
-  .row .record{grid-column:1/-1}
-  .detect{padding:24px 18px}
-  .detect>p{font-size:13px;line-height:1.6}
-  .sound-grid{grid-template-columns:1fr;gap:9px}
-  .sound{min-height:76px;padding:13px 42px 13px 14px}
-  .sound .wave{width:84px;height:14px}
-  .sound strong{position:absolute;left:115px;top:15px;margin:0}
-  .sound small{position:absolute;left:115px;top:40px}
-  .detect-foot{align-items:stretch;flex-direction:column}
-  .detect-foot .primary{width:100%;min-height:48px}
-  .library{gap:10px}
-  .empty{padding:34px 22px;line-height:1.7}
-  .asset{padding:15px}
-  .asset audio{height:38px}
-  .compose-form,.compose-preview{padding:27px 20px}
-  .hum{min-height:50px;text-align:left}
-  .styles{gap:6px}
-  .style{padding:11px 4px;font-size:13px;min-height:60px}
-  .title-input{min-height:48px}
-  .compose-form>.primary{min-height:49px}
-  .disc{width:190px;height:190px}
-  .disc:before{inset:56px;font-size:14px}
-  .player{gap:9px}
-  .finish{flex-direction:column}
-  .finish a{min-height:46px;display:grid;place-items:center}
-}
-@media(max-width:370px){
-  .nav .studio{display:none}
-  .hero h1{font-size:40px}
-  .sound strong,.sound small{left:105px}
-  .style small{display:none}
-}</style>
+<script src="/assets/soundtrace-raster.js?v=6" defer></script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>声迹 · 把此刻留在声音里</title>
+  <script src="/assets/soundtrace-shell.js?v=4" defer></script>
+<link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
+<link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
+<link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=1">
 </head>
-<body>
-<div class="toast" id="toast">已保存</div>
-<div class="shell">
-<header>
-  <div class="brand"><i>&#12349;</i><span>声迹<small>SOUNDTRACE</small></span></div>
-  <nav class="nav"><a href="memories.html">我的记忆空间</a><a class="studio" href="index.html">专业混音台</a></nav>
-</header>
-
-<section class="hero">
-  <div>
-    <span class="eyebrow">LISTEN TO WHERE YOU'VE BEEN</span>
-    <h1>把经过的地方，<br>写成一首歌。</h1>
-    <p>录下风、鸟鸣和街道，从现场挑选想保存的声音，再加入自己的哼唱。声迹会把真实经历重新编成一段音乐。</p>
-  </div>
-  <div class="hero-art" aria-label="云南山水抽象插画"><div class="sun"></div><div class="mountain"></div><div class="water"></div><div class="float f1">洱海 · 风和水鸟<br><small>00:18</small></div><div class="float f2">今天的声音已收进素材库</div></div>
-</section>
-
-<nav class="flowbar"><a href="#collect">① 录下声音</a><a href="#library">② 素材库</a><a href="#compose">③ 生成音乐</a></nav>
-
-<section class="section" id="collect">
-  <div class="head"><div><h2>录下此刻</h2><p>系统会辨认现场，再由你决定哪些声音值得留下。</p></div><span class="badge" id="engine">正在检查声音引擎…</span></div>
-  <div class="card">
-    <div class="capture">
-      <div class="capture-art"><div class="capture-copy"><b>云南 · 大理</b><small>2026.09.28 · 一段等待被记住的现场</small></div></div>
-      <div class="capture-panel">
-        <span class="step">01 · 采集</span><h3>现在，你听见了什么？</h3>
-        <p>录制 10–20 秒环境声，也可以上传已有音频。没有 GPU 服务时，原声仍会真实保留并参与本地混音；AI 声音分离需连接模型服务。</p>
-        <div class="row">
-          <button class="record" id="recordBtn">● 开始录音</button>
-          <label class="ghost upload">上传音频<input type="file" id="audioPick" accept="audio/*"></label>
-          <button class="ghost" id="demoBtn">使用示例</button>
-        </div>
-        <div class="status" id="recordStatus">准备好了就开始。录音仅用于本次创作。</div>
+<body class="st-home st-home-calm">
+  <header class="home-header">
+    <a class="home-brand" href="/" aria-label="声迹首页">声迹<span>SoundTrace</span></a>
+  </header>
+  <main>
+    <section class="home-scene" aria-labelledby="homeTitle" id="homeScene">
+      <div class="home-landscape" aria-hidden="true"><span class="home-art-desktop" data-raster="home-desktop"></span><span class="home-art-mobile" data-raster="home-mobile"></span></div>
+      <div class="home-story">
+        <h1 id="homeTitle">此刻，<br>听见生活。</h1>
+        <a class="home-record" href="/capture"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4m-3 0h6"/></svg>录一段声音</a>
       </div>
-    </div>
-    <div class="detect" id="detect">
-      <span class="step">02 · 挑选</span><h3>我们从现场听到了这些</h3><p>点选想保留的声音，然后将它们放进素材库。</p>
-      <div class="sound-grid" id="sounds"></div>
-      <div class="detect-foot"><span class="status" id="extractStatus"></span><button class="primary" id="saveBtn">保存所选声音</button></div>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="library">
-  <div class="head"><div><h2>声音素材库</h2><p>每一段素材，都是这次经历留下的一层纹理。</p></div><span class="badge" id="assetCount">0 段素材</span></div>
-  <div class="library" id="assetGrid"><div class="empty">还没有素材。先录一段现场，或者点击“使用示例”。</div></div>
-</section>
-
-<section class="section" id="compose">
-  <div class="head"><div><h2>生成一首记忆音乐</h2><p>从素材库取出真实声音，选择它应该拥有的气质。</p></div></div>
-  <div class="card compose">
-    <div class="compose-form">
-      <span class="step">03 · 创作</span><h3>制作一张属于你的唱片</h3>
-      <label class="label">哼唱旋律</label>
-      <button class="hum" id="humBtn"><span>&#9835; 加入一段自己的哼唱</span><span id="humState">未录制</span></button>
-      <label class="label">选择曲风</label>
-      <div class="styles"><button class="style" data-style="lofi">Lo-fi<br><small>温暖松弛</small></button><button class="style on" data-style="ambient">氛围<br><small>辽阔安静</small></button><button class="style" data-style="cinematic">电影感<br><small>细腻叙事</small></button></div>
-      <label class="label" for="title">唱片名字</label><input class="title-input" id="title" value="风从洱海来">
-      <button class="primary" id="generateBtn" style="width:100%;margin-top:22px">生成我的记忆音乐</button>
-      <div class="status" id="generateStatus">生成时将使用素材库中已勾选的声音。</div>
-      <div class="finish" id="finish"><a class="primary" id="saveMemory" href="memories.html">收藏到记忆空间</a><a class="ghost" href="index.html">进入专业混音台</a></div>
-    </div>
-    <div class="compose-preview">
-      <div class="disc" id="disc"></div>
-      <div class="track"><h3 id="previewTitle">风从洱海来</h3><p id="meta">环境声音 · 氛围音乐 · 等待生成</p><div class="player"><button class="play" id="playBtn">&#9654;</button><div class="timeline"><i id="progress"></i></div><small id="clock">0:00</small></div><audio id="player" preload="metadata"></audio></div>
-    </div>
-  </div>
-</section>
-</div>
-<script>
-var $=function(s){return document.querySelector(s)}, sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
-var backend=false,uploadId=null,recorder=null,chunks=[],selected=[],assets=[],style='ambient',ctx=null,capturedUrl=null,currentTags=[],generatedUrl=null;
-var DEMO='/outputs/soundtrace_demo.wav';
-var demoTags=[{en:'birds singing',zh:'清晨鸟鸣',score:1,url:'/outputs/demo_birds.wav',kind:'鸟鸣',note:'合成演示 · 独立鸟鸣音效'},{en:'wind',zh:'穿过树叶的风',score:1,url:'/outputs/demo_wind.wav',kind:'风声',note:'合成演示 · 独立风声音效'},{en:'flowing stream',zh:'远处的水声',score:1,url:'/outputs/demo_stream.wav',kind:'水流',note:'合成演示 · 独立水流音效'},{en:'city traffic',zh:'经过的车流',score:1,url:'/outputs/demo_traffic.wav',kind:'车流',note:'合成演示 · 独立车流音效'}];
-function toast(m){var e=$('#toast');e.textContent=m;e.classList.add('show');setTimeout(function(){e.classList.remove('show')},2100)}
-async function api(url,opt){var r=await fetch(url,opt);if(!r.ok){var b=await r.json();throw new Error(b.detail||r.statusText)}return r.json()}
-async function poll(id,cb){for(;;){var j=await api('/api/jobs/'+id);cb(j);if(j.status==='done'||j.status==='failed')return j;await sleep(1600)}}
-async function check(){try{var h=await api('/api/health');backend=true;$('#engine').textContent='● 声音引擎已连接 · '+String(h.device).toUpperCase()}catch(e){$('#engine').textContent='● 本机录音模式 · AI 分离未连接'}}
-function bars(seed){var s='';for(var n=0;n<18;n++)s+='<i style="height:'+(5+(n*7+seed*11)%16)+'px"></i>';return s}
-function showSounds(tags,demo){selected=[];currentTags=tags;$('#detect').classList.add('show');$('#sounds').innerHTML=tags.map(function(t,i){var note=t.real?'来自本次真实录音 · 暂未分离':(t.note||'匹配度 '+Math.round(t.score*100)+'%');return '<button class="sound" data-idx="'+i+'"><span class="check">&#10003;</span><div class="wave">'+bars(i)+'</div><strong>'+(t.zh||t.en)+'</strong><small>'+note+'</small></button>'}).join('');document.querySelectorAll('.sound').forEach(function(b){b.onclick=function(){b.classList.toggle('on');selected=Array.from(document.querySelectorAll('.sound.on')).map(function(x){var t=currentTags[Number(x.dataset.idx)];return{en:t.en,zh:t.zh||t.en,demo:!!demo,url:t.url||null,real:!!t.real,kind:t.kind||null}})}});$('#recordStatus').textContent=demo?'示例现场已经准备好。':tags.some(function(t){return t.real})?'录音已真实保留。当前未连接 AI 分离服务，可先保存完整现场原声。':'识别完成，请挑选声音。';$('#detect').scrollIntoView({behavior:'smooth',block:'center'})}
-$('#demoBtn').onclick=function(){showSounds(demoTags,true)};
-$('#audioPick').onchange=function(e){handleFile(e.target.files[0])};
-$('#recordBtn').onclick=async function(){if(recorder&&recorder.state==='recording'){recorder.stop();return}try{var stream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];recorder=new MediaRecorder(stream);recorder.ondataavailable=function(e){chunks.push(e.data)};recorder.onstop=async function(){stream.getTracks().forEach(function(t){t.stop()});$('#recordBtn').classList.remove('live');$('#recordBtn').textContent='● 开始录音';await handleFile(new Blob(chunks,{type:chunks[0]&&chunks[0].type||'audio/webm'}))};recorder.start();$('#recordBtn').classList.add('live');$('#recordBtn').textContent=backend?'■ 结束并识别':'■ 结束录音';$('#recordStatus').textContent='正在收听现场… 建议录制 10–20 秒'}catch(e){$('#recordStatus').textContent='无法使用麦克风，请允许权限或上传音频。'}};
-async function wav(file){ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();var b=await ctx.decodeAudioData(await file.arrayBuffer()),d=b.getChannelData(0),out=new ArrayBuffer(44+d.length*2),v=new DataView(out);function ws(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))}ws(0,'RIFF');v.setUint32(4,36+d.length*2,true);ws(8,'WAVE');ws(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,b.sampleRate,true);v.setUint32(28,b.sampleRate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);ws(36,'data');v.setUint32(40,d.length*2,true);for(var i=0,o=44;i<d.length;i++,o+=2){var x=Math.max(-1,Math.min(1,d[i]));v.setInt16(o,x<0?x*32768:x*32767,true)}return new Blob([out],{type:'audio/wav'})}
-async function handleFile(file){if(!file)return;$('#recordStatus').textContent='正在整理这段声音…';capturedUrl=URL.createObjectURL(file);var realTag={en:'field recording',zh:'本次现场原声',score:1,url:capturedUrl,real:true};if(!backend){await sleep(500);showSounds([realTag],false);return}try{var fd=new FormData();fd.append('file',new File([await wav(file)],'memory.wav',{type:'audio/wav'}));var u=await api('/api/upload',{method:'POST',body:fd});uploadId=u.upload_id;$('#recordStatus').textContent='已记录 '+u.duration+' 秒，正在辨认声音…';var a=await api('/api/analyze/'+uploadId,{method:'POST'});showSounds(a.tags,false)}catch(e){showSounds([realTag],false);$('#recordStatus').textContent='录音已真实保存；AI 分离服务暂不可用，先保留完整现场原声。'}}
-$('#saveBtn').onclick=async function(){if(!selected.length){toast('至少选择一种想留下的声音');return}var st=$('#extractStatus');if(!backend||!uploadId||selected[0].demo||selected[0].real){st.textContent='正在把声音收进素材库…';await sleep(500);selected.forEach(function(x){var url=x.url;if(!url)return;if(!assets.some(function(a){return a.en===x.en&&a.url===url})){assets.push({en:x.en,zh:x.zh,url:url,real:!!x.real,demo:!!x.demo,kind:x.kind||null})}});renderAssets();st.textContent='保存完成 \u2713';toast('声音已经收好');$('#library').scrollIntoView({behavior:'smooth'});return}for(var i=0;i<selected.length;i++){var c=selected[i];st.textContent='正在分离 '+c.zh+'（'+(i+1)+'/'+selected.length+'）…';try{var q=await api('/api/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'extract',upload_id:uploadId,target_en:c.en,target_zh:c.zh})});var fin=await poll(q.job_id,function(j){st.textContent=j.stage});if(fin.status==='done')assets.push({en:c.en,zh:c.zh,url:'/'+fin.results.denoised})}catch(e){st.textContent=c.zh+' 提取失败，继续处理其他素材。'}}renderAssets();st.textContent='已保存 '+assets.length+' 段声音 \u2713';$('#library').scrollIntoView({behavior:'smooth'})};
-function renderAssets(){if(!assets.length)return;$('#assetCount').textContent=assets.length+' 段素材';$('#assetGrid').innerHTML=assets.map(function(a,i){return '<article class="asset"><div class="asset-top"><div style="display:flex;gap:11px"><span class="asset-icon">&#9835;</span><div><h3>'+a.zh+'</h3><p>'+(a.real?'本次真实录音 · 完整现场原声':a.kind?'合成演示素材 · '+a.kind:'云南散记 · 环境声音')+'</p></div></div><button onclick="removeAsset('+i+')">×</button></div><audio controls src="'+a.url+'"></audio></article>'}).join('')}
-window.removeAsset=function(i){assets.splice(i,1);if(assets.length)renderAssets();else{$('#assetCount').textContent='0 段素材';$('#assetGrid').innerHTML='<div class="empty">还没有素材。先录一段现场，或者点击“使用示例”。</div>'}};
-document.querySelectorAll('.style').forEach(function(b){b.onclick=function(){document.querySelectorAll('.style').forEach(function(x){x.classList.remove('on')});b.classList.add('on');style=b.dataset.style}});
-$('#humBtn').onclick=function(){$('#humState').textContent='已加入 8 秒';$('#humState').style.color='var(--orange)';toast('已加入一段哼唱轮廓')};
-$('#title').oninput=function(e){$('#previewTitle').textContent=e.target.value||'未命名唱片'};
-async function decodeSource(url){var r=await fetch(url);if(!r.ok)throw new Error('音频读取失败');ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();return ctx.decodeAudioData(await r.arrayBuffer())}
-function audioBufferToWav(buffer){var channels=buffer.numberOfChannels,length=buffer.length*channels*2+44,out=new ArrayBuffer(length),v=new DataView(out),offset=44;function ws(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))}ws(0,'RIFF');v.setUint32(4,length-8,true);ws(8,'WAVE');ws(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,channels,true);v.setUint32(24,buffer.sampleRate,true);v.setUint32(28,buffer.sampleRate*channels*2,true);v.setUint16(32,channels*2,true);v.setUint16(34,16,true);ws(36,'data');v.setUint32(40,length-44,true);var data=[];for(var c=0;c<channels;c++)data.push(buffer.getChannelData(c));for(var n=0;n<buffer.length;n++)for(var c=0;c<channels;c++){var x=Math.max(-1,Math.min(1,data[c][n]));v.setInt16(offset,x<0?x*32768:x*32767,true);offset+=2}return new Blob([out],{type:'audio/wav'})}
-function blobToDataURL(blob){return new Promise(function(resolve,reject){var reader=new FileReader();reader.onload=function(){resolve(reader.result)};reader.onerror=reject;reader.readAsDataURL(blob)})}
-async function mixMemory(assetUrls){var decoded=await Promise.all([DEMO].concat(assetUrls).map(decodeSource)),music=decoded[0],layers=decoded.slice(1),Offline=window.OfflineAudioContext||window.webkitOfflineAudioContext;if(!Offline)throw new Error('浏览器不支持本地混音');var durations=[10,music.duration].concat(layers.map(function(x){return x.duration})),rate=16000,duration=Math.min(24,Math.max.apply(null,durations)),off=new Offline(1,Math.ceil(duration*rate),rate);function add(buffer,volume){var source=off.createBufferSource(),gain=off.createGain();source.buffer=buffer;source.loop=true;gain.gain.value=volume;source.connect(gain).connect(off.destination);source.start(0)}add(music,.78);var layerVolume=Math.min(.3,.5/Math.sqrt(Math.max(1,layers.length)));layers.forEach(function(layer){add(layer,layerVolume)});return audioBufferToWav(await off.startRendering())}
-$('#generateBtn').onclick=async function(){var st=$('#generateStatus'),btn=$('#generateBtn');btn.disabled=true;if(!assets.length){assets=[{en:'birds singing',zh:'清晨鸟鸣',url:'/outputs/demo_birds.wav',demo:true,kind:'鸟鸣'}];renderAssets();st.textContent='已自动加入一段示例环境声。'}var realAssets=assets.filter(function(x){return x.real}),demoAssets=assets.filter(function(x){return x.demo}),usedLocalMix=false;try{var src=DEMO,storedSrc=DEMO;if(backend&&!realAssets.length&&!demoAssets.length){var q=await api('/api/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'generate',style:style,duration:30,seed:Math.floor(Math.random()*9999),target_en:assets.map(function(x){return x.en}).join(', ')})});var fin=await poll(q.job_id,function(j){st.textContent=j.stage+' · '+Math.round(j.elapsed)+'s'});if(fin.status==='failed')throw new Error('生成失败');src='/'+fin.results.generated;storedSrc=src}else{var msgs=['正在听取你保存的声音…','正在寻找旋律和节奏…','正在制作唱片…'];for(var i=0;i<msgs.length;i++){st.textContent=msgs[i];await sleep(500+i*120)}var localAssets=assets.filter(function(x){return x.url});if(localAssets.length){usedLocalMix=true;st.textContent=realAssets.length?'正在混合全部真实现场录音…':'正在混合所选的不同示例素材…';var mixed=await mixMemory(localAssets.map(function(x){return x.url}));if(generatedUrl)URL.revokeObjectURL(generatedUrl);generatedUrl=URL.createObjectURL(mixed);src=generatedUrl;storedSrc=await blobToDataURL(mixed)}}$('#player').src=src;var names=assets.map(function(x){return x.zh}).join('、');$('#meta').textContent=names+' · '+(style==='ambient'?'氛围':style==='lofi'?'Lo-fi':'电影感');st.textContent=realAssets.length?'完成：已混入 '+realAssets.length+' 段真实现场录音 \u2713':usedLocalMix?'完成：已混入 '+assets.length+' 段不同素材 \u2713':'你的记忆音乐已经完成 \u2713';$('#finish').classList.add('show');var record={title:$('#title').value||'未命名唱片',audio:storedSrc,style:style,materials:names,date:new Date().toLocaleDateString('zh-CN'),creation:realAssets.length?'本地混音':usedLocalMix?'示例混音':'AI 编曲'};try{localStorage.setItem('soundtrace_latest_record',JSON.stringify(record))}catch(storageError){record.audio=DEMO;localStorage.setItem('soundtrace_latest_record',JSON.stringify(record));st.textContent+='（记忆空间保存伴奏预览）'}toast('唱片制作完成')}catch(e){$('#player').src=DEMO;st.textContent=realAssets.length?'本地混音失败，但素材库中的真实录音仍可播放。':'混音服务暂不可用，已载入示例唱片。';$('#finish').classList.add('show')}btn.disabled=false};
-$('#playBtn').onclick=function(){var p=$('#player');if(!p.src)p.src=DEMO;if(p.paused){p.play();$('#playBtn').textContent='Ⅱ';$('#disc').classList.add('spin')}else{p.pause();$('#playBtn').textContent='\u25b6';$('#disc').classList.remove('spin')}};
-$('#player').ontimeupdate=function(e){var p=e.target;$('#progress').style.width=(p.currentTime/(p.duration||1)*100)+'%';$('#clock').textContent=Math.floor(p.currentTime/60)+':'+String(Math.floor(p.currentTime%60)).padStart(2,'0')};$('#player').onended=function(){$('#playBtn').textContent='\u25b6';$('#disc').classList.remove('spin')};
-check();
-</script>
+      <a class="home-listen" href="/album?scene=sea-window&amp;listen=1&amp;demo=1" aria-label="试听海港午后的示例声音">
+        <span class="home-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7z"/></svg></span>
+        <span><strong>海港午后</strong><small>听一段示例声音</small></span>
+      </a>
+      <a class="home-explore" href="/map">声音地图 <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+  <script>
+    // 手机版：此刻页双指捏合（缩放）即可进入声音地图
+    (() => {
+      const scene = document.getElementById('homeScene');
+      if (!scene) return;
+      let base = 0, active = false;
+      scene.addEventListener('touchstart', e => {
+        if (e.touches.length === 2) {
+          const [a, b] = e.touches;
+          base = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+          active = true;
+        }
+      }, { passive: true });
+      scene.addEventListener('touchmove', e => {
+        if (!active || e.touches.length !== 2) return;
+        const [a, b] = e.touches;
+        const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+        if (base && Math.abs(dist - base) / base > 0.25) {
+          active = false;
+          location.href = window.SoundTraceRoute?.('/map') || '/map';
+        }
+      }, { passive: true });
+      scene.addEventListener('touchend', () => { active = false; }, { passive: true });
+    })();
+  </script>
 </body>
 </html>

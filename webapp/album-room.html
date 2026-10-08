@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<script src="/assets/soundtrace-raster.js?v=6" defer></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>声迹 · 收藏间</title>
+<link rel="stylesheet" href="assets/visual-v1/tokens.css">
+<link rel="stylesheet" href="assets/album-room.css">
+<link rel="stylesheet" href="assets/listening-stage.css">
+<script src="assets/mineradio-port/three.r128.min.js" defer></script>
+<script src="assets/mineradio-port/memory-shelf.js" defer></script>
+<script src="assets/mineradio-port/beat-reactivity.js" defer></script>
+<script src="assets/album-room.js?v=7" defer></script>
+<link rel="stylesheet" href="assets/album-mineradio.css">
+<script src="/assets/soundtrace-shell.js?v=4" defer></script>
+<link rel="stylesheet" href="/assets/album-memory.css">
+<link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
+<link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
+<link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=1">
+</head>
+<body class="st-album">
+<header class="topbar">
+  <a class="brand" href="/">声迹 <small>SOUNDTRACE</small></a>
+  <div class="topbar-actions">
+    <button id="inboxBtn" class="text-button" type="button">信箱 <span aria-hidden="true">✉</span></button>
+  </div>
+</header>
+<main>
+  <section class="album-intro">
+    <div class="album-title-block">
+      <h1>我的收藏间</h1>
+      <div class="profile-strip" id="profileStrip">
+        <button class="profile-ava" id="stripAva" type="button" aria-label="编辑个人资料">🎧</button>
+        <div class="profile-strip-info"><strong id="stripName">…</strong><small id="stripSub">编辑资料，开启声音档案</small></div>
+        <button class="profile-checkin-mini" id="stripCheckin" type="button">签到</button>
+      </div>
+    </div>
+    <button id="enterStage" class="stage-entry" type="button" aria-label="进入沉浸聆听"><span aria-hidden="true">▶</span> 聆听</button>
+  </section>
+  <section class="room scene-carousel" id="room" aria-label="左右滑动切换记忆场景" tabindex="0"><div class="scene-track" id="sceneTrack"><article class="scene-slide is-active" data-scene="sea-window"><div class="room-content" id="roomContent"><div class="room-shade"></div><div class="photo-line" id="photoLine" aria-label="照片墙"></div><div class="cabinet" aria-label="唱片和磁带柜"><div class="cabinet-objects" id="cabinetObjects"></div><div class="cabinet-top"></div><div class="cabinet-front"><span class="cabinet-knobs" aria-hidden="true">●　　　　●</span></div><div class="cabinet-side"></div></div></div><span class="scene-slide-label">海港午后</span></article></div></section>
+  <div class="scene-position" aria-live="polite"><span id="sceneDescription">海港午后</span><span id="sceneIndex">01 / 06</span><div class="scene-progress" id="sceneProgress" aria-hidden="true"></div></div>
+  <section id="backgroundTools" class="background-tools" aria-label="记忆背景" hidden></section>
+</main>
+<aside id="mailDrawer" class="mail-drawer" aria-label="拖放投递箱" aria-hidden="true">
+  <div id="dropZone" class="drop-zone"><div id="drawerArt" class="drawer-art" aria-hidden="true"></div><div><strong>寄出 ↗</strong></div></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button id="closeModal" class="modal-close" type="button" aria-label="关闭">×</button><div id="modalContent"></div></div></div>
+<section id="listeningStage" class="listening-stage" role="dialog" aria-modal="true" aria-label="沉浸聆听" hidden>
+  <iframe id="mineradioEngine" class="mineradio-engine" src="/mineradio/soundtrace-engine.html" title="Mineradio 原版粒子与播放器" tabindex="-1" loading="eager"></iframe>
+  <div class="listening-decoration listening-top" aria-hidden="true"><img src="/assets/ui-selected-v3/listening-top.webp" alt=""></div><div class="listening-decoration listening-left" aria-hidden="true"><img src="/assets/ui-selected-v3/listening-left.webp" alt=""></div><div class="listening-decoration listening-mobile-footer" aria-hidden="true"><img src="/assets/ui-selected-v3/listening-mobile-footer.webp" alt=""></div><div class="listening-brand" aria-hidden="true">声迹<small>SoundTrace</small></div>
+  <canvas id="stageCanvas" class="stage-canvas" aria-hidden="true"></canvas>
+  <div class="stage-scene" aria-hidden="true"></div>
+  <video id="stageMemoryVideo" class="stage-memory-video" muted loop playsinline preload="none" aria-hidden="true" hidden></video>
+  <div class="stage-content">
+    <header class="stage-header"><button id="stageClose" class="stage-icon-button" type="button" aria-label="退出沉浸聆听">×</button></header>
+    <div class="stage-body"><div class="stage-description sr-only" aria-live="polite"><span id="stageSceneName"></span><span id="stageKind"></span><span id="stageTitle"></span><span id="stageStory"></span><span id="stageLocation"></span></div>
+      <section id="stageShelf3d" class="stage-shelf-3d" aria-label="3D 声音藏品架"><span class="stage-shelf-index sr-only" data-shelf-count>00 / 00</span><div class="stage-shelf-tabs" role="group" aria-label="筛选藏品"><button type="button" data-memory-filter="all" aria-label="全部藏品" aria-pressed="true" class="active">全部</button><button type="button" data-memory-filter="photo" aria-label="照片" aria-pressed="false">照片</button><button type="button" data-memory-filter="vinyl" aria-label="唱片" aria-pressed="false">唱片</button><button type="button" data-memory-filter="tape" aria-label="磁带" aria-pressed="false">磁带</button></div><div class="stage-shelf-viewport" aria-hidden="true"></div><div class="stage-shelf-foot"><strong class="sr-only" data-shelf-type>声音藏品</strong><div class="stage-shelf-nav"><button type="button" data-shelf-prev aria-label="上一件藏品">↑</button><button type="button" data-shelf-next aria-label="下一件藏品">↓</button></div></div></section>
+    </div>
+    <div class="stage-bottom"><div class="stage-controls"><button id="stagePrevious" class="stage-icon-button" type="button" aria-label="上一段声音">‹</button><button id="stagePlay" class="stage-play" type="button" aria-label="播放">▶</button><button id="stageNext" class="stage-icon-button" type="button" aria-label="下一段声音">›</button><input id="stageProgress" type="range" min="0" max="1000" value="0" aria-label="播放进度"><span id="stageTime" class="stage-time">0:00 / --:--</span></div><div id="stageShelf" class="stage-shelf" aria-label="可播放的藏品"></div></div>
+  </div>
+  <audio id="stageAudio" preload="metadata"></audio>
+</section>
+</body>
+</html>
+

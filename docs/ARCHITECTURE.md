@@ -23,9 +23,6 @@
 - `GET /health`：健康检查。
 - `POST /v1/demo-jobs`：创建内置样例任务，请求体示例 `{"target":"birds","duration":42}`。
 - `GET /v1/jobs/<job_id>`：读取任务状态和输出路径。
-- `GET /outputs/jobs/<job_id>/<filename>`：下载已成功任务在 `result.outputs` 中列出的 WAV 文件；未知文件和越界路径返回 404。
-
-创建任务仅接受 JSON 对象，请求体上限 64 KiB；负数 Content-Length 和非对象 JSON 返回 400，过大的请求返回 413。
 
 真实素材上传应在下一阶段增加对象存储直传：客户端获得签名 URL 后上传环境录音和哼唱，API 只接收对象 key，避免大文件经过业务服务。
 

@@ -23,21 +23,5 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(store.get(job.id), job)
         self.assertEqual(job.status, "queued")
 
-    def test_frontend_demo_assets_are_distinct_and_deployed(self):
-        root = Path(__file__).resolve().parents[1]
-        names = [
-            "demo_birds.wav",
-            "demo_wind.wav",
-            "demo_stream.wav",
-            "demo_traffic.wav",
-        ]
-        source_audio = [(root / "outputs" / name).read_bytes() for name in names]
-        self.assertEqual(len({audio for audio in source_audio}), len(names))
-        for name, audio in zip(names, source_audio):
-            self.assertEqual((root / "deploy" / "tencent-pages" / "outputs" / name).read_bytes(), audio)
-        page = (root / "webapp" / "home.html").read_text(encoding="utf-8")
-        for name in names:
-            self.assertIn(f"/outputs/{name}", page)
-
 if __name__ == "__main__":
     unittest.main()

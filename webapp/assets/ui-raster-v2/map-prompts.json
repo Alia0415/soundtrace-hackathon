@@ -1,0 +1,12 @@
+[
+  [
+    "map-desktop-paper",
+    "24-map-desktop.png",
+    "Extract ONLY the illustrated West Lake map backdrop from this approved desktop screen. Remove ALL app UI: top navigation/logo/avatar, right sidebar list and divider, popover card and ALL its contents, photo pin markers, zoom buttons, text labels. Restore the shoreline/trees/water where popover and pins were. Keep the exact artist's geography and existing details: huge blue West Lake, black ink mountains to north, causeway and arches on LEFT, small islands middle, pagoda on lower RIGHT shore, lotus bottom left, trees and houses. Crop away top header and entire right sidebar, frame the map illustration itself. Keep real hand drawn irregular textured ink strokes, light blue water, pure white paper. Map MUST fill the 4:3 landscape image. No interface, labels, circular photo markers, letters or numbers. NOT a new composition; clean extraction preserving the approved picture."
+  ],
+  [
+    "map-mobile-paper",
+    "23-map-mobile.png",
+    "Extract ONLY the geographic map background shown behind the mobile interface: West Lake pale sky-blue water, white thin irregular shoreline, pale green parks, light hand drawn gray road lines. Remove top header/title/status/navigation, bottom footprint cards, all map labels/Chinese place names, ALL photo pin markers, ALL black footprints and dashed route, zoom buttons, and floating detail card. Restore lake water and road topology underneath. Output one portrait 3:4 illustrated West Lake background with original map layout and river/lake geography retained; lake centered, green parks and road lines at edges. Pure white edges. No app UI, text, markers, photographs, numbers, buttons. Keep reference illustration style precisely; NOT a computer vector redraw."
+  ]
+]
