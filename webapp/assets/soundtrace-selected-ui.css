@@ -125,6 +125,83 @@ body .st-account-dialog[data-surface=auth] button:not(.password-reveal):not(.st-
 .library-bottom-art{position:relative}.library-bottom-art:after{content:"";position:absolute;left:38%;top:0;width:23%;height:45%;background:#fff;pointer-events:none}
 
 .avatar-upload-icon{display:none}
+/* Annotated revisions: the original illustrated buttons are the visible surface.
+   Native anchors/buttons keep focus, disabled state and actual event handlers. */
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+body .original-art-button,.studio-main .original-art-button{display:block!important;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;min-height:0!important;line-height:0;position:relative;transform:none!important}
+.original-art-button>.raster-frame,.original-art-button>[data-raster]{display:block;width:100%;height:auto}
+.original-art-button:focus-visible{outline:3px solid #007fac!important;outline-offset:5px}
+.original-art-button:disabled{opacity:.45;cursor:wait}
+body .home-record{width:320px;min-width:0!important}.home-button-mobile{display:none!important}
+body .home-explore{width:290px;min-width:0!important}.home-explore:before{display:none!important}
+.capture-entry:not(.is-recording) .record-orb{width:144px;height:auto;aspect-ratio:329/324;padding:0;border:0;background:transparent!important;border-radius:0;display:block}
+.capture-entry:not(.is-recording) .record-orb>.raster-frame{width:100%;height:auto;display:block}
+.capture-entry .capture-import{width:230px;max-width:100%;margin:auto}.capture-links{display:flex;flex-direction:column;align-items:center;gap:12px}
+.capture-entry .capture-links{display:flex!important;flex-direction:column!important;align-items:center!important;width:100%;gap:12px}
+.capture-entry .capture-links .capture-ready{order:2}.capture-entry .capture-links .capture-import{order:1}
+.capture-ready{display:block;width:105px;position:relative}.capture-ready>.raster-frame{width:100%;height:auto}
+.capture-entry.is-recording .record-label{font-size:21px}
+.capture-entry .permission-import{width:min(350px,100%)!important;margin:auto}
+.raw-success .library-current-actions .raw-generate{width:100%;flex:1;max-width:460px;margin:auto}
+.sound-library.raw-success .raw-success-actions{display:grid}
+.sound-library .library-item>.raster-frame{width:48px;height:auto;flex:none}
+.library-next>.raster-frame{width:100%;height:auto}
+.workbench .transport .icon-button{border:0!important;padding:0;background:transparent!important;width:46px;height:46px;display:grid;place-items:center}
+.workbench .transport .icon-button>.raster-frame{width:100%;height:auto}
+.workbench .transport .transport-zoom-out>.raster-frame,.workbench .transport .transport-zoom-in>.raster-frame{width:23px}
+.workbench .transport .transport-zoom-out,.workbench .transport .transport-zoom-in{border:1px solid #aaa!important;border-radius:999px}
+.workbench .transport .play-button{padding:0;display:grid;place-items:center;overflow:hidden}
+.workbench .transport-play>.raster-frame:has(img[src$="transport-pause.webp"]){width:100%;height:100%}
+.workbench .transport-play>.raster-frame:has(img[src$="icon-play.webp"]){width:25px;height:auto;filter:invert(1);mix-blend-mode:screen}
+.workbench .track-label button{background:transparent!important;border:0!important;padding:4px;min-width:36px;min-height:36px}
+.workbench .track-label button>.raster-frame{width:27px;height:auto}
+.workbench .track-label button[aria-pressed=true]{opacity:.35}
+.workbench .add-actions button{display:inline-flex;align-items:center;gap:8px}
+.workbench .add-actions .raster-frame,.music-direction-control>.raster-frame{width:24px;height:27px;flex:none}
+.music-generation-failure{display:grid;grid-template-columns:120px 1fr;gap:8px 20px;align-items:center;margin:24px auto;padding:20px;max-width:540px}
+.music-generation-failure>.raster-frame{grid-row:1/4;width:120px;height:auto}.music-generation-failure h3,.music-generation-failure p{margin:0}.music-generation-failure p{font-size:13px;color:#666}.music-generation-failure button{width:max-content}
+body .st-dock-icon img{display:block;width:26px;height:26px;object-fit:contain;mix-blend-mode:multiply}
+body .st-dock a:not([aria-current=page]) .st-dock-icon img{filter:grayscale(1)}
+body .st-dock a[aria-current=page]:not(:first-child) .st-dock-icon img{filter:invert(44%) sepia(98%) saturate(1553%) hue-rotate(160deg) brightness(100%) contrast(102%)}
+.workbench .keep-button{display:flex;align-items:center;justify-content:center;gap:9px}.workbench .keep-button>.raster-frame{width:26px;height:26px;mix-blend-mode:lighten}
+.st-community .community-tabs{top:auto!important;position:static!important;margin:0 0 8px;padding-top:0}
+.st-community .community-feed{position:relative;z-index:auto;background:#fff}
+.st-community .community-art,.st-community .community-art-right{z-index:0!important}
+.st-community .community-actions{width:100%;justify-content:flex-start!important;gap:22px!important;position:relative;padding-left:8px}
+.st-community .community-actions .community-share{margin-left:auto}
+.st-community .community-action{flex-shrink:0}
+@media(min-width:761px){
+ .st-community .doodle-header{position:relative;overflow:clip}.st-community .doodle-header .st-dock{position:absolute!important;top:25px!important;bottom:auto}
+ .st-community .community-art-right{width:20vw;max-width:300px}.st-community .community-art{width:19vw;max-width:290px}
+ .workbench-top>.editor-illustration{width:112%;max-width:none;margin-left:-6%;align-self:start}
+ .workbench .workbench-top{grid-template-columns:43% 57%;min-height:350px}
+ .home-art-desktop{aspect-ratio:890/900;max-height:100%;height:auto!important;width:100%;bottom:0}
+ .home-landscape{width:65%;height:100%;right:0}
+ .home-story h1{width:max-content;max-width:100%;position:relative}.home-story h1:after{position:static!important;width:55%;margin:8px 0 0 35%}
+}
+@media(max-width:760px){
+ .home-button-desktop{display:none!important}.home-button-mobile{display:block!important}
+ body .home-record{width:min(100%,300px);align-self:center;margin:0}
+ body .home-explore{width:min(100%,265px);align-self:center}
+ .capture-entry:not(.is-recording) .record-orb{width:142px}
+ .capture-entry.is-recording .record-label{font-size:20px}
+ .workbench .record-preview>.raster-frame{width:100%;height:auto}
+ .workbench .record-preview{background:none!important;transform:none!important}
+ .workbench .transport .transport-start{grid-column:1}.workbench .transport .transport-play{grid-column:2}.workbench .transport .transport-undo{grid-column:3}.workbench .transport .transport-redo{grid-column:4}
+ .st-map .map-memory{top:85px!important;right:12px!important;width:185px!important;max-height:calc(100% - 105px)!important;padding:12px!important}
+ .st-map .map-memory h2{font-size:15px!important;line-height:1.4;margin-right:20px}.st-map .map-memory .popmeta{font-size:10px;margin:6px 0}
+ .st-map .map-memory .memory-print{height:80px!important;margin:9px 0!important}.st-map .map-memory .popstory{font-size:11px!important;line-height:1.55;margin:8px 0}
+ .st-map .map-memory .soundtrace-player{gap:6px;margin:8px 0 0}.st-map .map-memory .memory-close{width:30px;height:30px;min-height:30px;font-size:23px}
+ .st-album .listening-stage .mineradio-engine{inset:185px auto auto 16%!important;width:68%!important;height:46dvh!important;min-height:310px;max-height:440px;overflow:hidden;border-radius:18px}
+ .st-album .listening-stage .listening-left{display:block;left:0;top:35%;bottom:auto;width:15%;height:auto;opacity:1}
+ .st-album .listening-stage .listening-mobile-footer{bottom:28px;max-height:180px;height:auto;width:100%}
+ .st-album .listening-stage .stage-shelf-3d{top:110px!important;bottom:auto!important;margin:0!important;background:transparent!important}
+ .st-album .listening-stage .stage-content{position:absolute!important;inset:0!important;padding:14px!important;height:100dvh!important;min-height:0!important}
+ .st-album .listening-stage .stage-body{position:static!important;transform:none!important;margin:0!important}
+ .st-album .listening-stage .stage-shelf-tabs button{background:transparent!important}
+ .st-album .listening-stage .stage-bottom{bottom:190px;left:16%;right:16%;width:auto}
+ .st-community .community-actions{padding-left:0;gap:14px!important}
+}
 @media(min-width:761px){.studio-main.phase-editor{max-width:1505px;width:100%;padding:35px 4vw 20px}}
 @media(max-width:760px){
  .modal[data-surface=profile] .profile-upload{min-height:44px}
