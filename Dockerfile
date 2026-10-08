@@ -6,6 +6,11 @@ COPY studio/src ./src
 COPY studio/vite.config.js ./
 RUN npm run build
 
+FROM python:3.12-slim AS source_archive
+WORKDIR /source
+COPY . .
+RUN python tools/package_public.py
+
 FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 SOUNDTRACE_DATA_DIR=/data
 WORKDIR /app
@@ -21,7 +26,7 @@ COPY --from=frontend /build/webapp/assets/studio ./webapp/assets/studio
 COPY third_party/Mineradio-paused-main/public ./third_party/Mineradio-paused-main/public
 COPY outputs/seeds ./outputs/seeds
 COPY tools/backup_public.py ./tools/backup_public.py
-COPY runtime/releases/soundtrace-public.zip ./public-source.zip
+COPY --from=source_archive /source/runtime/releases/soundtrace-public.zip ./public-source.zip
 COPY third_party/Mineradio-paused-main/LICENSE third_party/Mineradio-paused-main/NOTICE.md ./third_party/Mineradio-paused-main/
 USER soundtrace
 EXPOSE 8080

@@ -1,12 +1,7 @@
 .git
 .env*
 data
-runtime
-!runtime/
-runtime/*
-!runtime/releases/
-runtime/releases/*
-!runtime/releases/soundtrace-public.zip
+runtime/
 backups
 studio/node_modules
 __pycache__

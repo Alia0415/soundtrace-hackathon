@@ -28,7 +28,7 @@
 
 ## 上线
 
-把部署包解压到服务器；源码包包含上游 LICENSE、NOTICE、完整代码及修改说明，可从 `/source` 下载。构建前运行 `python tools/package_public.py` 生成对应源码归档，然后复制 `deploy/production.env.example` 为 `.env.production`，填入真实域名：
+把部署包解压到服务器；源码包包含上游 LICENSE、NOTICE、完整代码及修改说明，可从 `/source` 下载。Docker 构建时会自动运行 `python tools/package_public.py` 生成对应源码归档，无需预先生成或提交 `runtime/releases/soundtrace-public.zip`；直接从 GitHub 拉取代码即可构建。若需要单独导出部署包，可在本地运行该命令。然后复制 `deploy/production.env.example` 为 `.env.production`，填入真实域名：
 
 ```text
 SOUNDTRACE_DOMAIN=soundtrace.example.com
