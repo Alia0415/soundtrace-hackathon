@@ -71,5 +71,5 @@
  if(demo&&located.length>1)L.polyline(located.slice().reverse().map(displayPoint),{color:'#222',weight:2,dashArray:'5 10',opacity:.45,interactive:false}).addTo(map);
  if(!demo&&markers.size)map.setFitView([...markers.values()],false,[80,80,80,80],14);
  if(!items.length)$('list').append(make('p','meta','还没有声音足迹。录下一段声音，在制作日记时选择记录位置。'));
- if(demo&&items.length)select(items[0]);if(map)new ResizeObserver(()=>demo?map.invalidateSize():map.resize()).observe($('mapWrap'));
+ $('mapMemory').hidden=true;if(map)new ResizeObserver(()=>demo?map.invalidateSize():map.resize()).observe($('mapWrap'));
 })().catch(()=>{document.getElementById('mapMode').textContent='地图暂时无法显示，请刷新重试';});

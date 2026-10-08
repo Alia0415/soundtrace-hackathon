@@ -14,18 +14,21 @@ import DiarySetup from './DiarySetup';
 import {blankDiary,diaryFromMemory,diaryValue} from './diary-options';
 
 export const masterEffects=(input,output)=>{const limiter=new Limiter(-1);input.connect(limiter);limiter.connect(output);return ()=>limiter.dispose();};
+// Keep engine configuration stable when retrying adds a music track. Changing
+// the zoom-level list during an incremental add disposes the loaded playout.
+const zoomLevels=[256,512,1024,2048,4096,8192,16384,32768,65536];
 function makeTrack(buffer,name,id,color,volume=1){return {...createTrack({name,color,volume,clips:[createClipFromSeconds({audioBuffer:buffer,startTime:0,name,fadeIn:{duration:.15},fadeOut:{duration:.35}})]}),id};}
 export default function App(){
   const recordingEntry=location.pathname.replace(/^\/demo(?=\/|$)/,'')==='/capture';
   const [tracks,setTracks]=useState([]),[style,setStyle]=useState('ambient'),[scene,setScene]=useState('sea-window');
   const [busy,setBusy]=useState(''),[error,setError]=useState(''),[recording,setRecording]=useState(false),[level,setLevel]=useState(0),[seconds,setSeconds]=useState(0);
   const [draft,setDraft]=useState(null),[ai,setAi]=useState(false),[source,setSource]=useState(null),[draftInfo,setDraftInfo]=useState(null),[epoch,setEpoch]=useState(0);
-  const [promptSave,setPromptSave]=useState(false),[micError,setMicError]=useState(false);
+  const [promptSave,setPromptSave]=useState(false),[micError,setMicError]=useState(false),[musicFailed,setMusicFailed]=useState(false);
   const [phase,setPhase]=useState('library'),[sourceName,setSourceName]=useState('此刻的声音'),[memory,setMemory]=useState(null),[diary,setDiary]=useState({...blankDiary}),[libraryRevision,setLibraryRevision]=useState(0);
   const projectSeconds=Math.max(source?.duration||15,...tracks.flatMap(t=>t.clips.map(c=>(c.startSample+c.durationSamples)/(c.sampleRate||44100))));
   const timelineWidth=window.innerWidth>760?Math.min(window.innerWidth,1505)-window.innerWidth*.08-88:window.innerWidth-145;
-  const initialZoom=Math.max(256,Math.ceil(projectSeconds*44100/Math.max(140,timelineWidth)));
-  const zoomLevels=[...new Set([256,512,1024,2048,4096,8192,16384,32768,initialZoom])].sort((a,b)=>a-b);
+  const requestedZoom=Math.max(256,Math.ceil(projectSeconds*44100/Math.max(140,timelineWidth)));
+  const initialZoom=zoomLevels.find(value=>value>=requestedZoom)||zoomLevels.at(-1);
   const pick=useRef(),rec=useRef(),editor=useRef(),musicToken=useRef(0),abortJob=useRef();
   const onPlaybackError=useCallback(()=>setError('播放引擎暂时无法启动，请刷新恢复草稿。'),[]);
   const onEngineReady=useCallback(()=>editor.current?.onReady?.(),[]);
@@ -38,10 +41,10 @@ export default function App(){
     if(buffer.duration<.25) throw new Error('声音太短，请至少录下半秒。');
     if(buffer.duration>120) throw new Error('每次可导入最多 2 分钟的声音，请先截取想留下的部分。');
     editor.current?.pause();abortJob.current?.abort();setDraftInfo(null);setEpoch(x=>x+1);
-    musicToken.current++;setSource(buffer);setSourceName(name);setMemory(null);setTracks([]);setPhase('library');setDiary({...blankDiary});setDraft(null);setPromptSave(false);setMicError(false);
+    musicToken.current++;setSource(buffer);setSourceName(name);setMemory(null);setTracks([]);setPhase('library');setDiary({...blankDiary});setDraft(null);setPromptSave(false);setMicError(false);setMusicFailed(false);
   }
   async function changeBed(next,duration,initial){
-    const token=++musicToken.current;setStyle(next);setError('');
+    const token=++musicToken.current;setStyle(next);setError('');setMusicFailed(false);
     if(!window.SoundTraceDemo&&!ai){setError('音乐服务尚未配置，当前可微调原声；配置完成后可生成专属旋律。');return;}
     setBusy(window.SoundTraceDemo?'正在打开演示音乐…':'正在制作专属旋律…');
     const controller=new AbortController();abortJob.current=controller;
@@ -50,7 +53,7 @@ export default function App(){
       const response=await fetch('/'+path,{signal:controller.signal});if(!response.ok)throw new Error('无法读取生成音乐');const bed=await decode(await response.blob());if(token!==musicToken.current)return;
       const track=makeTrack(bed,window.SoundTraceDemo?'演示音乐':'专属旋律','music','#91b9ca',.4);
       if(initial){setTracks([...initial,track]);setDraftInfo({version:window.SoundTraceDemo?'demo':'ai'});}else editor.current?.replaceMusic(track,window.SoundTraceDemo?'demo':'ai');
-    }catch(e){setError(e.message);}finally{if(token===musicToken.current)setBusy('');}
+    }catch(e){if(token===musicToken.current&&e.name!=='AbortError'){setMusicFailed(true);setError(e.message);}}finally{if(token===musicToken.current)setBusy('');}
   }
   async function selectMemory(saved,setup=false){setBusy('正在打开声音素材…');setError('');
     try{const response=await fetch('/'+saved.audio);if(!response.ok)throw new Error('声音素材暂时无法读取，请重试。');
@@ -86,13 +89,13 @@ export default function App(){
       {phase==='library'&&!source&&!recordingEntry&&<section className="audio-import-scene" aria-label="导入已有音频"><RasterArt id={error?'import-error':'import-empty'} className="audio-import-art"/><div className="audio-import-actions"><button className="primary" type="button" onClick={()=>pick.current.click()} disabled={!!busy}>上传本地音频</button>{window.SoundTraceDemo&&<button className="quiet" type="button" onClick={example} disabled={!!busy}>演示音频</button>}</div></section>}
       {phase==='library'&&!source&&recordingEntry&&<section className="capture-scene" aria-label="录制声音">
         <div className="capture-status"><h2>{micError?<>记录，<br/>你的声音。</>:recording?'正在录音':'留下一段声音'}</h2>{!micError&&<time className="capture-clock">{clock(seconds)}</time>}</div>
-        <div className="capture-photo"><RasterArt id={micError?'capture-permission':recording?'capture-recording':'microphone'}/>{recording&&<div className="live-level" style={{'--level':Math.min(1,level*5+.01)}} aria-label="实时录音音量"><i/><i/><i/><i/><i/></div>}</div>
-        <div className="capture-actions">{micError?<><h3>未获得麦克风输入</h3><p>可以检查权限，或导入已有声音。</p>{error&&<p className="capture-error-detail" role="alert">{error}</p>}<a className="primary" href={route('/studio#rec')}>导入已有音频</a><button className="outline" onClick={record} disabled={!!busy}>重试录音</button></>:<><button className={`record-orb ${recording?'recording':''}`} aria-label={recording?'结束录音':'开始录音'} onClick={recording?stopRecording:record} disabled={!!busy}><span aria-hidden="true">{recording?'■':<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4m-4 0h8"/></svg>}</span></button><span className="record-label">{recording?'结束并保存':'点击录音'}</span>{!recording&&<div className="capture-links"><a className="outline" href={route('/studio#rec')}>导入已有音频 ↗</a></div>}</>}{draft&&<button className="restore" onClick={restore} disabled={!!busy||recording}>继续上次的手记 ↗</button>}</div>
+        <div className="capture-photo"><RasterArt id={micError?'capture-permission':recording?'capture-recording':'capture-idle-art'}/>{recording&&<div className="live-level" style={{'--level':Math.min(1,level*5+.01)}} aria-label="实时录音音量"><i/><i/><i/><i/><i/></div>}</div>
+        <div className="capture-actions">{micError?<><h3>未获得麦克风输入</h3><p>可以检查权限，或导入已有声音。</p>{error&&<p className="capture-error-detail" role="alert">{error}</p>}<a className="primary original-art-button permission-import" href={route('/studio#rec')}><RasterArt id="permission-import-button"/><span className="sr-only">导入已有音频</span></a><button className="outline" onClick={record} disabled={!!busy}>重试录音</button></>:<><button className={`record-orb ${recording?'recording':''}`} aria-label={recording?'结束录音':'开始录音'} onClick={recording?stopRecording:record} disabled={!!busy}>{recording?<span aria-hidden="true">■</span>:<RasterArt id="capture-idle-button"/>}</button><span className={`record-label ${recording?"":"sr-only"}`}>{recording?'结束并保存':'点击录音'}</span>{!recording&&<div className="capture-links"><a className="outline original-art-button capture-import" href={route('/studio#rec')}><RasterArt id="capture-import-button"/><span className="sr-only">导入已有音频 ↗</span></a><span className="capture-ready"><RasterArt id="capture-ready"/><span className="sr-only">准备好了</span></span></div>}</>}{draft&&<button className="restore" onClick={restore} disabled={!!busy||recording}>继续上次的手记 ↗</button>}</div>
       </section>}
       {phase==='library'&&source&&<SoundLibrary source={source} name={sourceName} memory={memory} onSave={saveMaterial} onGenerate={beginDiary} onSelect={selectMemory} busy={recording||!!busy} refreshKey={libraryRevision} onImport={()=>pick.current.click()} onNew={newProject} onRestore={draft?restore:undefined} rawSuccess={promptSave} onDismissSuccess={()=>setPromptSave(false)}/>}
       {phase==='setup'&&<DiarySetup diary={diary} setDiary={setDiary} style={style} setStyle={setStyle} onContinue={createDiary} onBack={()=>setPhase('library')} busy={!!busy}/>}
       {phase==='editor'&&<WaveformPlaylistProvider tracks={tracks} onTracksChange={setTracks} theme={theme} effects={masterEffects} waveHeight={76} mono controls={{show:true,width:88}} samplesPerPixel={initialZoom} zoomLevels={zoomLevels} sampleRate={44100} barWidth={2} barGap={2} roundedBars onReady={onEngineReady} onError={onPlaybackError}>
-        <Editor key={epoch} tracks={tracks} setTracks={setTracks} style={style} scene={scene} setScene={setScene} ai={ai} source={source} busy={busy} setBusy={setBusy} setError={setError} recording={recording} seconds={seconds} record={record} stopRecording={stopRecording} pick={()=>pick.current.click()} changeStyle={changeBed} handle={editor} initial={draftInfo} abortJob={abortJob} diary={diary} memory={memory} onSaved={savedRaw} onEditDiary={()=>{editor.current?.pause();setPhase('setup');}}/>
+        <Editor key={epoch} tracks={tracks} setTracks={setTracks} style={style} scene={scene} setScene={setScene} ai={ai} source={source} busy={busy} setBusy={setBusy} setError={setError} musicFailed={musicFailed} recording={recording} seconds={seconds} record={record} stopRecording={stopRecording} pick={()=>pick.current.click()} changeStyle={changeBed} handle={editor} initial={draftInfo} abortJob={abortJob} diary={diary} memory={memory} onSaved={savedRaw} onEditDiary={()=>{editor.current?.pause();setPhase('setup');}}/>
       </WaveformPlaylistProvider>}
       {!!busy&&phase==='setup'&&ai&&<button className="quiet" onClick={()=>abortJob.current?.abort()}>停止等待</button>}
       {recording&&<div className="record-meter" aria-label="录音音量"><div style={{transform:`scaleX(${Math.min(1,level*5+.01)})`}}/></div>}

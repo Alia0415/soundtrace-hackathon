@@ -16,11 +16,11 @@
   links.forEach(([href, icon, label, key]) => {
     const link = document.createElement('a');
     link.href = href;
-    link.innerHTML = `<span class="st-dock-icon" aria-hidden="true"><svg viewBox="0 0 24 24">${icon}</svg></span><span>${label}</span>`;
+    link.innerHTML = `<span class="st-dock-icon" aria-hidden="true"><img src="/assets/ui-selected-v3/nav-${key}.webp" alt="" draggable="false"></span><span>${label}</span>`;
     if (page === key || (page === 'studio' && key === 'home')) link.setAttribute('aria-current', 'page');
     dock.appendChild(link);
   });
-  const navigationHost = page === 'map' ? document.querySelector('.doodle-header') : null;
+  const navigationHost = ['map','community'].includes(page) ? document.querySelector('.doodle-header') : null;
   (navigationHost || document.body).appendChild(dock);
   // 滑动指示条：量测当前项位置，随窗口尺寸重算
   const indicator = document.createElement('span');
