@@ -10,8 +10,9 @@
 
 启动: hackathon-env/Scripts/python.exe soundtrace_gpu.py  →  http://127.0.0.1:8090
 """
-import os, sys, gc, json, time, uuid, queue, threading, traceback, re, shutil
+import os, sys, gc, json, time, uuid, queue, threading, traceback, re, shutil, base64, hmac, io
 from pathlib import Path
+import tempfile
 
 ROOT = Path(__file__).resolve().parent
 WORKSPACE = ROOT.parent
@@ -36,8 +37,10 @@ torch.load = _patched_load
 
 import soundfile as sf
 import librosa
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, UploadFile, File, HTTPException, Request, Form
+from urllib.parse import unquote
+from soundtrace_storage import commit_work, preserve_audio, preserve_references, LOCK as STORAGE_LOCK
+from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional
@@ -100,8 +103,53 @@ def finalize_mix(mix, target_rms: float = 0.16):
         mix[over] = 0.98 * np.sign(mix[over])
     return mix
 
+
+# T13: 情绪标签 → 生成 prompt 修饰词
+MOOD_PROMPTS = {
+    "宁静": "peaceful, serene, calm", "思念": "nostalgic, tender, wistful",
+    "雀跃": "uplifting, bright, playful", "忧郁": "melancholic, soft, introspective",
+    "治愈": "healing, warm, gentle", "冒险": "adventurous, driving, energetic",
+}
+
+# T12: 作品索引（声音地图的数据源）
+WORKS_FILE = ROOT / "outputs" / "works.json"
+_works_lock = STORAGE_LOCK
+
+
+def register_work(entry: dict):
+    with _works_lock:
+        entry = {**entry, "audio": preserve_audio(ROOT, entry.get("audio"))}
+        works = []
+        if WORKS_FILE.exists():
+            try:
+                works = json.loads(WORKS_FILE.read_text(encoding="utf-8"))
+            except Exception:
+                works = []
+        works.append(entry)
+        WORKS_FILE.write_text(json.dumps(works, ensure_ascii=False, indent=1), encoding="utf-8")
+
 app = FastAPI(title="SoundTrace MVP")
+
+
+@app.middleware("http")
+async def demo_access(request: Request, call_next):
+    """Public demo access gate; localhost remains frictionless when unset."""
+    password = os.getenv("SOUNDTRACE_DEMO_PASSWORD", "")
+    if os.getenv("SOUNDTRACE_PUBLIC") == "1" and not password:
+        return Response("Demo password is not configured", status_code=503)
+    if password:
+        supplied = request.headers.get("authorization", "")
+        expected = "Basic " + base64.b64encode(
+            f"{os.getenv('SOUNDTRACE_DEMO_USER', 'soundtrace')}:{password}".encode()
+        ).decode()
+        if not hmac.compare_digest(supplied, expected):
+            return Response("Access restricted", status_code=401,
+                            headers={"WWW-Authenticate": 'Basic realm="SoundTrace demo"'})
+    return await call_next(request)
+
 app.mount("/outputs", StaticFiles(directory=ROOT / "outputs"), name="outputs")
+app.mount("/assets", StaticFiles(directory=ROOT / "webapp" / "assets"), name="assets")
+app.mount("/mineradio", StaticFiles(directory=ROOT / "third_party" / "Mineradio-paused-main" / "public", html=True), name="mineradio")
 _gpu_lock = threading.Lock()
 _models = {"audiosep": None, "audiosep_cpu": None, "clearvoice": None, "text_emb": None}
 _jobs = {}
@@ -210,7 +258,8 @@ def denoise(stem_path: Path, target_en: str, out_path: Path):
 
 def generate_and_mix(style: str, target_en: str, duration: float, seed: int,
                      gen_path: Path, ambience_path: Optional[Path], mix_path: Path,
-                     stage=None, ambience_level: float = 0.35):
+                     stage=None, ambience_level: float = 0.35,
+                     melody_ref: Optional[Path] = None, ref_strength: float = 0.85):
     def say(s):
         if stage:
             stage(s)
@@ -221,13 +270,19 @@ def generate_and_mix(style: str, target_en: str, duration: float, seed: int,
     pipe = ACEStepPipeline(checkpoint_dir=str(ACESTEP_CKPT), cpu_offload=True)
     prompt = f"{STYLE_PROMPTS[style]}, {target_en} atmosphere"
     say(f"生成伴奏中（{STYLE_NAMES[style]}·{duration:.0f}s，约需 {duration*4:.0f}~{duration*6:.0f} 秒）")
+    a2a = {}
+    if melody_ref is not None and Path(melody_ref).exists():
+        # T11: 哼唱参考驱动旋律（T8 实验验证 note-chroma 1.000）
+        a2a = {"audio2audio_enable": True, "ref_audio_input": str(melody_ref),
+               "ref_audio_strength": float(ref_strength)}
+        say(f"以哼唱旋律为参考生成（强度 {ref_strength}）")
     pipe(audio_duration=float(duration), prompt=prompt, lyrics="[inst]",
          infer_step=27, guidance_scale=15.0, manual_seeds=[seed],
-         save_path=str(gen_path))
+         save_path=str(gen_path), **a2a)
     del pipe; gc.collect(); torch.cuda.empty_cache()
 
     if ambience_path is None or not Path(ambience_path).exists():
-        return
+        return prompt
     say("混入环境声中")
     # 将提取出的环境声铺在生成伴奏下：响度自适应归一到音乐 RMS 的
     # ambience_level 倍（默认 0.35 ≈ -9dB，清晰可闻且不压过音乐），
@@ -253,6 +308,7 @@ def generate_and_mix(style: str, target_en: str, duration: float, seed: int,
         amb[-fade:] *= np.linspace(1, 0, fade)
     mix = gen + amb[:, None]
     sf.write(str(mix_path), finalize_mix(mix), sr)
+    return prompt
 
 
 def _resolve_media(rel_path: str) -> Optional[Path]:
@@ -423,6 +479,7 @@ def analyze_hum(upload_path: Path, jd: Path) -> dict:
 
 def run_job(job: dict):
     jd = JOB_ROOT / job["id"]; jd.mkdir(parents=True, exist_ok=True)
+    job["status"] = "running"
     try:
         if job["type"] == "extract":
             job["stage"] = "加载分离模型（首次约20秒）"
@@ -488,6 +545,13 @@ def run_job(job: dict):
                 backend = denoise(stem, job["target_en"], jd / "denoised.wav")
                 job["results"]["denoised"] = f"outputs/service_jobs/{job['id']}/denoised.wav"
                 job["results"]["denoise_backend"] = backend
+                # 素材索引（唱片册·素材库的磁带）
+                mats = _load_json(MATERIALS_FILE, [])
+                mats.append({"id": job["id"], "name": job["target_en"],
+                             "audio": job["results"]["denoised"],
+                             "raw": job["results"]["extracted"],
+                             "created": time.time()})
+                _save_json(MATERIALS_FILE, mats)
         elif job["type"] == "remix":
             # 纯 CPU 混音：伴奏 + 多段环境声按摆放位置渲染
             gen = _resolve_media(job.get("generated") or "")
@@ -500,6 +564,13 @@ def run_job(job: dict):
                                   duck_db=job.get("duck", 0.0))
             job["results"]["final"] = f"outputs/service_jobs/{job['id']}/final_mix.wav"
             job["results"]["placed"] = used
+            # T12: 成品混音登记为作品（含元数据，地图数据源）
+            meta = job.get("metadata") or {}
+            if job.get("auto_register", True):
+                register_work({"id": job["id"], "kind": "mix", "created": time.time(),
+                           "title": meta.get("title") or f"声音明信片·{time.strftime('%m-%d %H:%M')}",
+                           "metadata": meta,
+                           "audio": f"outputs/service_jobs/{job['id']}/final_mix.wav"})
         elif job["type"] == "hum":
             # 哼唱旋律分析（纯 CPU）：F0→调性量化→重合成
             upload = UPLOAD_DIR / job["upload_id"]
@@ -512,13 +583,28 @@ def run_job(job: dict):
                 p = ROOT / "outputs" / job["ambience"].split("outputs/", 1)[1]
                 if p.exists():
                     amb = p
+            melody = _resolve_media(job.get("melody_ref") or "")
+            # T13: 情绪 → prompt 修饰词
+            meta = job.get("metadata") or {}
+            mood = (meta.get("mood") or "").strip()
+            if mood in MOOD_PROMPTS:
+                job["target_en"] = f"{job['target_en']}, {MOOD_PROMPTS[mood]}"
             job["stage"] = "加载生成模型（约30秒）"
             with _gpu_lock:
-                generate_and_mix(job["style"], job["target_en"], job["duration"],
+                prompt = generate_and_mix(job["style"], job["target_en"], job["duration"],
                                  job["seed"], jd / "generated.wav", amb, jd / "final_mix.wav",
                                  stage=lambda s: job.__setitem__("stage", s),
-                                 ambience_level=job.get("ambience_level", 0.35))
+                                 ambience_level=job.get("ambience_level", 0.35),
+                                 melody_ref=melody,
+                                 ref_strength=job.get("ref_strength", 0.85))
             job["results"]["generated"] = f"outputs/service_jobs/{job['id']}/generated.wav"
+            job["results"]["prompt"] = prompt
+            # T12: 登记作品（供声音地图）
+            if job.get("auto_register", True):
+                register_work({"id": job["id"], "kind": "generated", "created": time.time(),
+                           "title": meta.get("title") or f"{STYLE_NAMES.get(job['style'], '')}·{time.strftime('%m-%d')}",
+                           "metadata": meta,
+                           "audio": f"outputs/service_jobs/{job['id']}/generated.wav"})
             if amb is not None:
                 job["results"]["final"] = f"outputs/service_jobs/{job['id']}/final_mix.wav"
         job["status"] = "done"
@@ -542,6 +628,12 @@ def _gc_loop():
     """T7: 每 10 分钟清理超过 24h 的上传与任务产物。"""
     while True:
         time.sleep(600)
+        # Any previously saved work or extracted material must survive task cleanup.
+        # If retention fails, skip this GC pass rather than removing referenced audio.
+        try:
+            preserve_references(ROOT)
+        except OSError:
+            continue
         cutoff = time.time() - 24 * 3600
         for d in (UPLOAD_DIR, JOB_ROOT):
             for p in list(d.iterdir()):
@@ -579,6 +671,7 @@ threading.Thread(target=_warmup, daemon=True).start()
 
 class JobReq(BaseModel):
     type: str
+    auto_register: bool = True
     upload_id: Optional[str] = None
     target_en: str = "interesting sound"
     target_zh: Optional[str] = None
@@ -590,12 +683,42 @@ class JobReq(BaseModel):
     generated: Optional[str] = None            # remix: 伴奏轨（root 相对路径）
     placements: Optional[list] = None          # remix: [{file, start, length?}]
     duck: float = 0.0                          # remix: 音乐避让深度 dB
+    melody_ref: Optional[str] = None           # generate: 哼唱旋律参考（T11）
+    ref_strength: float = 0.85                 # generate: audio2audio 强度
+    metadata: Optional[dict] = None            # T12: {title, location, lat, lng, mood, story}
 
 
 @app.get("/api/health")
 def health():
     return {"status": "ok", "device": DEVICE,
             "pending_jobs": _queue.qsize(), "models_loaded": bool(_models["audiosep"])}
+
+
+@app.get("/api/studio/health")
+def studio_health():
+    return {"editing": True, "storage": True, "ai": AUDIOSEP_DIR.exists() and ACESTEP_CKPT.exists()}
+
+
+@app.post("/api/studio/works", status_code=201)
+async def save_studio_work(request: Request):
+    origin = request.headers.get("origin")
+    if origin and origin != str(request.base_url).rstrip("/"):
+        raise HTTPException(403, "请从声迹页面发起请求")
+    encoded = request.headers.get("x-soundtrace-metadata", "%7B%7D")
+    if len(encoded) > 24000:
+        raise HTTPException(400, "作品信息过长")
+    body = bytearray()
+    async for chunk in request.stream():
+        body.extend(chunk)
+        if len(body) > 60 * 1024 * 1024:
+            raise HTTPException(413, "音频文件过大")
+    try:
+        info = json.loads(unquote(encoded))
+        if not isinstance(info, dict):
+            raise ValueError("作品信息格式错误")
+        return commit_work(ROOT, bytes(body), info)
+    except (ValueError, OSError) as exc:
+        raise HTTPException(400, str(exc)) from exc
 
 
 @app.post("/api/upload")
@@ -641,11 +764,613 @@ def get_job(job_id: str):
     return out
 
 
+@app.get("/api/works")
+def list_works():
+    """T16: 声音地图数据源——全部已登记作品（含元数据与音频路径）"""
+    try:
+        works = json.loads(WORKS_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        works = []
+    for memory in _load_memories():
+        if memory.get("music_audio"):
+            works.append({"id": f"memory-vinyl-{memory['id']}", "memory_id": memory["id"],
+                          "project": memory.get("project"), "title": memory["title"],
+                          "kind": "mix", "collectible": "vinyl", "audio": memory["music_audio"],
+                          "img": memory["cover_vinyl"], "cover": memory["cover_vinyl"],
+                          "metadata": {"scene": memory.get("scene", "sea-window"),
+                                       "location": memory.get("location"), "mood": memory.get("mood"),
+                                       "story": memory.get("notes"), "weather": memory.get("weather"),
+                                       "images": memory.get("images", []), "videos": memory.get("videos", []),
+                                       "audio_files": memory.get("audio_files", []),
+                                       "captured_at": memory.get("captured_at"),
+                                       "lat": memory.get("lat"), "lng": memory.get("lng")},
+                          "created": memory["created"]})
+    return {"works": works[-100:]}
+
+
+# ─────────────── 录音手记（记忆）：保存弹窗产物 + 封面生图 ───────────────
+MEMORIES_FILE = ROOT / "outputs" / "memories.json"
+MEMORY_DIR = ROOT / "outputs" / "memories"
+MEMORY_DIR.mkdir(parents=True, exist_ok=True)
+_STT = {"model": None}
+
+_FONT_CANDIDATES = [r"C:\Windows\Fonts\msyh.ttc", r"C:\Windows\Fonts\msyhbd.ttc",
+                    r"C:\Windows\Fonts\simhei.ttf"]
+
+
+def _font(size: int):
+    from PIL import ImageFont
+    for path in _FONT_CANDIDATES:
+        if os.path.exists(path):
+            try:
+                return ImageFont.truetype(path, size)
+            except Exception:
+                continue
+    return ImageFont.load_default()
+
+
+def make_cover(bg_path, title: str, sub: str, kind: str, out_path: Path):
+    """生成磁带/唱片封面：有上传图片→图作背景+底部标签；无→白底黑字。
+    kind: tape(4:3) | vinyl(1:1)"""
+    from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
+    W, H = (840, 630) if kind == "tape" else (800, 800)
+    if bg_path and os.path.exists(bg_path):
+        img = Image.open(bg_path).convert("RGB")
+        ratio = min(img.width / W, img.height / H)
+        img = img.crop((int((img.width - W * ratio) / 2), int((img.height - H * ratio) / 2),
+                        int((img.width + W * ratio) / 2), int((img.height + H * ratio) / 2))
+                      ).resize((W, H))
+        img = ImageEnhance.Color(img).enhance(1.12)
+        img = ImageEnhance.Contrast(img).enhance(1.05)
+        img = img.filter(ImageFilter.GaussianBlur(0.6))
+    else:
+        img = Image.new("RGB", (W, H), "#ffffff")        # 无图：白底黑字
+    draw = ImageDraw.Draw(img, "RGBA")
+    f_title, f_sub = _font(46), _font(26)
+    label_h = 118
+    draw.rectangle([0, H - label_h, W, H], fill=(255, 255, 255, 235))
+    ink = (24, 44, 62, 255)
+    draw.text((28, H - label_h + 16), (title or "一段声音")[:14], font=f_title, fill=ink)
+    draw.text((30, H - 42), (sub or "")[:32], font=f_sub, fill=(90, 112, 130, 255))
+    badge = "TAPE · 声音磁带" if kind == "tape" else "VINYL · 声音唱片"
+    draw.rounded_rectangle([24, 22, 24 + 34 + len(badge) * 15, 62], radius=16,
+                           fill=(20, 40, 60, 190))
+    draw.text((34, 30), badge, font=_font(20), fill=(255, 255, 255, 230))
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out_path, quality=92)
+    return out_path
+
+
+def _generate_memory_art(entry: dict, image_path: Path, mdir: Path, sub: str):
+    """在后台基于用户图片和笔记生成唱片/磁带视觉，原图继续作为记忆背景。"""
+    try:
+        import requests
+        from PIL import Image
+        prompt = (
+            "Create a square, painterly keepsake artwork inspired by this uploaded photo. "
+            "Preserve the recognizable place and atmosphere, with warm light, tactile brush texture, "
+            "clear focal subject and rich color. No letters, logos, cassette, record, frame or UI. "
+            f"Sound: {entry['title'][:80]}. Memory: {entry.get('notes','')[:500]}. "
+            f"Mood: {entry.get('mood','')[:60]}. Place: {entry.get('location','')[:100]}."
+        )
+        reference = mdir / "art_reference.png"
+        with Image.open(image_path) as uploaded:
+            uploaded.convert("RGB").save(reference, format="PNG")
+        with reference.open("rb") as image_file:
+            response = requests.post("https://api.openai.com/v1/images/edits",
+                                     headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"},
+                                     data={"model": os.getenv("SOUNDTRACE_IMAGE_MODEL", "gpt-image-2.5-flare"),
+                                           "prompt": prompt, "size": "1024x1024"},
+                                     files={"image[]": (reference.name, image_file, "image/png")},
+                                     timeout=180)
+        response.raise_for_status()
+        artwork = mdir / "generated_art.png"
+        artwork.write_bytes(base64.b64decode(response.json()["data"][0]["b64_json"]))
+        make_cover(artwork, entry["title"], sub, "tape", mdir / "cover_tape_ai.jpg")
+        make_cover(artwork, entry["title"], sub, "vinyl", mdir / "cover_vinyl_ai.jpg")
+        with STORAGE_LOCK:
+            memories = _load_memories()
+            for memory in memories:
+                if memory["id"] == entry["id"]:
+                    memory["cover_tape"] = f"outputs/memories/{entry['id']}/cover_tape_ai.jpg"
+                    memory["cover_vinyl"] = f"outputs/memories/{entry['id']}/cover_vinyl_ai.jpg"
+                    memory["art_status"] = "generated"
+                    memory["artwork"] = f"outputs/memories/{entry['id']}/generated_art.png"
+                    break
+            _save_json(MEMORIES_FILE, memories)
+    except Exception as exc:
+        print(f"Memory artwork generation failed for {entry['id']}: {type(exc).__name__}: {exc}", flush=True)
+        with STORAGE_LOCK:
+            memories = _load_memories()
+            for memory in memories:
+                if memory["id"] == entry["id"]:
+                    memory["art_status"] = "failed"
+                    break
+            _save_json(MEMORIES_FILE, memories)
+
+
+def _load_memories():
+    try:
+        return json.loads(MEMORIES_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+
+@app.get("/api/memories")
+def get_memories():
+    return {"memories": _load_memories()[::-1]}
+
+
+@app.post("/api/memories")
+async def save_memory(audio: UploadFile = File(...),
+                      title: str = Form(""), notes: str = Form(""),
+                      mood: str = Form(""), location: str = Form(""),
+                      lat: float = Form(0), lng: float = Form(0),
+                      weather: str = Form(""), captured_at: float = Form(0),
+                      scene: str = Form("sea-window"),
+                      project: str = Form(""), share: bool = Form(False),
+                      music_audio: UploadFile = File(None),
+                      images: list[UploadFile] = File(None),
+                      videos: list[UploadFile] = File(None),
+                      audio_files: list[UploadFile] = File(None)):
+    """录音手记保存：原声 + 图片 + 时间/天气/心情/地点 → 生成磁带/唱片封面。
+    磁带保存录音原声；唱片（生成音乐时）复用同一封面并携带全部信息。"""
+    raw_audio = await audio.read()
+    if not raw_audio or len(raw_audio) > 60_000_000 or raw_audio[:4] != b"RIFF" or raw_audio[8:12] != b"WAVE":
+        raise HTTPException(400, "请上传不超过 60 MB 的 WAV 原声")
+    if len(images or []) > 6 or len(videos or []) > 2 or len(audio_files or []) > 4:
+        raise HTTPException(400, "最多上传 6 张图片、2 段视频和 4 段补充音频")
+    if lat and not -90 <= lat <= 90 or lng and not -180 <= lng <= 180:
+        raise HTTPException(400, "地点坐标无效")
+    mid = uuid.uuid4().hex[:12]
+    mdir = MEMORY_DIR / mid
+    mdir.mkdir(parents=True, exist_ok=True)
+    audio_path = mdir / "audio.wav"
+    audio_path.write_bytes(raw_audio)
+    music_path = None
+    if music_audio is not None:
+        generated = await music_audio.read()
+        if not generated or len(generated) > 60_000_000 or generated[:4] != b"RIFF" or generated[8:12] != b"WAVE":
+            raise HTTPException(400, "生成音乐需要不超过 60 MB 的 WAV 文件")
+        music_path = mdir / "music.wav"
+        music_path.write_bytes(generated)
+    img_paths = []
+    for i, f in enumerate(images or []):
+        data = await f.read()
+        if not data:
+            continue
+        if len(data) > 12_000_000:
+            raise HTTPException(413, "每张图片需小于 12 MB")
+        try:
+            from PIL import Image
+            with Image.open(io.BytesIO(data)) as image:
+                image.verify()
+        except Exception as exc:
+            raise HTTPException(400, "图片文件无法读取，请换一张图片") from exc
+        ext = (f.filename or "x.jpg").split(".")[-1].lower()
+        if ext not in ("jpg", "jpeg", "png", "webp", "gif"):
+            ext = "jpg"
+        p = mdir / f"img_{i}.{ext}"
+        p.write_bytes(data)
+        img_paths.append(p)
+    video_paths = []
+    for i, f in enumerate(videos or []):
+        data = await f.read()
+        ext = (f.filename or "").rsplit(".", 1)[-1].lower()
+        if len(data) > 60_000_000:
+            raise HTTPException(413, "每段视频需小于 60 MB")
+        if data and ext in ("mp4", "webm", "mov"):
+            p = mdir / f"video_{i}.{ext}"
+            p.write_bytes(data)
+            video_paths.append(p)
+    extra_audio_paths = []
+    for i, f in enumerate(audio_files or []):
+        data = await f.read()
+        ext = (f.filename or "").rsplit(".", 1)[-1].lower()
+        if len(data) > 30_000_000:
+            raise HTTPException(413, "每段补充音频需小于 30 MB")
+        if data and ext in ("wav", "mp3", "m4a", "ogg", "webm"):
+            p = mdir / f"extra_{i}.{ext}"
+            p.write_bytes(data)
+            extra_audio_paths.append(p)
+    rel = lambda p: f"outputs/memories/{mid}/{p.name}"
+    sub = " · ".join(x for x in [location, weather, mood,
+                                 time.strftime("%Y-%m-%d %H:%M", time.localtime(captured_at or time.time()))] if x)
+    make_cover(img_paths[0] if img_paths else None, title or notes[:14], sub, "tape",
+               mdir / "cover_tape.jpg")
+    make_cover(img_paths[0] if img_paths else None, title or notes[:14], sub, "vinyl",
+               mdir / "cover_vinyl.jpg")
+    entry = {"id": mid, "title": title[:80] or notes[:14] or "一段声音", "notes": notes[:1200],
+             "mood": mood, "location": location, "lat": lat or None, "lng": lng or None,
+             "weather": weather, "captured_at": captured_at or time.time(),
+             "audio": rel(audio_path),
+             "music_audio": rel(music_path) if music_path else None,
+             "images": [rel(p) for p in img_paths],
+             "videos": [rel(p) for p in video_paths],
+             "audio_files": [rel(p) for p in extra_audio_paths],
+             "scene": scene if scene in ("sea-window", "rainy-city", "autumn-lake", "snow-mountain", "spring-meadow", "desert-dusk") else "sea-window",
+             "project": project[:24000] if project else None,
+             "cover_tape": rel(mdir / "cover_tape.jpg"),
+             "cover_vinyl": rel(mdir / "cover_vinyl.jpg"),
+             "created": time.time(),
+             "art_status": "pending" if img_paths and os.getenv("OPENAI_API_KEY") else
+                           "needs_provider" if img_paths else "text_only"}
+    with STORAGE_LOCK:
+        items = _load_memories()
+        items.append(entry)
+        _save_json(MEMORIES_FILE, items)
+    if entry["art_status"] == "pending":
+        threading.Thread(target=_generate_memory_art,
+                         args=(entry.copy(), img_paths[0], mdir, sub), daemon=True).start()
+    if share:
+        post_feed(entry["notes"] or entry["title"], kind="tape", audio=entry["audio"],
+                  img=entry["images"][0] if entry["images"] else entry["cover_tape"])
+    return entry
+
+
+@app.post("/api/transcribe")
+async def transcribe(file: UploadFile = File(...)):
+    """『这是什么声音』的语音识别输入（faster-whisper 本地，懒加载）"""
+    if _STT["model"] is None:
+        try:
+            from faster_whisper import WhisperModel
+            _STT["model"] = WhisperModel(os.getenv("SOUNDTRACE_WHISPER_MODEL", "base"),
+                                         device="cpu", compute_type="int8",
+                                         download_root=str(ROOT / "outputs" / "whisper"))
+        except Exception as exc:
+            raise HTTPException(503, "语音识别模型尚未准备好，请直接输入文字或稍后重试") from exc
+    data = await file.read()
+    if not data or len(data) > 10_000_000:
+        raise HTTPException(400, "语音输入需小于 10 MB")
+    with tempfile.NamedTemporaryFile(suffix=".wav", dir=ROOT / "outputs", delete=False) as handle:
+        handle.write(data)
+        tmp = Path(handle.name)
+    try:
+        segments, _ = _STT["model"].transcribe(str(tmp), language="zh", beam_size=1)
+        return {"text": "".join(s.text for s in segments).strip()}
+    finally:
+        tmp.unlink(missing_ok=True)
+
+
+def _save_user_image(data: bytes, stem: str, max_side: int) -> Path:
+    from PIL import Image
+    try:
+        with Image.open(io.BytesIO(data)) as original:
+            image = original.convert("RGB")
+            image.thumbnail((max_side, max_side))
+            folder = ROOT / "outputs" / "user"
+            folder.mkdir(parents=True, exist_ok=True)
+            path = folder / f"{stem}-{uuid.uuid4().hex[:8]}.jpg"
+            image.save(path, "JPEG", quality=88)
+            return path
+    except Exception as exc:
+        raise HTTPException(400, "图片无法读取，请选择 JPG、PNG 或 WebP") from exc
+
+
+@app.post("/api/user/avatar")
+async def upload_avatar(file: UploadFile = File(...)):
+    data = await file.read()
+    if len(data) > 8_000_000:
+        raise HTTPException(413, "头像需小于 8 MB")
+    p = _save_user_image(data, "avatar", 512)
+    u = get_user()
+    u["avatar_img"] = f"outputs/user/{p.name}"
+    _save_json(USER_FILE, u)
+    return {"avatar_img": u["avatar_img"]}
+
+
+@app.post("/api/user/background")
+async def upload_background(file: UploadFile = File(...)):
+    data = await file.read()
+    if len(data) > 12_000_000:
+        raise HTTPException(413, "背景图片需小于 12 MB")
+    p = _save_user_image(data, "background", 1600)
+    u = get_user()
+    u["background_img"] = f"outputs/user/{p.name}"
+    _save_json(USER_FILE, u)
+    return {"background_img": u["background_img"]}
+
+
+class BeatReq(BaseModel):
+    file: str
+
+
+@app.post("/api/analyze-beat")
+def analyze_beat(req: BeatReq):
+    """T14: 节拍分析——返回 BPM 与拍点时间，供 DAW 吸附"""
+    p = _resolve_media(req.file)
+    if p is None:
+        raise HTTPException(404, "file not found")
+    y, sr = librosa.load(str(p), sr=22050, mono=True)
+    tempo, beats = librosa.beat.beat_track(y=y, sr=sr)
+    tempo = float(np.atleast_1d(tempo)[0])       # 新版 librosa 返回数组
+    times = librosa.frames_to_time(beats, sr=sr)
+    return {"bpm": round(float(tempo), 1),
+            "beats": [round(float(t), 3) for t in times]}
+
+
+@app.get("/map")
+def map_page():
+    return HTMLResponse((ROOT / "webapp" / "map.html").read_text(encoding="utf-8"))
+
+
+# ─────────────── 新交互层（照片墙/素材/信箱/社区/用户） ───────────────
+PHOTOS_FILE = ROOT / "outputs" / "photos.json"
+MATERIALS_FILE = ROOT / "outputs" / "materials.json"
+EXCHANGES_FILE = ROOT / "outputs" / "exchanges.json"
+FEED_FILE = ROOT / "outputs" / "feed.json"
+USER_FILE = ROOT / "outputs" / "user.json"
+PHOTO_DIR = ROOT / "outputs" / "photos"
+PHOTO_DIR.mkdir(parents=True, exist_ok=True)
+SEED_DIR = ROOT / "outputs" / "seeds"
+SEED_DIR.mkdir(parents=True, exist_ok=True)
+_new_lock = STORAGE_LOCK
+
+
+def _load_json(p, default):
+    with _new_lock:
+        try:
+            return json.loads(Path(p).read_text(encoding="utf-8"))
+        except Exception:
+            return default
+
+
+def _save_json(p, data):
+    with _new_lock:
+        Path(p).write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+def _seed_demo():
+    """收件箱/社区演示种子（无则建）"""
+    src = WORKSPACE / "test-materials" / "env-sounds-long"
+    for f, name in [("pouring_water_15s.wav", "seed_tape_water.wav"),
+                    ("chirping_birds_15s.wav", "seed_tape_birds.wav")]:
+        s, d = src / f, SEED_DIR / name
+        if s.exists() and not d.exists():
+            shutil.copy(s, d)
+    if not (SEED_DIR / "seed_vinyl.wav").exists():
+        gens = sorted(JOB_ROOT.glob("*/generated.wav"), key=lambda p: p.stat().st_mtime)
+        if gens:
+            shutil.copy(gens[-1], SEED_DIR / "seed_vinyl.wav")
+    _existing_feed = _load_json(FEED_FILE, []) or []
+    if not any(p.get("img") for p in _existing_feed):
+        # 社区示例内容（旅人经历图文，案例图为场景资产）
+        _save_json(FEED_FILE, _existing_feed + [
+            {"id": "seedp1", "text": "在喀纳斯待了三天，每天清晨湖面起雾。录了一段水声和鸟鸣，回来做成了这张《雾中晨走》。",
+             "img": "assets/scenes-v1/autumn-lake.png", "audio": "outputs/seeds/seed_tape_water.wav",
+             "author": "背包的北落", "created": time.time() - 86400 * 3},
+            {"id": "seedp2", "text": "重庆的雨夜，出租屋窗外全是我听不懂的川音。把车流声交给了 AI，它还给我一首 lo-fi。",
+             "img": "assets/scenes-v1/rainy-city.png", "audio": "outputs/seeds/seed_vinyl.wav",
+             "author": "山城客", "created": time.time() - 86400 * 2},
+            {"id": "seedp3", "text": "玉龙雪山的缆车上不敢说话，怕错过风声。海拔 4506 米，这是我录过最安静的一段。",
+             "img": "assets/scenes-v1/snow-mountain.png", "audio": None,
+             "author": "雪线以南", "created": time.time() - 86400},
+            {"id": "seedp4", "text": "呼伦贝尔的花野，风把歌声吹得很远。哼了一段不成调的旋律，AI 帮我补完了它。",
+             "img": "assets/scenes-v1/spring-meadow.png", "audio": None,
+             "author": "骑马的浪人", "created": time.time() - 3600 * 5},
+        ])
+    ex = _load_json(EXCHANGES_FILE, None)
+    if ex is None:
+        _save_json(EXCHANGES_FILE, [
+            {"id": "seed1", "dir": "in", "kind": "tape", "title": "一段溪水声",
+             "from": "雪山下的旅人", "audio": "outputs/seeds/seed_tape_water.wav",
+             "story": "虎跳峡旁录的，水很急。希望它成为你的一段伴奏。",
+             "allow_reuse": True, "created": time.time() - 86400},
+            {"id": "seed2", "dir": "in", "kind": "vinyl", "title": "《雾中晨走》",
+             "from": "匿名", "audio": "outputs/seeds/seed_vinyl.wav",
+             "story": "用海边风声做的，送给你。", "allow_reuse": False,
+             "created": time.time() - 3600},
+        ])
+
+
+class PhotoIn(BaseModel):
+    title: str = "一张声音记忆"
+    story: str = ""
+    audio: Optional[str] = None              # root 相对音频路径
+    mood: Optional[str] = None
+
+
+@app.post("/api/photos")
+async def add_photo(info: PhotoIn, file: UploadFile = File(...)):
+    """照片墙上的一张照片：图片 + 故事 + 关联录音"""
+    data = await file.read()
+    if len(data) > 12_000_000:
+        raise HTTPException(400, "图片过大（>12MB）")
+    ext = (file.filename or "x.jpg").split(".")[-1].lower()
+    if ext not in ("jpg", "jpeg", "png", "webp", "gif"):
+        ext = "jpg"
+    pid = uuid.uuid4().hex[:12]
+    (PHOTO_DIR / f"{pid}.{ext}").write_bytes(data)
+    photos = _load_json(PHOTOS_FILE, [])
+    photos.append({"id": pid, "title": info.title, "story": info.story,
+                   "mood": info.mood, "audio": info.audio,
+                   "img": f"outputs/photos/{pid}.{ext}", "created": time.time()})
+    _save_json(PHOTOS_FILE, photos)
+    return {"id": pid}
+
+
+@app.get("/api/photos")
+def get_photos():
+    photos = _load_json(PHOTOS_FILE, [])
+    for memory in _load_memories():
+        for index, image in enumerate(memory.get("images", [])):
+            photos.append({"id": f"memory-photo-{memory['id']}-{index}", "title": memory["title"],
+                           "img": image, "audio": memory["audio"], "created": memory["created"],
+                           "metadata": {"scene": memory.get("scene", "sea-window"),
+                                        "story": memory.get("notes"), "mood": memory.get("mood"),
+                                        "location": memory.get("location"), "weather": memory.get("weather")}})
+    return {"photos": photos[::-1]}
+
+
+@app.get("/api/materials")
+def get_materials():
+    """素材库（磁带）：提取完成的素材索引 + 录音手记（带封面，存原声）"""
+    mats = _load_json(MATERIALS_FILE, [])
+    for m in _load_memories():
+        mats.append({"id": f"mem_{m['id']}", "name": m["title"], "audio": m["audio"],
+                     "cover": m["cover_tape"], "memory": True,
+                     "metadata": {"scene": m.get("scene", "sea-window"),
+                                  "location": m.get("location"), "mood": m.get("mood"),
+                                  "story": m.get("notes"), "lat": m.get("lat"), "lng": m.get("lng"),
+                                  "images": m.get("images", []), "videos": m.get("videos", []),
+                                  "audio_files": m.get("audio_files", []),
+                                  "weather": m.get("weather"),
+                                  "captured_at": m.get("captured_at")},
+                     "created": m.get("created")})
+    return {"materials": mats[::-1]}
+
+
+@app.get("/capture")
+def capture_page():
+    return HTMLResponse((ROOT / "webapp" / "capture.html").read_text(encoding="utf-8"))
+
+
+@app.get("/api/inbox")
+def get_inbox():
+    return {"items": [x for x in _load_json(EXCHANGES_FILE, []) if x["dir"] == "in"][::-1]}
+
+
+@app.get("/api/exchange")
+def get_exchanges():
+    return {"items": _load_json(EXCHANGES_FILE, [])}
+
+
+class ExchangeIn(BaseModel):
+    kind: str                                  # photo | vinyl | tape
+    title: str
+    audio: Optional[str] = None
+    img: Optional[str] = None
+    sync_feed: bool = False
+    allow_reuse: bool = False
+
+
+@app.post("/api/exchange")
+def send_exchange(req: ExchangeIn):
+    """把照片/唱片/磁带投进信箱：匿名寄给一位匹配用户，可选同步社区"""
+    eid = uuid.uuid4().hex[:12]
+    entry = {"id": eid, "dir": "out", "kind": req.kind, "title": req.title,
+             "audio": req.audio, "img": req.img, "to": "喜好匹配的旅人",
+             "allow_reuse": req.allow_reuse, "created": time.time()}
+    ex = _load_json(EXCHANGES_FILE, [])
+    ex.append(entry)
+    _save_json(EXCHANGES_FILE, ex)
+    if req.sync_feed:
+        post_feed(req.title + "（已寄出）", kind=req.kind,
+                  audio=req.audio, img=req.img, note="匿名交换 · 同步动态")
+    return entry
+
+
+@app.post("/api/exchange/{eid}/contact")
+def request_contact(eid: str):
+    """对收到的匿名信件发起联系方式交换请求（演示：标记状态）"""
+    ex = _load_json(EXCHANGES_FILE, [])
+    for x in ex:
+        if x["id"] == eid:
+            x["contact"] = "requested"
+    _save_json(EXCHANGES_FILE, ex)
+    return {"status": "requested", "note": "对方同意后你们将互换站内联系方式（演示）"}
+
+
+def post_feed(text, kind=None, audio=None, img=None, note=None, author=None):
+    feed = _load_json(FEED_FILE, [])
+    feed.append({"id": uuid.uuid4().hex[:10], "text": text, "kind": kind,
+                 "audio": audio, "img": img, "note": note,
+                 "author": author or _load_json(USER_FILE, {}).get("name", "我"),
+                 "created": time.time()})
+    _save_json(FEED_FILE, feed)
+
+
+class FeedIn(BaseModel):
+    text: str
+    audio: Optional[str] = None
+    img: Optional[str] = None
+
+
+@app.post("/api/feed")
+def add_feed(req: FeedIn):
+    post_feed(req.text, audio=req.audio, img=req.img)
+    return {"ok": True}
+
+
+@app.get("/api/feed")
+def get_feed():
+    return {"posts": _load_json(FEED_FILE, [])[::-1]}
+
+
+@app.get("/api/user")
+def get_user():
+    u = _load_json(USER_FILE, {})
+    if not u:
+        u = {"name": "旅行者_" + uuid.uuid4().hex[:4], "avatar": "🎧", "streak": 0,
+             "last_checkin": None, "logged_in": False}
+        _save_json(USER_FILE, u)
+    return u
+
+
+class UserIn(BaseModel):
+    name: Optional[str] = None
+    avatar: Optional[str] = None
+    logged_in: Optional[bool] = None
+
+
+@app.post("/api/user")
+def set_user(req: UserIn):
+    u = get_user()
+    if req.name is not None:
+        name = req.name.strip()
+        if not name or len(name) > 32:
+            raise HTTPException(400, "昵称请填写 1 到 32 个字")
+        u["name"] = name
+    if req.avatar is not None:
+        u["avatar"] = req.avatar
+    if req.logged_in is not None:
+        u["logged_in"] = req.logged_in
+    _save_json(USER_FILE, u)
+    return u
+
+
+@app.post("/api/user/checkin")
+def checkin():
+    u = get_user()
+    today = time.strftime("%Y-%m-%d")
+    if u.get("last_checkin") == today:
+        return {"ok": False, "msg": "今天已签到", **u}
+    u["last_checkin"] = today
+    u["streak"] = (u.get("streak", 0) + 1) if time.strftime("%Y-%m-%d", time.localtime(time.time() - 86400)) == u.get("prev_date") else 1
+    u["prev_date"] = today
+    _save_json(USER_FILE, u)
+    return {"ok": True, "msg": f"签到成功，连续 {u['streak']} 天", **u}
+
+
 @app.get("/")
 def index():
+    return HTMLResponse((ROOT / "webapp" / "home.html").read_text(encoding="utf-8"))
+
+
+@app.get("/studio")
+def studio():
     return HTMLResponse((ROOT / "webapp" / "index.html").read_text(encoding="utf-8"))
 
 
+@app.get("/album")
+def album_page():
+    return HTMLResponse((ROOT / "webapp" / "album-room.html").read_text(encoding="utf-8"))
+
+
+@app.get("/community")
+def community_page():
+    return HTMLResponse((ROOT / "webapp" / "community.html").read_text(encoding="utf-8"))
+
+
+@app.get("/me")
+def me_page():
+    # “我的”与收藏间功能合并为一页
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse("/album?profile=1")
+
+
 if __name__ == "__main__":
+    _seed_demo()
+    # 0.0.0.0：允许手机/小程序在同一局域网访问（真机调试必需）
     print(f"SoundTrace MVP 服务启动: http://127.0.0.1:8090  (device={DEVICE})")
-    uvicorn.run(app, host="127.0.0.1", port=8090, log_level="warning")
+    uvicorn.run(app, host="0.0.0.0", port=8090, log_level="warning")

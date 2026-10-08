@@ -1,0 +1,4 @@
+.sample-audio{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:20px 0;margin-bottom:28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sample-description{flex:1;min-width:160px}.sample-description h2{font-size:14px;font-weight:600}.sample-description p{font-size:12px;line-height:1.7;color:var(--muted);margin-top:6px;overflow-wrap:anywhere}
+.sample-audio audio{width:240px;max-width:100%;height:40px}.sample-actions{display:flex;align-items:center;gap:4px;flex-wrap:wrap}.sample-actions .outline{font-size:13px}
+@media(max-width:600px){.sample-audio{gap:12px;padding:16px 0;margin-bottom:24px}.sample-description{flex-basis:100%}.sample-audio audio{width:100%}.sample-actions{width:100%}.sample-actions>.outline{flex:1}}

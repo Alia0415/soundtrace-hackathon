@@ -1,0 +1,3485 @@
+{
+  "date": "2026-10-08",
+  "assets": [
+    {
+      "id": "01-home-mobile",
+      "title": "此刻 · 手机",
+      "category": "此刻",
+      "controls": "录一段声音；示例试听；声音地图；双指缩放提示；账号；四项导航",
+      "png": "01-home-mobile.png",
+      "webp": "01-home-mobile.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 1,
+      "status": "主体已用",
+      "current": "home",
+      "evidence": "手机首页海景和传声筒直接裁自 01；标题、录音入口、地图和导航为真实控件。",
+      "gap": "有独立手机排布。示例内容和文字随功能更新，没有把整图铺成页面。"
+    },
+    {
+      "id": "02-home-desktop",
+      "title": "此刻 · 桌面",
+      "category": "此刻",
+      "controls": "录一段声音；示例试听；声音地图；账号；主导航",
+      "png": "02-home-desktop.png",
+      "webp": "02-home-desktop.webp",
+      "width": 1505,
+      "height": 1045,
+      "revised": false,
+      "number": 2,
+      "status": "主体已用",
+      "current": "home",
+      "evidence": "电脑首页右侧海景、唱片和桌面物件直接裁自 02，左侧文字、右侧插画。",
+      "gap": "有独立桌面排布；与手机版使用不同的插画裁切。"
+    },
+    {
+      "id": "03-capture-idle",
+      "title": "快速录音 · 待录音",
+      "category": "录音与保存",
+      "controls": "开始录音；计时与状态；导入已有音频；返回；账号；主导航",
+      "png": "03-capture-idle.png",
+      "webp": "03-capture-idle.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 3,
+      "status": "部分应用",
+      "current": "capture",
+      "evidence": "录音插画来自 03，但标题区复用了素材库插画；电脑为左右布局。",
+      "gap": "手机有麦克风原图，但缺少稿中顶部 00:00 的独立计时；待录音按钮比例和位置仍不同。"
+    },
+    {
+      "id": "04-capture-recording",
+      "title": "快速录音 · 录音中",
+      "category": "录音与保存",
+      "controls": "实时音量反馈；计时；结束并保存；主导航",
+      "png": "04-capture-recording.png",
+      "webp": "04-capture-recording.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 4,
+      "status": "部分应用",
+      "current": "recording",
+      "evidence": "录音状态、计时、停止按钮、音量反馈可用；插画沿用 03。",
+      "gap": "04 的蓝色横向声波、红色停止环和录音中构图未采用。截图用模拟麦克风。"
+    },
+    {
+      "id": "05-capture-permission",
+      "title": "快速录音 · 权限失败",
+      "category": "录音与保存",
+      "controls": "权限错误反馈；导入已有音频；重试录音（建议恢复入口）；账号；导航",
+      "png": "05-capture-permission.png",
+      "webp": "05-capture-permission.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 5,
+      "status": "未按稿落地",
+      "current": "permission-error",
+      "evidence": "权限错误是录音页下方的提示条，并保留导入入口。",
+      "gap": "05 的麦克风禁用图、专用标题和主次按键布局未采用，没有独立错误页。"
+    },
+    {
+      "id": "06-raw-save",
+      "title": "原声保存 · 主动弹出表单",
+      "category": "录音与保存",
+      "controls": "关闭；名称；语音输入；选填心情；地点；笔记；照片/视频/补充音频；时间天气位置；分享；跳过；保存",
+      "png": "06-raw-save-v2.png",
+      "webp": "06-raw-save.webp",
+      "width": 841,
+      "height": 1870,
+      "revised": true,
+      "number": 6,
+      "status": "新流程替代",
+      "current": null,
+      "evidence": "录音结束后的重复填写表单已按你的要求取消，直接保存原声并留在素材库。",
+      "gap": "06 不应整页恢复；填写信息放在后面的逐步选择和故事页。"
+    },
+    {
+      "id": "07-raw-success",
+      "title": "原声保存成功",
+      "category": "录音与保存",
+      "controls": "原声试听；生成音乐日记；留在素材库；查看收藏；再录一段；下载原声；回首页；关闭",
+      "png": "07-raw-success.png",
+      "webp": "07-raw-success.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 7,
+      "status": "新流程替代",
+      "current": "library",
+      "evidence": "原声保存后留在素材库，显示保存状态并提供生成日记入口。",
+      "gap": "没有 07 的独立原声成功页；可以复用成功插画，但保留当前少跳转的流程。"
+    },
+    {
+      "id": "08-library-mobile",
+      "title": "声音素材库 · 手机",
+      "category": "音乐制作",
+      "controls": "示例试听/使用/替换/删除；原声试听；保存素材；生成音乐日记；素材选择；录音/导入/新建/草稿；收藏；地图",
+      "png": "08-library-mobile.png",
+      "webp": "08-library-mobile.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 8,
+      "status": "部分应用",
+      "current": "library",
+      "evidence": "素材库标题插画来自 08，磁带使用提取后的物件；试听、保存、生成、素材列表可用。",
+      "gap": "手机排列有适配，但未逐项还原 08；顶部示例音频区和录音等入口已按最新要求移除。"
+    },
+    {
+      "id": "09-library-desktop",
+      "title": "声音素材库 · 桌面",
+      "category": "音乐制作",
+      "controls": "素材选择；开始录音；导入；新建；示例上传/试听/使用/替换/删除；当前原声试听；保存素材；生成日记；继续草稿；账号；收藏；地图",
+      "png": "09-library-desktop-v2.png",
+      "webp": "09-library-desktop.webp",
+      "width": 1505,
+      "height": 1045,
+      "revised": true,
+      "number": 9,
+      "status": "部分应用",
+      "current": "library",
+      "evidence": "电脑素材库是居中的当前音频和纵向素材列表，插画复用 08。",
+      "gap": "09-v2 的左素材栏、中间大磁带、右侧示例栏三栏布局没有落地。右侧示例栏应继续删除。"
+    },
+    {
+      "id": "10-sample-states",
+      "title": "示例音频 · 上传、复用与失败",
+      "category": "音乐制作",
+      "controls": "上传示例；播放/暂停/进度/音量；使用；替换；删除；读取失败重试；上传与保存状态",
+      "png": "10-sample-states.png",
+      "webp": "10-sample-states.webp",
+      "width": 1605,
+      "height": 980,
+      "revised": false,
+      "number": 10,
+      "status": "新流程替代",
+      "current": "studio",
+      "evidence": "顶部“我的示例音频”上传、复用、替换、删除整组已移除。",
+      "gap": "正式导入仅上传本地音频，演示版多一个演示音频按钮，10 的三个状态框不再恢复。"
+    },
+    {
+      "id": "11-diary-choices",
+      "title": "音乐日记 · 情境与音乐方向",
+      "category": "音乐制作",
+      "controls": "心情9项；天气8项；状态11项；三组其他输入；十种音乐方向；自由描述；返回素材库；开始制作；选中与必填反馈",
+      "png": "11-diary-choices.png",
+      "webp": "11-diary-choices.webp",
+      "width": 776,
+      "height": 2025,
+      "revised": false,
+      "number": 11,
+      "status": "部分应用",
+      "current": "weather",
+      "evidence": "心情、天气、状态和音乐风格图标确实裁自 11。",
+      "gap": "按新流程拆成天气→心情→状态→照片/笔记/位置→音乐，不能照旧稿把所有选择堆在一页。"
+    },
+    {
+      "id": "12-editor-desktop",
+      "title": "音乐编辑 · 桌面",
+      "category": "音乐制作",
+      "controls": "修改此刻；收藏保存；播放/暂停；回到开头；撤销/重做；缩放；游标；每轨静音；片段拖动/裁剪/淡入淡出；方向；混合比例；录音/更换；细调；AI未连接",
+      "png": "12-editor-desktop.png",
+      "webp": "12-editor-desktop.webp",
+      "width": 1503,
+      "height": 1047,
+      "revised": false,
+      "number": 12,
+      "status": "部分应用",
+      "current": "editor",
+      "evidence": "播放、撤销重做、缩放、轨道编辑、混合控制、保存均有真实控件，使用唱片物件。",
+      "gap": "12 的右上插画组合、蓝黄双轨视觉、工具和边景排布未完整采用；不能用静态第二轨冒充生成结果。"
+    },
+    {
+      "id": "13-editor-mobile",
+      "title": "音乐编辑 · 手机",
+      "category": "音乐制作",
+      "controls": "素材库；新建；修改此刻；播放；回到开头；撤销/重做；缩放；双轨静音/拖动/裁剪/淡入淡出；方向；平衡；录音/更换；细调；错误关闭；收藏保存",
+      "png": "13-editor-mobile-v2.png",
+      "webp": "13-editor-mobile.webp",
+      "width": 747,
+      "height": 2104,
+      "revised": true,
+      "number": 13,
+      "status": "部分应用",
+      "current": "editor",
+      "evidence": "音乐微调已有手机堆叠布局、播放和轨道编辑，使用唱片物件。",
+      "gap": "13-v2 顶部情境插画条、封面与播放区组合、间距及底部收藏布局尚未完整落地。"
+    },
+    {
+      "id": "14-editor-advanced",
+      "title": "音乐编辑 · 细调与 AI 条件状态",
+      "category": "音乐制作",
+      "controls": "细调展开/收起；片段选择；出现位置；起点/终点；AI生成/再创作；A/B版本；停止等待；辨认声源；标签；目标输入；提取；哼唱",
+      "png": "14-editor-advanced-v2.png",
+      "webp": "14-editor-advanced.webp",
+      "width": 1536,
+      "height": 1024,
+      "revised": true,
+      "number": 14,
+      "status": "部分应用",
+      "current": "editor-advanced",
+      "evidence": "细调可展开，片段、出现位置、原声起终点可编辑；AI 按服务状态禁用。",
+      "gap": "14-v2 的细调编排及 A/B、等待和失败状态未完整套用；辨认、提取、哼唱入口仍不可用。"
+    },
+    {
+      "id": "15-music-save",
+      "title": "音乐日记保存",
+      "category": "音乐制作",
+      "controls": "关闭；名称；语音输入；地点；获取天气位置；选填心情；笔记；沿用媒体；情境摘要；六场景；分享；跳过；保存；新建时媒体上传",
+      "png": "15-music-save-v2.png",
+      "webp": "15-music-save.webp",
+      "width": 854,
+      "height": 1840,
+      "revised": true,
+      "number": 15,
+      "status": "部分应用",
+      "current": "music-save",
+      "evidence": "音乐保存弹窗使用唱片和六个手绘场景缩略图，保留真实输入和已有信息。",
+      "gap": "15-v2 未整页采用；目前是弹窗，部分信息沿用前一步。改版需避免再次要求填重复选择题。"
+    },
+    {
+      "id": "16-music-success",
+      "title": "音乐日记保存成功",
+      "category": "音乐制作",
+      "controls": "查看收藏；下载原声；关闭；关联记忆保存反馈",
+      "png": "16-music-success.png",
+      "webp": "16-music-success.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 16,
+      "status": "新流程替代",
+      "current": "music-success",
+      "evidence": "音乐保存成功自动进入收藏间，并显示同步社区和远方寄出按钮。",
+      "gap": "16 的独立全屏成功页未采用；应保留后来指定的收藏间内成功交互，可只借用成功插画。"
+    },
+    {
+      "id": "17-collection-mobile",
+      "title": "我的收藏间 · 手机",
+      "category": "收藏与个人",
+      "controls": "编辑资料；签到；信箱；聆听；横滑场景；序号；点击物件；寄出；磁带生成日记；拖动物件；四项导航",
+      "png": "17-collection-mobile.png",
+      "webp": "17-collection-mobile.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 17,
+      "status": "主体已用",
+      "current": "album",
+      "evidence": "手机专用房间背景由 17 清理而来：柜子在左、窗在右，照片和物件是可交互覆盖层。",
+      "gap": "有独立手机背景；真实照片和其他场景是动态内容，不会把稿里的照片数量固定进去。"
+    },
+    {
+      "id": "18-collection-desktop-drag",
+      "title": "我的收藏间 · 桌面与拖拽",
+      "category": "收藏与个人",
+      "controls": "编辑资料；签到；信箱；聆听；横向场景；柜子；照片墙；物件拖动；箱子左入右移；放入后寄出确认",
+      "png": "18-collection-desktop-drag-v2.png",
+      "webp": "18-collection-desktop-drag.webp",
+      "width": 1506,
+      "height": 1045,
+      "revised": true,
+      "number": 18,
+      "status": "主体已用",
+      "current": "album",
+      "evidence": "电脑背景由 18-v2 清理而来：右立体柜、左照片绳，拖动投递箱原图也已接入。",
+      "gap": "有独立电脑背景，拖动触发箱子；挂图数量和照片根据记忆变化，不是整图覆盖。"
+    },
+    {
+      "id": "19-item-details",
+      "title": "收藏物件详情",
+      "category": "收藏与个人",
+      "controls": "关闭；物件封面/笔记/地点；音频播放/进度/音量；沉浸聆听；放进信箱；示例去记录",
+      "png": "19-item-details.png",
+      "webp": "19-item-details.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 19,
+      "status": "未按稿落地",
+      "current": null,
+      "evidence": "源码保留简易物件说明弹窗及原生音频控件；可播放物件点击会直接进入沉浸聆听。",
+      "gap": "19 的封面组合、手绘详情及播放器布局没落地；detail 虽登记在裁切表中，当前入口未实际渲染。"
+    },
+    {
+      "id": "20-profile-edit",
+      "title": "编辑个人资料",
+      "category": "收藏与个人",
+      "controls": "关闭/返回；上传头像；上传背景；昵称保存；8种默认头像；签到；统计；寄出清单；登录与上传状态",
+      "png": "20-profile-edit.png",
+      "webp": "20-profile-edit.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 20,
+      "status": "未按稿落地",
+      "current": "profile",
+      "evidence": "头像和背景上传、昵称、默认头像、签到、寄出信息均有功能。",
+      "gap": "仍为通用白色弹窗，默认头像是 emoji；20 的海景横幅、手绘头像组和个人资料构图未应用。"
+    },
+    {
+      "id": "21-listening-desktop",
+      "title": "沉浸聆听 · 桌面",
+      "category": "收藏与个人",
+      "controls": "退出；藏品筛选与切换；原引擎播放器；循环/顺序；队列；音量/静音；淡入淡出；全屏；详情/歌词/音质/收藏/AutoMix等继承菜单",
+      "png": "21-listening-desktop.png",
+      "webp": "21-listening-desktop.webp",
+      "width": 1505,
+      "height": 1045,
+      "revised": false,
+      "number": 21,
+      "status": "未按稿落地",
+      "current": "listening",
+      "evidence": "电脑聆听保留 Mineradio 粒子、原播放器和右侧 3D 藏品选择。",
+      "gap": "21 的白纸背景、左柜子和传声筒装饰未接入，目前仍是深色舞台。后续只改外围 UI，保留原粒子和播放器。"
+    },
+    {
+      "id": "22-listening-mobile",
+      "title": "沉浸聆听 · 手机",
+      "category": "收藏与个人",
+      "controls": "退出；藏品筛选与上下件；粒子照片；原引擎播放/暂停/上一首/下一首/进度/更多；窄屏播放替代入口",
+      "png": "22-listening-mobile.png",
+      "webp": "22-listening-mobile.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 22,
+      "status": "未按稿落地",
+      "current": "listening",
+      "evidence": "手机聆听保留原引擎、粒子、播放器和藏品操作。",
+      "gap": "22 的白底上下排布、夹住的照片框、底部传声筒和信箱装饰未接入，目前不是这张手机稿构图。"
+    },
+    {
+      "id": "23-map-mobile",
+      "title": "声音地图 · 手机",
+      "category": "声音地图",
+      "controls": "地图拖动/缩放；真实坐标地标；地标弹窗关闭；时间天气心情笔记图片；原声播放器；横向足迹；账号；导航",
+      "png": "23-map-mobile.png",
+      "webp": "23-map-mobile.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 23,
+      "status": "部分应用",
+      "current": "map",
+      "evidence": "演示地图使用从 23 提取的手机西湖底图，有可点地标、详情、虚线路线和下方横向足迹。",
+      "gap": "23 的脚印造型及部分边景和播放器细节未完整还原；演示已有虚线路线。正式高德 Key 未配置，真实地图仍待完成。"
+    },
+    {
+      "id": "24-map-desktop",
+      "title": "声音地图 · 桌面",
+      "category": "声音地图",
+      "controls": "地图缩放/拖动；地标；弹窗关闭；记忆信息与播放器；足迹浏览；适用视频播放；账号；导航",
+      "png": "24-map-desktop.png",
+      "webp": "24-map-desktop.webp",
+      "width": 1505,
+      "height": 1045,
+      "revised": false,
+      "number": 24,
+      "status": "部分应用",
+      "current": "map",
+      "evidence": "演示地图使用从 24 提取的电脑西湖底图，有右侧足迹列表和地图详情。",
+      "gap": "两端底图确实不同；正式真实地图和自定义手绘样式仍待高德配置、验收，不能用一张西湖图片代替全国地图。"
+    },
+    {
+      "id": "25-community-mobile",
+      "title": "社区 · 手机",
+      "category": "社区",
+      "controls": "全部/可聆听/图文；分享入口；音频播放；喜欢；回应；分享；删除自己的动态；回应输入/发送/自己的回应删除；账号；导航",
+      "png": "25-community-mobile.png",
+      "webp": "25-community-mobile.webp",
+      "width": 853,
+      "height": 1844,
+      "revised": false,
+      "number": 25,
+      "status": "部分应用",
+      "current": "community",
+      "evidence": "社区演示图文中的风景照片直接裁自 25；音频、喜欢和回应功能存在。",
+      "gap": "手机顶部飞鸟和线条装饰未完整采用，间距和播放器仍不同；正式社区由真实发布填充。"
+    },
+    {
+      "id": "26-community-desktop",
+      "title": "社区 · 桌面",
+      "category": "社区",
+      "controls": "主导航；账号；分类；发布；音频播放；喜欢；回应；分享；自己的动态删除；回应发送与删除",
+      "png": "26-community-desktop.png",
+      "webp": "26-community-desktop.webp",
+      "width": 1504,
+      "height": 1046,
+      "revised": false,
+      "number": 26,
+      "status": "部分应用",
+      "current": "community",
+      "evidence": "社区电脑左右传声筒和柜子边景直接来自 26，正文为真实动态。",
+      "gap": "主要边景已用，但列表密度、标题、头像、播放器仍不同；手机不照搬电脑边景。"
+    },
+    {
+      "id": "27-community-composer",
+      "title": "社区 · 发布与回应",
+      "category": "社区",
+      "controls": "发布输入；六场景封面；发布/取消/关闭；回应输入；发送；自己的回应删除；展开/收起；处理中",
+      "png": "27-community-composer-v2.png",
+      "webp": "27-community-composer.webp",
+      "width": 1605,
+      "height": 980,
+      "revised": true,
+      "number": 27,
+      "status": "部分应用",
+      "current": "composer",
+      "evidence": "发布和回应在信息流内展开；27-v2 六张风景用于收藏场景和地图地标等。",
+      "gap": "发布选择区仍用旧 scenes-v1 彩色插画；27 发布/回应双手机稿、回信边景、选择布局没整体落地。"
+    },
+    {
+      "id": "28-mailbox-send",
+      "title": "信箱 · 来信与寄出预留状态",
+      "category": "收藏与个人",
+      "controls": "来信/寄出清单；关闭；来信播放器预留；联系方式交换预留；记忆投递；社区勾选；二创授权；确认/取消；去记录；尚未开放",
+      "png": "28-mailbox-send-v2.png",
+      "webp": "28-mailbox-send.webp",
+      "width": 1605,
+      "height": 980,
+      "revised": true,
+      "number": 28,
+      "status": "部分应用",
+      "current": "inbox",
+      "evidence": "信箱和寄出使用了提取的手绘信箱物件，来信、寄出、音频、交换选项已有功能。",
+      "gap": "28-v2 两个独立页面构图、来信纸张和海景未完整应用；正式信件功能已比旧稿的预留状态更新。"
+    },
+    {
+      "id": "29-account-auth",
+      "title": "账号 · 登录与注册",
+      "category": "账号与状态",
+      "controls": "登录账号/密码/登录/创建账号/关闭；注册账号/密码/注册并登录/已有账号/关闭",
+      "png": "29-account-auth-v2.png",
+      "webp": "29-account-auth.webp",
+      "width": 1605,
+      "height": 980,
+      "revised": true,
+      "number": 29,
+      "status": "未按稿落地",
+      "current": "login",
+      "evidence": "登录和注册是通用弹窗，输入、显示密码、切换和提交存在。",
+      "gap": "29-v2 登录传声筒、注册柜子和信箱、双页背景未接入，没有独立两端登录视觉。"
+    },
+    {
+      "id": "30-account-management",
+      "title": "账号管理 · 记忆列表",
+      "category": "账号与状态",
+      "controls": "关闭；编辑资料；修改密码；退出；源码许可；记忆发布到社区；删除记忆；账号保存状态",
+      "png": "30-account-management-v2.png",
+      "webp": "30-account-management.webp",
+      "width": 851,
+      "height": 1848,
+      "revised": true,
+      "number": 30,
+      "status": "未按稿落地",
+      "current": "account",
+      "evidence": "账号管理是通用弹窗，资料、密码、退出、许可、发布和删除记忆均有功能。",
+      "gap": "30-v2 手绘物件列表缩略图、笔记本底部背景和独立账号页未应用，两端只是同一弹窗适配。"
+    },
+    {
+      "id": "31-password-delete",
+      "title": "修改密码与删除确认",
+      "category": "账号与状态",
+      "controls": "当前密码；新密码；保存；关闭/返回；确认删除；取消；记忆与动态两种删除影响",
+      "png": "31-password-delete.png",
+      "webp": "31-password-delete.webp",
+      "width": 1605,
+      "height": 980,
+      "revised": false,
+      "number": 31,
+      "status": "未按稿落地",
+      "current": "password",
+      "evidence": "修改密码和删除确认使用通用弹窗。",
+      "gap": "31 的密码/垃圾桶插画、错误框和删除确认专用构图未采用。本次未填写密码或执行删除。"
+    },
+    {
+      "id": "32-functional-states",
+      "title": "全站 · 空态、处理中与失败",
+      "category": "账号与状态",
+      "controls": "空态录音/导入；上传中；保存失败重试/返回编辑；定位天气失败/手填；地图失败/足迹仍可播放；AI不可用/生成中/停止等待/失败；选择/禁用；登录后继续保存",
+      "png": "32-functional-states-v2.png",
+      "webp": "32-functional-states.webp",
+      "width": 1448,
+      "height": 1086,
+      "revised": true,
+      "number": 32,
+      "status": "未按稿落地",
+      "current": "formal-map",
+      "evidence": "空态、处理中、失败和禁用由各组件文字/按钮反馈，部分空态复用信箱。",
+      "gap": "32-v2 的专用插画、盒子、垃圾桶和失败布局未成为统一两端组件；已取消的示例状态不应恢复。"
+    },
+    {
+      "id": "33-diary-other-states",
+      "title": "音乐日记 · 其他输入与选择提醒",
+      "category": "音乐制作",
+      "controls": "其他心情输入；其他天气输入；其他状态输入；选中；未填提醒；制作禁用/可用；返回素材库",
+      "png": "33-diary-other-states.png",
+      "webp": "33-diary-other-states.webp",
+      "width": 1605,
+      "height": 980,
+      "revised": false,
+      "number": 33,
+      "status": "部分应用",
+      "current": "mood-other",
+      "evidence": "其他输入、选中和继续操作有功能，复用 11 的图标。",
+      "gap": "33 不同天气/心情/状态的页面头图和输入提醒布局未逐项接入，当前每步都复用同一耳机头图。"
+    }
+  ],
+  "screenshots": [
+    {
+      "key": "home",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo",
+      "screenshot": "home-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/02-home-desktop.webp"
+        }
+      ]
+    },
+    {
+      "key": "capture",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/capture",
+      "screenshot": "capture-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/03-capture-idle.webp"
+        }
+      ]
+    },
+    {
+      "key": "studio",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "studio-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object audio-import-art",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "map",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/map",
+      "screenshot": "map-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "leaflet-image-layer leaflet-zoom-animated",
+          "src": "/assets/ui-raster-v2/map-desktop-paper.png"
+        }
+      ]
+    },
+    {
+      "key": "community",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/community",
+      "screenshot": "community-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/26-community-desktop.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/26-community-desktop.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "album",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "album-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "profile",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "profile-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "send",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "send-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "mail-send-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "inbox",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "inbox-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "mail-send-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "listening",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "listening-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "map-detail",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/map",
+      "screenshot": "map-detail-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "leaflet-image-layer leaflet-zoom-animated",
+          "src": "/assets/ui-raster-v2/map-desktop-paper.png"
+        }
+      ]
+    },
+    {
+      "key": "composer",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/community",
+      "screenshot": "composer-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/26-community-desktop.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/26-community-desktop.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/sea-window.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/rainy-city.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/autumn-lake.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/snow-mountain.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/spring-meadow.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/desert-dusk.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "replies",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/community",
+      "screenshot": "replies-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/26-community-desktop.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/26-community-desktop.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "library",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "library-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "weather",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "weather-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "mood",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "mood-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "mood-other",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "mood-other-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "activity",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "activity-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "story",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "story-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "music-style",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "music-style-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "editor",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "editor-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "editor-advanced",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "editor-advanced-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "music-save",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "music-save-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        }
+      ]
+    },
+    {
+      "key": "music-success",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/album?scene=sea-window",
+      "screenshot": "music-success-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-desktop-clean.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "mail-send-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "recording",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/demo/capture",
+      "screenshot": "recording-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/03-capture-idle.webp"
+        }
+      ]
+    },
+    {
+      "key": "permission-error",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/capture",
+      "screenshot": "permission-error-desktop.png",
+      "note": "模拟拒绝权限，不代表用户设备状态",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/03-capture-idle.webp"
+        }
+      ]
+    },
+    {
+      "key": "login",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "login-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/02-home-desktop.webp"
+        }
+      ]
+    },
+    {
+      "key": "register",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "register-desktop.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/02-home-desktop.webp"
+        }
+      ]
+    },
+    {
+      "key": "formal-map",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/map",
+      "screenshot": "formal-map-desktop.png",
+      "note": "当前未配置高德 Key 的真实空态",
+      "art": []
+    },
+    {
+      "key": "account",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "account-desktop.png",
+      "note": "模拟已登录和一条记忆，仅用于展示布局",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/02-home-desktop.webp"
+        }
+      ]
+    },
+    {
+      "key": "delete-confirm",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "delete-confirm-desktop.png",
+      "note": "仅打开确认窗，没有执行删除",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/02-home-desktop.webp"
+        }
+      ]
+    },
+    {
+      "key": "password",
+      "device": "desktop",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "password-desktop.png",
+      "note": "未填写或提交任何密码",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/02-home-desktop.webp"
+        }
+      ]
+    },
+    {
+      "key": "home",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo",
+      "screenshot": "home-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "capture",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/capture",
+      "screenshot": "capture-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/03-capture-idle.webp"
+        }
+      ]
+    },
+    {
+      "key": "studio",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "studio-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object audio-import-art",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "map",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/map",
+      "screenshot": "map-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "leaflet-image-layer leaflet-zoom-animated",
+          "src": "/assets/ui-raster-v2/map-mobile-paper.png"
+        }
+      ]
+    },
+    {
+      "key": "community",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/community",
+      "screenshot": "community-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "album",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "album-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "profile",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "profile-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "send",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "send-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "mail-send-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "inbox",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "inbox-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "mail-send-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "listening",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/album",
+      "screenshot": "listening-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "map-detail",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/map",
+      "screenshot": "map-detail-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "leaflet-image-layer leaflet-zoom-animated",
+          "src": "/assets/ui-raster-v2/map-mobile-paper.png"
+        }
+      ]
+    },
+    {
+      "key": "composer",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/community",
+      "screenshot": "composer-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/sea-window.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/rainy-city.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/autumn-lake.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/snow-mountain.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/spring-meadow.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/scenes-v1/desert-dusk.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "replies",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/community",
+      "screenshot": "replies-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/25-community-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "library",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "library-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "weather",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "weather-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "mood",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "mood-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "mood-other",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "mood-other-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "activity",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "activity-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "story",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "story-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "music-style",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "music-style-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/11-diary-choices.webp"
+        }
+      ]
+    },
+    {
+      "key": "editor",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "editor-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "editor-advanced",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "editor-advanced-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "music-save",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/studio",
+      "screenshot": "music-save-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "raster-object ",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/27-community-composer-v2.png"
+        }
+      ]
+    },
+    {
+      "key": "music-success",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/album?scene=sea-window",
+      "screenshot": "music-success-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide is-active scene-original-background",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "object-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "ARTICLE",
+          "cls": "scene-slide",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/collection-mobile.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-crop",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-doodle-v1/27-community-composer-v2.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "scene-mailbox raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        },
+        {
+          "tag": "SPAN",
+          "cls": "mail-send-art raster-object",
+          "src": "url(\"http://127.0.0.1:8093/assets/ui-raster-v2/objects.png\")"
+        }
+      ]
+    },
+    {
+      "key": "recording",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/demo/capture",
+      "screenshot": "recording-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/03-capture-idle.webp"
+        }
+      ]
+    },
+    {
+      "key": "permission-error",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/capture",
+      "screenshot": "permission-error-mobile.png",
+      "note": "模拟拒绝权限，不代表用户设备状态",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/08-library-mobile.webp"
+        },
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/03-capture-idle.webp"
+        }
+      ]
+    },
+    {
+      "key": "login",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "login-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "register",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "register-mobile.png",
+      "note": "",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "formal-map",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/map",
+      "screenshot": "formal-map-mobile.png",
+      "note": "当前未配置高德 Key 的真实空态",
+      "art": []
+    },
+    {
+      "key": "account",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "account-mobile.png",
+      "note": "模拟已登录和一条记忆，仅用于展示布局",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "delete-confirm",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "delete-confirm-mobile.png",
+      "note": "仅打开确认窗，没有执行删除",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    },
+    {
+      "key": "password",
+      "device": "mobile",
+      "url": "http://127.0.0.1:8093/",
+      "screenshot": "password-mobile.png",
+      "note": "未填写或提交任何密码",
+      "art": [
+        {
+          "tag": "IMG",
+          "cls": "",
+          "src": "/assets/ui-doodle-v1/01-home-mobile.webp"
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "主体已用": 4,
+    "部分应用": 16,
+    "未按稿落地": 9,
+    "新流程替代": 4
+  }
+}

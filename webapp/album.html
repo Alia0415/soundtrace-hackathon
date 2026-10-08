@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>声迹 · 唱片册</title>
+<style>
+  :root { --bg:#0f1420; --card:#171e2e; --line:#26304a; --acc:#5b8cff; --ok:#3ddc97; --dim:#8a94ad; --amber:#f5a623; }
+  * { box-sizing:border-box; }
+  body { font-family:"Microsoft YaHei",sans-serif; background:radial-gradient(1200px 500px at 50% -100px, #1a2236, var(--bg)); color:#e8ecf5; margin:0; padding-bottom:120px; }
+  header { display:flex; align-items:center; gap:12px; padding:14px 20px; max-width:1100px; margin:0 auto; }
+  header h1 { font-size:18px; margin:0; }
+  header .back { color:var(--dim); text-decoration:none; font-size:13px; }
+  .main { display:flex; max-width:1100px; margin:0 auto; gap:16px; padding:0 20px; }
+  /* 左侧栏（可隐藏） */
+  aside { width:170px; flex:none; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px; height:fit-content; }
+  aside.hide { display:none; }
+  aside .tab { padding:11px 12px; border-radius:9px; cursor:pointer; font-size:14px; color:#cfd7ea; }
+  aside .tab.on { background:rgba(91,140,255,.18); color:#fff; border:1px solid var(--acc); }
+  aside .fold { color:var(--dim); font-size:12px; cursor:pointer; margin-top:8px; text-align:center; }
+  #foldBtn { position:fixed; left:10px; top:70px; z-index:5; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 8px; cursor:pointer; font-size:12px; color:#cfd7ea; display:none; }
+  /* 内容区 */
+  section { flex:1; min-width:0; }
+  h2.sec { font-size:15px; color:#cfd7ea; margin:18px 0 10px; }
+  /* 照片墙 */
+  .wall { background:linear-gradient(#1c2438,#161d2e); border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; flex-wrap:wrap; gap:18px; justify-content:center; }
+  .photo { width:150px; cursor:grab; position:relative; transition:transform .15s; }
+  .photo:nth-child(odd){ transform:rotate(-2.2deg);} .photo:nth-child(even){ transform:rotate(1.8deg);}
+  .photo:hover { transform:rotate(0) scale(1.06); z-index:3; }
+  .photo .pin { width:12px; height:12px; border-radius:50%; background:var(--amber); position:absolute; top:-4px; left:50%; margin-left:-6px; box-shadow:0 2px 4px #000a; }
+  .photo img, .photo .ph { width:150px; height:110px; object-fit:cover; border:5px solid #fff; border-radius:3px; background:#0d1220; display:flex; align-items:center; justify-content:center; font-size:30px; }
+  .photo .cap { text-align:center; font-size:12px; margin-top:6px; color:#cfd7ea; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .empty { color:var(--dim); font-size:13px; padding:30px; text-align:center; width:100%; }
+  /* 唱片架 */
+  .shelf { border-bottom:10px solid #2a3450; border-radius:6px; display:flex; gap:14px; padding:14px 10px 6px; overflow-x:auto; background:var(--card); }
+  .vinyl { width:110px; flex:none; cursor:grab; text-align:center; }
+  .disc { width:104px; height:104px; border-radius:50%; margin:0 auto;
+          background:repeating-radial-gradient(#14161d 0 2px, #1d202a 2px 4px);
+          display:flex; align-items:center; justify-content:center; transition:transform .2s; }
+  .vinyl:hover .disc { transform:rotate(40deg); }
+  .disc .label { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .vinyl .cap { font-size:11px; margin-top:6px; color:#cfd7ea; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  /* 磁带 */
+  .tapes { display:flex; gap:14px; flex-wrap:wrap; }
+  .tape { width:190px; background:#1b2340; border:1px solid #303c60; border-radius:10px; padding:10px; cursor:grab; }
+  .tape .reels { display:flex; justify-content:space-around; margin:6px 0; }
+  .tape .reel { width:26px; height:26px; border:3px solid #46527d; border-radius:50%; position:relative; }
+  .tape .reel::after { content:''; position:absolute; inset:6px; background:#46527d; border-radius:50%; }
+  .tape b { font-size:12px; display:block; }
+  .tape .note { font-size:10px; color:var(--dim); }
+  /* 信箱 */
+  .mailbox { position:fixed; bottom:0; left:0; right:0; z-index:20; display:flex; justify-content:center; padding:10px 0 14px;
+             background:linear-gradient(transparent, #0d1220 40%); }
+  .box { background:#22172e; border:2px dashed var(--amber); border-radius:14px 14px 0 0; padding:12px 26px; text-align:center; min-width:260px; }
+  .box .ico { font-size:26px; }
+  .box .t { font-size:12px; color:var(--amber); }
+  .box.over { background:#33221a; box-shadow:0 0 24px #f5a62355; }
+  .box .inboxBtn { margin-top:4px; font-size:12px; color:#cfd7ea; background:none; border:none; text-decoration:underline; cursor:pointer; }
+  /* 弹窗 */
+  .mask { position:fixed; inset:0; background:#000a; z-index:30; display:none; align-items:center; justify-content:center; }
+  .modal { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; width:min(480px, 92vw); max-height:86vh; overflow:auto; }
+  .modal h3 { margin:0 0 10px; font-size:16px; }
+  .modal img { width:100%; border-radius:8px; margin-bottom:8px; }
+  .modal .story { font-size:13px; color:#cfd7ea; line-height:1.7; white-space:pre-wrap; }
+  .modal audio { width:100%; margin-top:10px; }
+  .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:10px 0; font-size:13px; }
+  button { background:var(--acc); border:none; color:#fff; padding:9px 16px; border-radius:8px; cursor:pointer; font-size:13px; }
+  button.ghost { background:none; border:1px solid var(--line); color:#cfd7ea; }
+  .inboxItem { border:1px dashed var(--line); border-radius:10px; padding:12px; margin-bottom:10px; }
+  .inboxItem .from { font-size:12px; color:var(--amber); }
+  .tag { font-size:11px; padding:2px 8px; border-radius:10px; background:#26304a; }
+</style>
+<link rel="stylesheet" href="/assets/soundtrace-shell.css">
+<script src="/assets/soundtrace-shell.js" defer></script>
+</head>
+<body class="st-album-legacy">
+<header>
+  <h1>💿 唱片册</h1>
+  <span style="color:var(--dim);font-size:12px">拖动照片 / 唱片 / 磁带 → 投进底部信箱，匿名寄给一位同好</span>
+  <span style="flex:1"></span>
+  <a class="back" href="/">← 首页</a>
+</header>
+<button id="foldBtn" onclick="toggleSide()">☰ 侧栏</button>
+
+<div class="main">
+  <aside id="sidebar">
+    <div class="tab on" onclick="switchTab('fav', this)">🖼 收藏间</div>
+    <div class="tab" onclick="switchTab('mat', this)">📼 素材库</div>
+    <div class="fold" onclick="toggleSide()">« 收起侧栏</div>
+  </aside>
+  <section>
+    <div id="favView">
+      <h2 class="sec">照片墙 · 我的经历</h2>
+      <div class="wall" id="wall"><div class="empty">还没有照片——去首页「记录」上传一张照片并附上当时的录音</div></div>
+      <h2 class="sec">唱片架 · 我做好的音乐</h2>
+      <div class="shelf" id="shelf"><div class="empty">暂无唱片，去「音乐合成」做一张</div></div>
+    </div>
+    <div id="matView" style="display:none">
+      <h2 class="sec">素材库 · 未整理的磁带</h2>
+      <div class="tapes" id="tapes"><div class="empty">素材库是空的——录音提取后会自动归档到这里</div></div>
+    </div>
+  </section>
+</div>
+
+<div class="mailbox"><div class="box" id="mbox">
+  <div class="ico">📮</div>
+  <div class="t">拖到这里 · 匿名寄给一位同好</div>
+  <button class="inboxBtn" onclick="openInbox()">收到的信件</button>
+</div></div>
+
+<div class="mask" id="mask" onclick="if(event.target===this)closeM()"><div class="modal" id="modal"></div></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const api = async (u, o) => { const r = await fetch(u, o); return r.json(); };
+let DATA = { photos: [], works: [], materials: [] };
+let dragItem = null;
+
+function openM(html){ $('modal').innerHTML = html; $('mask').style.display = 'flex'; }
+function closeM(){ $('mask').style.display = 'none'; }
+function toggleSide(){ $('sidebar').classList.toggle('hide'); $('foldBtn').style.display = $('sidebar').classList.contains('hide') ? 'block' : 'none'; }
+function switchTab(t, el){ document.querySelectorAll('aside .tab').forEach(x=>x.classList.remove('on')); el.classList.add('on');
+  $('favView').style.display = t==='fav' ? '' : 'none'; $('matView').style.display = t==='mat' ? '' : 'none'; }
+
+async function load() {
+  const [p, w, m] = await Promise.all([api('/api/photos'), api('/api/works'), api('/api/materials')]);
+  DATA = { photos: p.photos, works: (w.works||[]).slice().reverse(), materials: m.materials };
+  renderWall(); renderShelf(); renderTapes();
+}
+function renderWall() {
+  const el = $('wall');
+  if (!DATA.photos.length) return;
+  el.innerHTML = DATA.photos.map(p => `
+    <div class="photo" draggable="true" data-kind="photo" data-id="${p.id}">
+      <div class="pin"></div>
+      ${p.img ? `<img src="/${p.img}" loading="lazy">` : `<div class="ph">🏔</div>`}
+      <div class="cap">${p.title}</div>
+    </div>`).join('');
+  el.querySelectorAll('.photo').forEach(d => {
+    d.onclick = () => { const p = DATA.photos.find(x => x.id === d.dataset.id); showPhoto(p); };
+    d.ondragstart = e => { dragItem = { kind:'photo', title:p2(d.dataset.id).title,
+        img:p2(d.dataset.id).img, audio:p2(d.dataset.id).audio }; e.dataTransfer.setData('text', 'x'); };
+  });
+}
+const p2 = id => DATA.photos.find(x => x.id === id) || {};
+function showPhoto(p) {
+  openM(`<h3>${p.title}</h3>
+    ${p.img ? `<img src="/${p.img}">` : ''}
+    <div class="story">${p.story || '（这段经历没有留下文字）'}</div>
+    ${p.mood ? `<span class="tag">${p.mood}</span>` : ''}
+    ${p.audio ? `<audio controls src="/${p.audio}"></audio>` : '<div class="row" style="color:var(--dim)">这段照片没有关联录音</div>'}
+    <div class="row"><button onclick="location='/studio'">用它的声音做音乐</button>
+    <button class="ghost" onclick="closeM()">关闭</button></div>`);
+}
+function renderShelf() {
+  const el = $('shelf');
+  if (!DATA.works.length) return;
+  const colors = ['#5b8cff', '#3ddc97', '#f5a623', '#c586f0', '#4ec9e8'];
+  el.innerHTML = DATA.works.map((w, i) => `
+    <div class="vinyl" draggable="true" data-kind="vinyl" data-id="${w.id}">
+      <div class="disc"><div class="label" style="background:${colors[i%5]}">${w.metadata && w.metadata.mood ? '🎵' : '💿'}</div></div>
+      <div class="cap">${w.title}</div>
+    </div>`).join('');
+  el.querySelectorAll('.vinyl').forEach(d => {
+    d.onclick = () => { const w = DATA.works.find(x => x.id === d.dataset.id); openM(
+      `<h3>${w.title}</h3><div class="story">${(w.metadata&&w.metadata.story)||'一张声音音乐明信片'}</div>
+       <audio controls src="/${w.audio}"></audio>
+       <div class="row"><button class="ghost" onclick="closeM()">关闭</button></div>`); };
+    d.ondragstart = e => { const w = DATA.works.find(x => x.id === d.dataset.id);
+      dragItem = { kind:'vinyl', title:w.title, audio:w.audio, img:null }; e.dataTransfer.setData('text','x'); };
+  });
+}
+function renderTapes() {
+  const el = $('tapes');
+  if (!DATA.materials.length) return;
+  el.innerHTML = DATA.materials.map(m => `
+    <div class="tape" draggable="true" data-id="${m.id}">
+      <b>📼 ${m.name}</b>
+      <div class="reels"><div class="reel"></div><div class="reel"></div></div>
+      <div class="note">未整理素材 · ${new Date(m.created*1000).toLocaleDateString()}</div>
+      <audio controls style="width:100%;height:28px" src="/${m.audio}"></audio>
+    </div>`).join('');
+  el.querySelectorAll('.tape').forEach(d => {
+    const m = DATA.materials.find(x => x.id === d.dataset.id);
+    d.ondragstart = e => { dragItem = { kind:'tape', title:m.name, audio:m.audio, img:null }; e.dataTransfer.setData('text','x'); };
+  });
+}
+
+/* 信箱拖放 */
+const box = $('mbox');
+box.ondragover = e => { e.preventDefault(); box.classList.add('over'); };
+box.ondragleave = () => box.classList.remove('over');
+box.ondrop = e => { e.preventDefault(); box.classList.remove('over');
+  if (dragItem) sendModal(dragItem); dragItem = null; };
+
+function sendModal(it) {
+  const kindName = { photo:'一张照片', vinyl:'一张唱片', tape:'一盘磁带' }[it.kind];
+  openM(`<h3>📮 寄出${kindName}</h3>
+    <div class="story">「${it.title}」将匿名寄给一位依据喜好匹配的旅人。</div>
+    <div class="row"><label><input type="checkbox" id="sFeed"> 同步发布到动态社区</label></div>
+    <div class="row"><label><input type="checkbox" id="sAllow" checked> 授权对方使用这段素材创作</label></div>
+    <div class="row"><button onclick="doSend('${it.kind}','${(it.title||'').replace(/'/g,'')}')">投入信箱 ✉</button>
+    <button class="ghost" onclick="closeM()">取消</button></div>
+    <input type="hidden" id="sAudio" value="${it.audio||''}"><input type="hidden" id="sImg" value="${it.img||''}">`);
+}
+async function doSend(kind, title) {
+  await api('/api/exchange', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ kind, title, audio: $('sAudio').value || null, img: $('sImg').value || null,
+      sync_feed: $('sFeed').checked, allow_reuse: $('sAllow').checked }) });
+  closeM(); alert('已匿名寄出 ✉ 对方也会依据喜好寄来 TA 的一段声音');
+}
+async function openInbox() {
+  const r = await api('/api/inbox');
+  openM(`<h3>📬 收到的信件</h3>` + (r.items.map(x => `
+    <div class="inboxItem">
+      <div class="from">来自：${x.from} ${x.allow_reuse ? '<span class="tag">已授权使用</span>' : '<span class="tag">禁止二创</span>'}</div>
+      <b style="font-size:13px">${x.title}</b>
+      <div class="story" style="font-size:12px">${x.story||''}</div>
+      <audio controls style="width:100%;margin-top:6px" src="/${x.audio}"></audio>
+      <div class="row"><button ${x.contact?'disabled':''} onclick="reqContact('${x.id}')">${x.contact?'已发起交换':'🤝 发起联系方式交换'}</button></div>
+    </div>`).join('') || '<div class="empty">信箱是空的</div>'));
+}
+async function reqContact(id) {
+  const r = await api('/api/exchange/' + id + '/contact', { method:'POST' });
+  alert(r.note); openInbox();
+}
+load();
+</script>
+</body>
+</html>

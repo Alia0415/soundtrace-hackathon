@@ -1,0 +1,99 @@
+/* SoundTrace interface system, built around Mineradio's dark glass, broad
+   typography, quiet star field and floating navigation. The original player
+   and particle effects live in the separate Mineradio engine. */
+:root{--bg:#05080d;--card:#101820;--line:#ffffff26;--acc:#9ccfc8;--ok:#9ccfc8;--dim:#a3b1b8;--st-ink:#f6f5ee;--st-muted:#a9b7bc;--st-gold:#e8d39b;--st-glass:linear-gradient(145deg,#ffffff16,#14232bbd 35%,#071018dc);--st-stroke:#c8e7e638}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse 44% 42% at 8% 13%,#15363a57,transparent 75%),radial-gradient(ellipse 54% 60% at 92% 8%,#34304436,transparent 78%),#03070b!important;color:var(--st-ink)!important;font-family:Inter,"Noto Sans SC","Microsoft YaHei",sans-serif!important}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;background-image:radial-gradient(circle,#cce9e885 0 1px,transparent 1.6px),radial-gradient(circle,#adc5da7a 0 .8px,transparent 1.5px),radial-gradient(circle,#e7d8bc55 0 .7px,transparent 1.5px);background-size:149px 137px,211px 193px,277px 241px;background-position:12px 33px,97px 42px,183px 111px}
+body>*{position:relative;z-index:1}
+body.stage-open::before{display:none}
+a{color:#c4e4df}
+button,input,select,textarea{font-family:inherit!important}
+button{transition:transform .2s cubic-bezier(.16,1,.3,1),background .2s,border-color .2s,box-shadow .2s}
+button:hover:not(:disabled){transform:translateY(-2px)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--st-gold)!important;outline-offset:3px}
+button:not(.stage-icon-button):not(.stage-play):not(.modal-close):not(.send-shortcut):not(.st-dock a){border-radius:999px}
+input,textarea,select{background:#071219d9!important;color:#f4f6f1!important;border:1px solid #b9d5d54d!important;box-shadow:inset 0 1px 5px #0005}
+input::placeholder,textarea::placeholder{color:#8fa3a7}
+audio{accent-color:var(--acc)}
+.st-dock{position:fixed!important;z-index:90;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;width:min(665px,calc(100vw - 26px));padding:7px;border:1px solid #ffffff4d;border-radius:999px;background:#071016b8;box-shadow:inset 0 1px #ffffff33,0 13px 45px #000a;backdrop-filter:blur(24px) saturate(1.6)}
+.st-dock a{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;min-height:43px;padding:8px 10px;border-radius:999px;color:#b6c6c8;text-decoration:none;font:600 12px Inter,"Microsoft YaHei",sans-serif;white-space:nowrap;transition:background .2s,color .2s,transform .2s}
+.st-dock a:hover{color:#fff;transform:translateY(-2px)}
+.st-dock a[aria-current=page]{background:linear-gradient(125deg,#d2ece5ed,#92c4bfda);color:#0a2027;box-shadow:0 0 25px #92c4bf40}
+.st-dock .st-dock-icon{font-size:16px;line-height:1}
+body.stage-open .st-dock{display:none}
+nav.bottom{display:none!important}
+.st-kicker{color:var(--acc);font:700 11px Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+.st-pagehead{display:flex;align-items:end;justify-content:space-between;gap:20px;width:min(1220px,calc(100% - 42px));margin:0 auto;padding:35px 0 18px}
+.st-pagehead h1{margin:9px 0 0;font:750 clamp(30px,3.8vw,58px)/1.05 Inter,"Noto Sans SC",sans-serif;letter-spacing:-.035em}
+.st-pagehead p{margin:7px 0 0;color:var(--st-muted);font-size:14px}
+.st-pagehead a{border:1px solid #ffffff42;border-radius:999px;padding:11px 17px;text-decoration:none;white-space:nowrap;background:#ffffff0a}
+.st-panel,.step,.postbox,.post,.card,.msec,.work{border:1px solid var(--st-stroke)!important;border-radius:23px!important;background:var(--st-glass)!important;box-shadow:inset 0 1px #ffffff1d,0 18px 46px #0006;backdrop-filter:blur(18px)}
+.st-panel:hover,.entry:hover,.post:hover{border-color:#b7e2de71!important}
+.st-section-title{display:flex;align-items:center;gap:10px;color:#ecf5ef;font-size:13px;font-weight:700;letter-spacing:.08em}
+.st-section-title::before{content:"";width:18px;height:2px;background:var(--acc);box-shadow:0 0 12px var(--acc)}
+/* Home: SoundTrace's own collection journey, arranged as a listening console. */
+.st-home{min-height:100vh;padding:0 30px 110px!important}
+.st-home .st-home-header{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1370px;margin:auto;padding:26px 0}
+.st-home-brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;font-size:24px;font-weight:800;letter-spacing:-.04em}
+.st-home-brand-mark{display:grid;place-items:center;width:42px;height:42px;border:1px solid #a5dbd45c;border-radius:50%;color:#8ed0d1;box-shadow:0 0 22px #68c4c03d;font-size:26px}
+.st-home-brand small{display:block;color:#9db7bb;font:700 10px Inter,sans-serif;letter-spacing:.25em}
+.st-home-header-actions{display:flex;align-items:center;gap:10px}
+.st-home-header-actions button,.st-home-header-actions a{border:1px solid #ffffff4a!important;border-radius:999px;background:#ffffff0d!important;color:#e8f4ef!important;text-decoration:none;padding:10px 16px;font-size:12px}
+.st-home-header-actions button:hover,.st-home-header-actions a:hover{background:#ffffff20!important}
+.st-home-main{max-width:1370px;margin:auto}
+.st-home-hero{display:grid;grid-template-columns:minmax(350px,.9fr) minmax(420px,1.1fr);gap:22px;min-height:520px}
+.st-home-lead,.st-home-visual{position:relative;overflow:hidden;border:1px solid var(--st-stroke);border-radius:31px;background:var(--st-glass);box-shadow:inset 0 1px #ffffff22,0 22px 55px #0008}
+.st-home-lead{display:flex;flex-direction:column;justify-content:center;padding:clamp(30px,5vw,70px)}
+.st-home-lead::after{content:"";position:absolute;right:-70px;bottom:-100px;width:280px;height:280px;border:1px solid #b7e2de2c;border-radius:50%;box-shadow:0 0 0 43px #b7e2de0d,0 0 0 86px #b7e2de09;pointer-events:none}
+.st-home-lead h1{position:relative;z-index:1;margin:25px 0 20px;font:750 clamp(44px,5vw,78px)/1.09 Inter,"Noto Sans SC",sans-serif;letter-spacing:-.06em;text-wrap:balance}
+.st-home-lead h1 em{font-style:normal;color:var(--st-gold)}
+.st-home-lead p{position:relative;z-index:1;max-width:32em;color:#c6d4d1;font-size:16px;line-height:1.85}
+.st-home-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.st-home-cta a{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:45px;padding:0 19px;border:1px solid #c3e1dc87;border-radius:999px;background:#c9e8e0;color:#09232b;text-decoration:none;font-size:13px;font-weight:800}
+.st-home-cta a.secondary{background:#ffffff0b;color:#e8f4ef;border-color:#ffffff4a}
+.st-home-visual{background:#09232c url('/assets/scenes-v1/sea-window.png') center/cover no-repeat}
+.st-home-visual::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#07111944,transparent 46%),linear-gradient(0deg,#03111edb,transparent 48%)}
+.st-home-visual-caption{position:absolute;left:29px;right:29px;bottom:25px;display:flex;justify-content:space-between;align-items:end;gap:20px;color:#fff}
+.st-home-visual-caption strong{font:700 25px "Noto Sans SC",serif}.st-home-visual-caption span{color:#d7e8e4;font-size:12px}
+.st-home-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:18px}
+.st-home-path{position:relative;min-height:180px;padding:25px 25px 20px;border:1px solid var(--st-stroke);border-radius:24px;background:var(--st-glass);text-decoration:none;color:#f7f5ef;box-shadow:inset 0 1px #ffffff1c;transition:transform .25s,border-color .25s}
+.st-home-path:hover{transform:translateY(-5px);border-color:#bbe4df88}
+.st-home-path .number{color:var(--acc);font:700 11px Inter,sans-serif;letter-spacing:.17em}.st-home-path h2{font:700 24px "Noto Sans SC",sans-serif;margin:24px 0 8px}.st-home-path p{margin:0;color:#aabbbd;font-size:13px;line-height:1.6}.st-home-path .arrow{position:absolute;right:24px;top:20px;font-size:24px;color:#cbe2dc}
+.st-home-bottom{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:18px}
+.st-home-bottom .st-panel{padding:24px}.st-home-bottom h2{margin:12px 0 12px;font:700 25px "Noto Sans SC",sans-serif}.st-home-bottom p{color:#b1c1c3;line-height:1.75;font-size:13px}.st-recent-list{display:flex;flex-direction:column;gap:8px}.st-recent-list a{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid #ffffff20;text-decoration:none;color:#e5f3ed;font-size:13px}.st-recent-list small{color:#92a9aa}
+/* Studio: original workflow remains intact, with a console-like surface. */
+.st-studio{padding:0 20px 115px!important}
+.st-studio .wrap{max-width:1220px!important}.st-studio .wrap>h1,.st-studio .wrap>.sub{display:none}
+.st-studio .step{position:relative;margin:16px 0!important;padding:25px 28px!important;overflow:hidden}
+.st-studio .step::after{content:"";position:absolute;right:-70px;top:-70px;width:210px;height:210px;border:1px solid #bfe0da13;border-radius:50%;pointer-events:none}
+.st-studio .step h2{margin:0 0 19px!important;color:#f8f8f1!important;font:700 clamp(18px,2vw,24px) "Noto Sans SC",sans-serif!important;letter-spacing:-.02em}
+.st-studio .num{flex:none;width:28px!important;height:28px!important;background:#bfe1dc!important;color:#07202a!important;font:800 12px Inter,sans-serif!important}
+.st-studio button:not(.ms){background:#a7d5cc!important;color:#09232b!important;border:1px solid #d5f1ea80!important;font-weight:700}
+.st-studio button.ghost{background:#ffffff0b!important;color:#dbe8e5!important;border:1px solid #ffffff45!important}
+.st-studio button.rec{background:#bb6d71!important;color:#fff!important;border-color:#d39394!important}
+.st-studio .note,.st-studio .sub{color:#a9b8b9!important}.st-studio .status{color:#abddc9!important}
+.st-studio .chip{border-color:#bdddda48!important;background:#ffffff08}.st-studio .chip.on{background:#a3d1c921!important;border-color:#9ed3cb!important}
+.st-studio .mat,.st-studio #dawouter,.st-studio .trayline .tag{border-color:#ffffff30!important;background:#ffffff08!important;border-radius:14px!important}
+.st-studio #dawouter{overflow:hidden}.st-studio .lane{background:#07131bc9!important}.st-studio .lane.noclip{background:#0b1821a6!important}
+/* Community, profile and map retain their data and actions. */
+.st-community,.st-me{padding-bottom:118px!important}.st-community>header,.st-me>header,.st-map>header{width:min(1180px,calc(100% - 44px));max-width:none!important;margin:22px auto 4px!important;padding:14px 0 22px!important;border-bottom:1px solid #ffffff2b!important;background:none!important}
+.st-community header h1,.st-me header h1,.st-map header h1{font:750 clamp(28px,3.4vw,50px) Inter,"Noto Sans SC",sans-serif!important;letter-spacing:-.04em}
+.st-community .wrap{max-width:850px!important}.st-community .postbox,.st-community .post{padding:22px 24px!important;margin-bottom:15px!important}.st-community textarea{min-height:120px!important;resize:vertical}.st-community button,.st-me button,.st-map button{background:#b5dfd6!important;color:#0a232a!important;border:1px solid #d6eee9a8!important;font-weight:700}.st-community .post .who b{color:#eaf6ef!important}.st-community .post .note{color:#a6d5cd!important}
+.st-me .wrap{max-width:850px!important}.st-me .card{padding:30px!important;margin-bottom:18px!important}.st-me .bigava{width:92px!important;height:92px!important;border:1px solid #a7d4ceaa!important;background:#13313b!important;box-shadow:0 0 32px #a6dbd52e}.st-me .stat div{min-width:120px;background:#ffffff0b!important;border-color:#ffffff35!important;border-radius:16px!important}.st-me .sent{text-align:left}.st-me .tag{background:#a8d4cd26!important;color:#d8f0e7}
+.st-map{height:100vh!important;padding-bottom:76px!important}.st-map>header{flex:none}.st-map #map{margin:8px 20px 0;border:1px solid #ffffff45;border-radius:23px;overflow:hidden;box-shadow:0 18px 45px #000a}.st-map #list{flex:none;max-height:29vh;padding:15px 20px 30px!important;border:0!important}.st-map .work{padding:12px 15px!important;margin-bottom:10px!important}.st-map .work b{color:#f6f6ee}.st-map .leaflet-popup-content-wrapper,.st-map .leaflet-popup-tip{background:#10202a;color:#e9f2ed}
+/* The painted memory room becomes a luminous exhibit inside Mineradio glass. */
+.st-album{color:#f3f6ee!important;padding-bottom:105px!important}
+.st-album .topbar{position:relative;z-index:5;background:#08131bd9!important;border-bottom:1px solid #ffffff39!important;box-shadow:0 8px 30px #0006}
+.st-album .brand,.st-album .topbar nav a,.st-album .text-button{color:#eff8f2!important}.st-album .topbar nav a.current{background:#afdad126!important;color:#c3eee6!important}.st-album .text-button{background:#ffffff12!important;border-color:#ffffff4d!important}
+.st-album main{max-width:1450px!important;padding-top:42px!important}
+.st-album .heading{margin-bottom:26px!important}.st-album .heading h1{font:750 clamp(40px,4.2vw,64px)/1.1 Inter,"Noto Sans SC",sans-serif!important;letter-spacing:-.05em;color:#f8f7ef}.st-album .eyebrow{color:#afdcd4!important}.st-album .subtitle,.st-album .scene-control label,.st-album .room-caption{color:#adc0c0!important}.st-album .scene-control select{background:#0c1b23!important;border-color:#ffffff57!important;color:#eaf5ed!important}
+.st-album .room{border:1px solid #c0e5dd67!important;border-radius:29px!important;box-shadow:inset 0 1px #ffffff5c,0 35px 75px #000b,0 0 45px #6cb4bc29!important}.st-album .room-shade{background:linear-gradient(180deg,#00121a13 40%,#04121d84 100%)}
+.st-album .wall-guide,.st-album .memory-object .object-title,.st-album .cabinet-label,.st-album .cabinet-objects:empty::before{background:#071722dc!important;color:#e9f8ee!important;border:1px solid #e1f5ed66!important;backdrop-filter:blur(9px)}
+.st-album .collection-notes div{background:var(--st-glass)!important;border:1px solid var(--st-stroke)!important;box-shadow:inset 0 1px #ffffff1b,0 15px 35px #0005}.st-album .collection-notes strong{color:#f5f7ef}.st-album .collection-notes p{color:#a9bbbb}
+.st-album .modal{background:#0a1720f5!important;border:1px solid #c4e6dc6a!important;box-shadow:0 22px 80px #000c!important}.st-album .modal h2,.st-album .modal-close{color:#f6f8ef!important}.st-album .modal p{color:#b7c8c7!important}.st-album .modal .disclosure{background:#b6d9d023!important}.st-album .modal button.action,.st-album .modal a.action{background:#b9ddd5!important;color:#082029!important;border-color:#cce9e3!important}.st-album .modal button.secondary{background:#ffffff0c!important;color:#e7f1ec!important;border-color:#ffffff61!important}
+.st-album .drop-zone{background:#0b2630e8!important;border-color:#addbd1!important}.st-album .drop-zone strong{color:#f7f8f0!important}.st-album .drop-zone span{color:#bfceca!important}
+@media(max-width:900px){.st-home-hero{grid-template-columns:1fr;min-height:0}.st-home-lead{min-height:420px}.st-home-visual{min-height:380px}.st-home-grid{grid-template-columns:1fr 1fr}.st-home-bottom{grid-template-columns:1fr}.st-map #map{margin:6px 10px 0}}
+@media(max-width:600px){.st-home{padding:0 13px 100px!important}.st-home-header{padding:17px 0}.st-home-header-actions .hide-mobile{display:none}.st-home-brand{font-size:20px}.st-home-hero{gap:12px}.st-home-lead{min-height:365px;padding:28px}.st-home-lead h1{font-size:44px}.st-home-visual{min-height:300px}.st-home-grid{grid-template-columns:1fr;gap:10px}.st-home-path{min-height:142px}.st-home-path h2{margin-top:15px}.st-home-bottom{gap:10px}.st-pagehead{width:calc(100% - 26px);padding-top:23px}.st-pagehead h1{font-size:32px}.st-studio{padding:0 11px 105px!important}.st-studio .step{padding:18px!important}.st-community>header,.st-me>header,.st-map>header{width:calc(100% - 26px)}.st-community .wrap,.st-me .wrap{padding:0 13px!important}.st-me .stat{flex-wrap:wrap}.st-dock{bottom:7px}.st-dock a{min-height:42px;gap:2px;flex-direction:column;font-size:10px;padding:5px 2px}.st-dock .st-dock-icon{font-size:17px}.st-album main{padding-top:25px!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
