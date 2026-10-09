@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends fonts-noto-cjk 
     && mkdir /data && chown soundtrace:soundtrace /data
 COPY requirements-public.txt ./
 RUN pip install --no-cache-dir -r requirements-public.txt
-COPY soundtrace_public.py soundtrace_storage.py soundtrace_music.py soundtrace_maps.py soundtrace_art.py soundtrace_processing.py soundtrace_network.py ./
+COPY soundtrace_public.py soundtrace_storage.py soundtrace_music.py soundtrace_maps.py soundtrace_art.py soundtrace_processing.py soundtrace_network.py soundtrace_uploads.py ./
 COPY webapp ./webapp
 COPY --from=frontend /build/webapp/assets/studio ./webapp/assets/studio
 COPY third_party/Mineradio-paused-main/public ./third_party/Mineradio-paused-main/public

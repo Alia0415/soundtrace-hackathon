@@ -73,6 +73,36 @@ class PublicSiteTests(unittest.TestCase):
         self.assertEqual(len(synchronized['images']),2)
         self.assertEqual(self.guest.get('/'+post['audio']).status_code,404)
 
+    def test_chunked_audio_preserves_bytes_and_owner(self):
+        raw = audio(150)
+        task = self.alice.post('/api/audio-uploads', json={'size': len(raw)}).json()
+        uid, size = task['upload_id'], task['chunk_size']
+        first = '/api/audio-uploads/' + uid + '/0'
+        self.assertEqual(self.bob.put(first, content=raw[:size]).status_code, 404)
+        self.assertEqual(self.alice.put('/api/audio-uploads/'+uid+'/1', content=raw[size:]).status_code, 400)
+        self.assertEqual(self.alice.post('/api/memories', data={'audio_upload_id':uid}).status_code, 400)
+        for offset in range(0, len(raw), size):
+            response = self.alice.put('/api/audio-uploads/'+uid+'/'+str(offset//size), content=raw[offset:offset+size])
+            self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(self.alice.put(first, content=raw[:size]).status_code, 200)
+        self.assertEqual(self.bob.post('/api/memories', data={'audio_upload_id':uid}).status_code, 404)
+        result = self.alice.post('/api/memories', data={'audio_upload_id':uid, 'title':'分段原声'})
+        self.assertEqual(result.status_code, 201, result.text)
+        self.assertEqual(self.alice.get('/'+result.json()['audio']).content, raw)
+        self.assertEqual(self.guest.get('/'+result.json()['audio']).status_code, 404)
+        self.assertEqual(self.alice.put(first, content=raw[:size]).status_code, 404)
+        task = self.alice.post('/api/audio-uploads', json={'size':len(raw)}).json()
+        for offset in range(0, len(raw), size):
+            self.alice.put('/api/audio-uploads/'+task['upload_id']+'/'+str(offset//size), content=raw[offset:offset+size]).raise_for_status()
+        saved = self.alice.post('/api/memories/'+result.json()['id']+'/music', data={'music_audio_upload_id':task['upload_id']})
+        self.assertEqual(saved.status_code, 200, saved.text)
+        self.assertEqual(self.alice.get('/'+saved.json()['music_audio']).content, raw)
+        self.assertFalse(list((self.folder/'data'/'pending-audio').iterdir()))
+
+    def test_live_home_does_not_send_users_to_demo(self):
+        self.assertIn('href="/" aria-label="声迹首页"', self.guest.get('/').text)
+        self.assertIn('href="/demo" aria-label="声迹演示"', self.guest.get('/demo').text)
+
     def test_letter_queue_matching_private_media_and_idempotence(self):
         memory=self.save()
         endpoint='/api/memories/'+memory['id']+'/send'

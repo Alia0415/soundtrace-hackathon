@@ -44,7 +44,7 @@ async def generate_art(photo, memory):
                         break
                 try:
                     code = json.loads(error_body).get('error', {}).get('code', '')
-                    if code == 'InvalidEndpointOrModel.NotFound':
+                    if code in ('ModelNotOpen', 'InvalidEndpointOrModel.NotFound'):
                         raise RuntimeError('生图模型不存在或当前账号尚未开通，请在火山方舟确认模型权限；原照片已保留')
                 except (ValueError, AttributeError, TypeError):
                     pass

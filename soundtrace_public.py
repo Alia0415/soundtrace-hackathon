@@ -416,6 +416,13 @@ def create_app(data_dir=None, public_url=None):
                 'audio': m['audio'], 'metadata': {**m, 'story': m.get('notes')}, 'created': m['created']}
                 for m in own_records(request, 'memory') for i, ref in enumerate(m['images'])]}
 
+    from soundtrace_uploads import install_uploads
+    read_staged_audio, discard_staged_audio = install_uploads(app, db, account, data, quota)
+
+    async def audio_from_form(form, key, user):
+        uid = form.get(key + '_upload_id')
+        return read_staged_audio(uid, user) if uid else await read_upload(form.get(key), 60_000_000)
+
     async def read_upload(upload, limit):
         if upload is None or not hasattr(upload, 'read'):
             raise HTTPException(400, '请选择文件')
@@ -538,7 +545,7 @@ def create_app(data_dir=None, public_url=None):
     async def save_memory(request: Request):
         user = account(request)
         form = await upload_form(request, max_files=15, max_fields=24)
-        raw = await read_upload(form.get('audio'), 60_000_000)
+        raw = await audio_from_form(form, 'audio', user)
         duration = validate_wav(raw)
         mid = uuid.uuid4().hex
         folder = data / 'users' / user['id'] / mid
@@ -566,8 +573,8 @@ def create_app(data_dir=None, public_url=None):
                 entry[key] = float(value) if value not in (None, '') else None
                 if entry[key] is not None and (not math.isfinite(entry[key]) or abs(entry[key]) > bound):
                     raise HTTPException(400, '地点坐标无效')
-            if form.get('music_audio') is not None:
-                music = await read_upload(form['music_audio'], 60_000_000)
+            if form.get('music_audio') is not None or form.get('music_audio_upload_id'):
+                music = await audio_from_form(form, 'music_audio', user)
                 validate_wav(music)
                 entry['music_audio'] = store('music.wav', music, 'audio/wav')
             for key, count, limit in (('images', 6, 12_000_000), ('videos', 2, 60_000_000), ('audio_files', 4, 30_000_000)):
@@ -594,7 +601,10 @@ def create_app(data_dir=None, public_url=None):
                 file = cover(folder, entry['title'], background, kind)
                 entry[f'cover_{kind}'] = store(file.name, file.read_bytes(), 'image/jpeg')
             entry['art_status'] = 'photo_cover' if background else 'text_only'
-            return commit_record(user, entry, 'memory', files, str(form.get('share', '')).lower() == 'true')
+            result = commit_record(user, entry, 'memory', files, str(form.get('share', '')).lower() == 'true')
+            for key in ('audio_upload_id', 'music_audio_upload_id'):
+                discard_staged_audio(form.get(key), user)
+            return result
         except Exception:
             shutil.rmtree(folder)
             raise
@@ -639,7 +649,7 @@ def create_app(data_dir=None, public_url=None):
         user = account(request)
         memory_detail(mid, request)
         form = await upload_form(request, max_files=7, max_fields=24)
-        content = await read_upload(form.get('music_audio'), 60_000_000)
+        content = await audio_from_form(form, 'music_audio', user)
         validate_wav(content)
         uploads = form.getlist('images')
         if len(uploads) > 6:
@@ -718,6 +728,7 @@ def create_app(data_dir=None, public_url=None):
             raise
         for ref in removed:
             ref_path(ref).unlink(missing_ok=True)
+        discard_staged_audio(form.get('music_audio_upload_id'), user)
         return entry
 
     @app.post('/api/memories/{mid}/publish')
@@ -925,10 +936,10 @@ def create_app(data_dir=None, public_url=None):
             html = html.replace('src="mineradio/', 'src="/mineradio/')
             runtime = '<script src="/assets/soundtrace-demo.js?v=5"></script>' if demo else ''
             html = html.replace('<head>', '<head>' + runtime + '<script src="/assets/soundtrace-account.js?v=5" defer></script>', 1)
-            html = html.replace('href="/" aria-label="声迹首页"', 'href="/demo" aria-label="声迹演示"')
-            html = html.replace('class="doodle-brand" href="/"', 'class="doodle-brand" href="/demo"')
-            html = html.replace('class="brand" href="/"', 'class="brand" href="/demo"')
             if demo:
+                html = html.replace('href="/" aria-label="声迹首页"', 'href="/demo" aria-label="声迹演示"')
+                html = html.replace('class="doodle-brand" href="/"', 'class="doodle-brand" href="/demo"')
+                html = html.replace('class="brand" href="/"', 'class="brand" href="/demo"')
                 html = html.replace('<title>', '<title>演示 · ', 1)
             return HTMLResponse(html)
         return page

@@ -1,4 +1,17 @@
 export async function api(path, options={}) {
+  // Keep each audio request below cloud gateway limits, without changing the WAV.
+  if(path.startsWith('/api/memories') && options.body instanceof FormData && !window.SoundTraceDemo) {
+    const form=options.body;
+    for(const key of ['audio','music_audio']) {
+      const file=form.get(key);
+      if(!(file instanceof Blob) || file.size<=4_000_000)continue;
+      const task=await api('/api/audio-uploads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({size:file.size}),signal:options.signal});
+      for(let offset=0,index=0;offset<file.size;offset+=task.chunk_size,index++) {
+        await api(`/api/audio-uploads/${task.upload_id}/${index}`,{method:'PUT',headers:{'Content-Type':'application/octet-stream'},body:file.slice(offset,offset+task.chunk_size),signal:options.signal});
+      }
+      form.delete(key);form.set(key+'_upload_id',task.upload_id);
+    }
+  }
   const r=await fetch(path,options); let data; try {data=await r.json();} catch {throw new Error('服务暂时未响应，请稍后重试。');}
   if(!r.ok) throw new Error(typeof data.detail==='string'?data.detail:'请求未完成，请重试。'); return data;
 }
