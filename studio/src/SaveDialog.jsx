@@ -70,7 +70,7 @@ export default function SaveDialog({close,render,scene,setScene,version,project,
     <div className="save-art"><RasterArt id={rawOnly?'tape':'vinyl'} label={rawOnly?"原声磁带":"音乐日记唱片"}/></div>
     <div className="save-content">{saved?<><h2>{rawOnly?'原声已存入素材库':'音乐日记已保存'}</h2><p>{rawOnly?'随时可以用这段声音制作音乐日记。':'磁带保留原声，唱片保存音乐与这段记忆。'}</p>{rawOnly&&<><button className="primary" onClick={onGenerate}>生成音乐日记 →</button><button className="quiet" onClick={close}>留在素材库</button></>}<a className={rawOnly?'quiet':'primary'} href={`/album?scene=${scene}`}>打开我的音乐 ↗</a><button className="quiet" onClick={()=>download(blob,`${saved.title}.wav`)}>下载原声</button></>:<>
       <h2>{rawOnly?'这是什么声音？':'保存音乐'}</h2>
-      <p>{rawOnly?'留下一句话，或直接保存。其他内容选填。':'音乐将保存到“我的音乐”。下面的信息均为选填，分享默认关闭。'}</p>
+      <p>{rawOnly?'留下一句话，或直接保存。其他内容选填。':'信息选填，保存到“我的音乐”。'}</p>
       <div className="save-answer"><label className="field">声音的名字<input maxLength={80} value={title} onChange={e=>setTitle(e.target.value)} placeholder="例如：下雨前的风" autoFocus/></label><button type="button" className="outline" onClick={dictate} disabled={!speechEnabled||speaking||busy} title={speechEnabled?'录音后转为文字':'语音识别尚未启用，请直接输入'}>{speaking?'正在听你说…':speechEnabled?'说给我听':'请直接输入'}</button></div>
       <div className="save-meta"><span>{new Date(recordedAt.current).toLocaleString('zh-CN',{month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}</span><span>{weather||'天气未获取'}</span>{<button type="button" className="quiet" onClick={locate} disabled={busy}>{geo.lat!=null?'位置已记录 ✓':window.SoundTraceDemo?'使用演示位置（西湖）':'获取位置与天气'}</button>}</div>
       <label className="field">地点<input maxLength={100} value={locationName} onChange={e=>setLocationName(e.target.value)} placeholder="在哪里录的？"/></label>
