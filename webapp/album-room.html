@@ -3,7 +3,7 @@
 <head>
 <script src="/assets/soundtrace-raster.js?v=8" defer></script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>声迹 · 我的音乐</title>
+<title>声迹 · 收藏间</title>
 <link rel="stylesheet" href="assets/visual-v1/tokens.css">
 <link rel="stylesheet" href="assets/album-room.css">
 <link rel="stylesheet" href="assets/listening-stage.css">
@@ -12,11 +12,11 @@
 <script src="assets/mineradio-port/beat-reactivity.js" defer></script>
 <script src="assets/album-room.js?v=14" defer></script>
 <link rel="stylesheet" href="assets/album-mineradio.css?v=3">
-<script src="/assets/soundtrace-shell.js?v=5" defer></script>
+<script src="/assets/soundtrace-shell.js?v=7" defer></script>
 <link rel="stylesheet" href="/assets/album-memory.css">
 <link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
 <link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
-<link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=4">
+<link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=5">
 </head>
 <body class="st-album">
 <header class="topbar">
@@ -28,7 +28,7 @@
 <main>
   <section class="album-intro">
     <div class="album-title-block">
-      <h1>我的音乐</h1>
+      <h1>我的收藏间</h1>
       <div class="profile-strip" id="profileStrip">
         <button class="profile-ava" id="stripAva" type="button" aria-label="编辑个人资料">🎧</button>
         <div class="profile-strip-info"><strong id="stripName">…</strong><small id="stripSub">编辑资料，开启声音档案</small></div>
@@ -37,8 +37,8 @@
     </div>
     <button id="enterStage" class="stage-entry" type="button" aria-label="进入沉浸聆听"><span aria-hidden="true">▶</span> 聆听</button>
   </section>
-  <div class="scene-position" aria-live="polite"><span id="sceneDescription">海港午后</span><span id="sceneIndex">01 / 06</span><div class="scene-progress" id="sceneProgress" aria-hidden="true"></div></div>
   <section class="room scene-carousel" id="room" aria-label="左右滑动切换记忆场景" tabindex="0"><div class="scene-track" id="sceneTrack"><article class="scene-slide is-active" data-scene="sea-window"><div class="room-content" id="roomContent"><div class="room-shade"></div><div class="photo-line" id="photoLine" aria-label="照片墙"></div><div class="cabinet" aria-label="唱片和磁带柜"><div class="cabinet-objects" id="cabinetObjects"></div><div class="cabinet-top"></div><div class="cabinet-front"><span class="cabinet-knobs" aria-hidden="true">●　　　　●</span></div><div class="cabinet-side"></div></div></div><span class="scene-slide-label">海港午后</span></article></div></section>
+  <div class="scene-position" aria-live="polite"><span id="sceneDescription">海港午后</span><span id="sceneIndex">01 / 06</span><div class="scene-progress" id="sceneProgress" aria-hidden="true"></div></div>
   <section id="backgroundTools" class="background-tools" aria-label="记忆背景" hidden></section>
 </main>
 <aside id="mailDrawer" class="mail-drawer" aria-label="拖放投递箱" aria-hidden="true">

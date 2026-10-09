@@ -7,7 +7,7 @@ import './diary-flow.css';
 const order=['weather','mood','activity'];
 const headings=['那天，天气怎么样？','此刻，是什么心情？','你正在做什么？','把这一刻留在纸上。','想把它变成什么音乐？'];
 export default function DiarySetup({diary,setDiary,style,setStyle,onContinue,onBack,busy}) {
-  const [step,setStep]=useState(4),[error,setError]=useState(''),[locating,setLocating]=useState(false),[urls,setUrls]=useState([]),[artEnabled,setArtEnabled]=useState(false);
+  const [step,setStep]=useState(0),[error,setError]=useState(''),[locating,setLocating]=useState(false),[urls,setUrls]=useState([]),[artEnabled,setArtEnabled]=useState(false);
   const group=diaryGroups.find(g=>g.id===order[step]);
   const update=(key,value)=>{setDiary(prev=>({...prev,[key]:value}));setError('');};
   useEffect(()=>{window.scrollTo({top:0,behavior:'instant'});},[step]);
