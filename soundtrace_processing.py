@@ -8,6 +8,7 @@ import uuid
 from urllib.parse import urlsplit
 
 import httpx
+from soundtrace_network import trust_environment
 from fastapi import BackgroundTasks, HTTPException, Request
 
 
@@ -26,7 +27,7 @@ async def process_audio(content, kind, target, stage):
         raise RuntimeError('声音处理服务地址配置无效')
     password = os.getenv('SOUNDTRACE_GPU_PASSWORD', '')
     auth = httpx.BasicAuth(os.getenv('SOUNDTRACE_GPU_USER', 'soundtrace'), password) if password else None
-    async with httpx.AsyncClient(timeout=120, follow_redirects=False, auth=auth) as client:
+    async with httpx.AsyncClient(trust_env=trust_environment(), timeout=120, follow_redirects=False, auth=auth) as client:
         stage('正在向私有声音处理服务提交原声')
         response = await client.post(base + '/api/upload', files={'file': ('original.wav', content, 'audio/wav')})
         response.raise_for_status()

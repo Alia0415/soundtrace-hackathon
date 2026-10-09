@@ -144,7 +144,7 @@
   }
   function demo(kind) {
     const title = state.scene.sample;
-    return { kind, id:`demo-${kind}`, title: kind === 'photo' ? title : kind === 'vinyl' ? `《${title}》` : `${title}的声音`, story:'这里会展示你亲自留下的声音记忆。', demo:true };
+    return { kind, id:`demo-${kind}`, title: kind === 'photo' ? '照片占位 · 等你收藏' : kind === 'vinyl' ? '唱片占位 · 等你创作' : '磁带占位 · 等你录音', story:'这里会展示你亲自留下的声音记忆。', demo:true };
   }
   function makeItem(item) {
     const kindName = { photo:'照片', vinyl:'唱片', tape:'磁带' }[item.kind];
@@ -413,7 +413,7 @@
     const src = mediaUrl(raw);
     if (!src) return;
     const audio = node('audio');
-    audio.controls = true;
+    audio.controls = true;audio.setAttribute('aria-label','播放这段记忆');
     audio.src = src;
     wrap.appendChild(audio);
   }
@@ -585,6 +585,7 @@
     if (!state.stageQueue.length) { notify('先录下一段声音，或制作一张唱片，再进入聆听舞台。'); return; }
     const index = item ? state.stageQueue.findIndex(track => track.kind === item.kind && track.id === item.id) : 0;
     if (!$('modalBackdrop').hidden) closeModal();
+    const player=$('mineradioEngine');if(!player.hasAttribute('src'))player.src=player.dataset.src;
     $('listeningStage').hidden = false;
     state.stageRequestedAutoplay = true;
     document.body.classList.add('stage-open');
@@ -668,7 +669,7 @@
         try{
           const mid=item.metadata?.id||item.memory_id||item.id;
           const result=await apiJSON('/api/memories/'+encodeURIComponent(mid)+'/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:item.kind||'vinyl',allow_reuse:reuse.checked,receive_mail:feed.checked})});
-          closeModal();notify(result.status==='delivered'?'已送达远方旅人的信箱。':'已放进信箱，等待另一位愿意交换声音的旅人。');
+          loadProfileStrip();closeModal();notify(result.status==='delivered'?'已送达远方旅人的信箱。':'已放进信箱，等待另一位愿意交换声音的旅人。');
         }catch(e){notify(e.message||'寄出失败，请重试。');submit.disabled=false;}
       };
     const cancel = node('button', 'secondary', '取消'); cancel.type = 'button'; cancel.addEventListener('click', closeModal);

@@ -1,3 +1,4 @@
+import {configureGlobalContext,getGlobalAudioContext} from '@waveform-playlist/playout';
 export const RATE = 44100;
 export function encodeWav(buffer) {
   const channels = buffer.numberOfChannels, n = buffer.length;
@@ -14,7 +15,14 @@ export function encodeWav(buffer) {
   return new Blob([bytes], {type: 'audio/wav'});
 }
 let decodeContext;
-export function context() { return decodeContext ||= new AudioContext({sampleRate: RATE}); }
+export function context() {
+  if (!decodeContext) {
+    // Configure the playlist's own singleton before decoding or scheduling audio.
+    configureGlobalContext({sampleRate: RATE,nativeAudioContext:true});
+    decodeContext = getGlobalAudioContext();
+  }
+  return decodeContext;
+}
 export async function decode(blob) { return context().decodeAudioData(await blob.arrayBuffer()); }
 export function download(blob, name) {
   const url = URL.createObjectURL(blob), a = document.createElement('a');

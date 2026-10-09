@@ -1,4 +1,5 @@
 import RasterArt from './RasterArt';
+import {clipRate,clipEditDelta} from './clip-time';
 import React,{useEffect,useMemo,useRef,useState} from 'react';
 import {Waveform,ClipInteractionProvider,usePlaylistControls,usePlaylistData,usePlaylistState,usePlaybackAnimation} from '@waveform-playlist/browser';
 import {useExportWav} from '@waveform-playlist/browser/tone';
@@ -90,7 +91,7 @@ export default function Editor({tracks,setTracks,style,scene,setScene,ai,soundPr
   </section>;
 }
 function ClipDetails({tracks,engine,rate}){
-  const [selected,setSelected]=useState('');const all=tracks.flatMap(t=>t.clips.map(c=>({t,c})));const item=all.find(x=>x.c.id===selected)||all[0];if(!item)return null;const {t,c}=item;
-  function edit(type,value){if(!engine||!Number.isFinite(value))return;engine.beginTransaction();try{if(type==='start')engine.moveClip(t.id,c.id,Math.round(value*rate)-c.startSample);else if(type==='left')engine.trimClip(t.id,c.id,'left',Math.round(value*rate)-c.offsetSamples);else engine.trimClip(t.id,c.id,'right',Math.round(value*rate)-c.offsetSamples-c.durationSamples);}finally{engine.commitTransaction();}}
+  const [selected,setSelected]=useState('');const all=tracks.flatMap(t=>t.clips.map(c=>({t,c})));const item=all.find(x=>x.c.id===selected)||all[0];if(!item)return null;const {t,c}=item;rate=clipRate(c,rate);
+  function edit(type,value){if(!engine||!Number.isFinite(value))return;if(type==='start')engine.moveClip(t.id,c.id,clipEditDelta(c,'start',value,rate));else if(type==='left')engine.trimClip(t.id,c.id,'left',clipEditDelta(c,'left',value,rate));else engine.trimClip(t.id,c.id,'right',clipEditDelta(c,'right',value,rate));}
   return <div className="clip-details"><label>片段<select value={item.c.id} onChange={e=>setSelected(e.target.value)}>{all.map(({t,c})=><option key={c.id} value={c.id}>{t.name} · {c.name}</option>)}</select></label>{[['start','出现位置',c.startSample],['left','原声起点',c.offsetSamples],['right','原声终点',c.offsetSamples+c.durationSamples]].map(([key,name,samples])=><label key={key}>{name}<span><input key={`${c.id}-${samples}`} type="number" min="0" step=".1" defaultValue={(samples/rate).toFixed(1)} onBlur={e=>edit(key,Number(e.target.value))} onKeyDown={e=>{if(e.key==='Enter')e.currentTarget.blur();}}/> 秒</span></label>)}</div>;
 }

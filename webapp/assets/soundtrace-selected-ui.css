@@ -167,7 +167,7 @@ body .st-dock a[aria-current=page]:not(:first-child) .st-dock-icon img{filter:in
 .st-community .community-tabs{top:auto!important;position:static!important;margin:0 0 8px;padding-top:0}
 .st-community .community-feed{position:relative;z-index:auto;background:#fff}
 .st-community .community-art,.st-community .community-art-right{z-index:0!important}
-.st-community .community-actions{width:100%;justify-content:flex-start!important;gap:22px!important;position:relative;padding-left:8px}
+.st-community .community-actions{width:100%;box-sizing:border-box;display:flex;flex-wrap:wrap;justify-content:flex-start!important;gap:12px 22px!important;position:relative;padding-left:8px}
 .st-community .community-actions .community-share{margin-left:auto}
 .st-community .community-action{flex-shrink:0}
 @media(min-width:761px){

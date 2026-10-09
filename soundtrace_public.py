@@ -815,7 +815,7 @@ def create_app(data_dir=None, public_url=None):
         from soundtrace_art import art_config
         from soundtrace_processing import processing_config
         config = music_config()
-        return {'editing': True, 'storage': True, 'accounts': True, 'ai': config['enabled'], 'music_provider': config['provider'], 'image_generation': art_config()['enabled'], 'sound_analysis': processing_config()['enabled'], 'local_humming': True}
+        return {'editing': True, 'storage': True, 'accounts': True, 'ai': config['enabled'], 'music_provider': config['provider'], 'image_generation': art_config()['enabled'], 'sound_analysis': processing_config()['enabled'], 'local_humming': True, 'speech_to_text': os.getenv('SOUNDTRACE_ENABLE_STT') == '1'}
 
     @app.get('/api/inbox')
     @app.get('/api/exchange')

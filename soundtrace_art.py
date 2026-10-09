@@ -7,6 +7,7 @@ import time
 import uuid
 
 import httpx
+from soundtrace_network import trust_environment, provider_error
 from fastapi import BackgroundTasks, HTTPException, Request
 
 
@@ -31,9 +32,22 @@ async def generate_art(photo, memory):
                'image': 'data:image/jpeg;base64,' + base64.b64encode(photo).decode(),
                'size': '2K', 'response_format': 'b64_json', 'watermark': True,
                'stream': False}
-    async with httpx.AsyncClient(timeout=httpx.Timeout(300, connect=10), follow_redirects=False) as client:
+    async with httpx.AsyncClient(trust_env=trust_environment(), timeout=httpx.Timeout(300, connect=10), follow_redirects=False) as client:
         async with client.stream('POST', 'https://ark.cn-beijing.volces.com/api/v3/images/generations',
                                  headers={'Authorization': 'Bearer ' + os.environ['SOUNDTRACE_ARK_KEY']}, json=payload) as response:
+            if response.is_error:
+                # Read only a bounded error payload, never expose provider text or credentials.
+                error_body = bytearray()
+                async for chunk in response.aiter_bytes():
+                    error_body.extend(chunk[:4096-len(error_body)])
+                    if len(error_body) >= 4096:
+                        break
+                try:
+                    code = json.loads(error_body).get('error', {}).get('code', '')
+                    if code == 'InvalidEndpointOrModel.NotFound':
+                        raise RuntimeError('生图模型不存在或当前账号尚未开通，请在火山方舟确认模型权限；原照片已保留')
+                except (ValueError, AttributeError, TypeError):
+                    pass
             response.raise_for_status()
             chunks = bytearray()
             async for chunk in response.aiter_bytes():
@@ -121,7 +135,7 @@ def install_art(app, db, account, data, quota, normalize_image, cover):
             # Remove only the exact files in this job folder, never a recursive computed target.
             for name in ('scenery.jpg', 'cover_tape.jpg', 'cover_vinyl.jpg'):
                 (folder / name).unlink(missing_ok=True)
-            message = str(error) if isinstance(error, RuntimeError) else '生图服务暂时不可用，请检查凭据、模型权限或额度；原照片已保留'
+            message = provider_error(error, '生图服务')
             with db() as con:
                 con.execute("UPDATE art_jobs SET status='failed',stage=? WHERE id=?", (message, jid))
 

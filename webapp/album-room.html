@@ -10,13 +10,13 @@
 <script src="assets/mineradio-port/three.r128.min.js" defer></script>
 <script src="assets/mineradio-port/memory-shelf.js" defer></script>
 <script src="assets/mineradio-port/beat-reactivity.js" defer></script>
-<script src="assets/album-room.js?v=7" defer></script>
+<script src="assets/album-room.js?v=12" defer></script>
 <link rel="stylesheet" href="assets/album-mineradio.css">
 <script src="/assets/soundtrace-shell.js?v=5" defer></script>
 <link rel="stylesheet" href="/assets/album-memory.css">
 <link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
 <link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
-<link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=3">
+<link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=4">
 </head>
 <body class="st-album">
 <header class="topbar">
@@ -47,7 +47,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button id="closeModal" class="modal-close" type="button" aria-label="关闭">×</button><div id="modalContent"></div></div></div>
 <section id="listeningStage" class="listening-stage" role="dialog" aria-modal="true" aria-label="沉浸聆听" hidden>
-  <iframe id="mineradioEngine" class="mineradio-engine" src="/mineradio/soundtrace-engine.html" title="Mineradio 原版粒子与播放器" tabindex="-1" loading="eager"></iframe>
+  <iframe id="mineradioEngine" class="mineradio-engine" data-src="/mineradio/soundtrace-engine.html" title="Mineradio 原版粒子与播放器" tabindex="-1" loading="eager"></iframe>
   <div class="listening-decoration listening-top" aria-hidden="true"><img src="/assets/ui-selected-v3/listening-top.webp" alt=""></div><div class="listening-decoration listening-left" aria-hidden="true"><img src="/assets/ui-selected-v3/listening-left.webp" alt=""></div><div class="listening-decoration listening-mobile-footer" aria-hidden="true"><img src="/assets/ui-selected-v3/listening-mobile-footer.webp" alt=""></div><div class="listening-brand" aria-hidden="true">声迹<small>SoundTrace</small></div>
   <canvas id="stageCanvas" class="stage-canvas" aria-hidden="true"></canvas>
   <div class="stage-scene" aria-hidden="true"></div>

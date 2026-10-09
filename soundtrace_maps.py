@@ -3,6 +3,7 @@ import json
 import math
 import os
 import httpx
+from soundtrace_network import trust_environment
 from fastapi import HTTPException, Request
 from fastapi.responses import Response
 
@@ -38,7 +39,7 @@ def install_maps(app, account):
         if not path:
             params.append(('appid', 'jsapi_v3'))
         try:
-            async with httpx.AsyncClient(timeout=15, follow_redirects=False) as client:
+            async with httpx.AsyncClient(trust_env=trust_environment(), timeout=15, follow_redirects=False) as client:
                 result = await client.get(upstreams[path], params=params,
                                           headers={'Referer': str(request.base_url)})
                 result.raise_for_status()
@@ -66,7 +67,7 @@ def install_maps(app, account):
                 not -90 <= p[0] <= 90 or not -180 <= p[1] <= 180):
                 raise HTTPException(400, '位置坐标无效')
         try:
-            async with httpx.AsyncClient(timeout=15, follow_redirects=False) as client:
+            async with httpx.AsyncClient(trust_env=trust_environment(), timeout=15, follow_redirects=False) as client:
                 response = await client.get('https://apis.map.qq.com/ws/coord/v1/translate',
                     params={'key': key, 'type': 1, 'locations': ';'.join(f'{lat},{lng}' for lat, lng in points)},
                     headers={'Referer': str(request.base_url)})

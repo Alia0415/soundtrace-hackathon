@@ -19,3 +19,6 @@ body{overflow:hidden!important}
   #cuefield-automix-btn,#mini-queue-btn{display:none!important}
   #play-btn{width:50px!important;height:50px!important}
 }
+
+/* This embed only plays SoundTrace media; cloud-account controls are not connected. */
+#control-title-badges,#quality-control,#heart-btn,#collect-btn,#lyrics-toggle-btn,#gesture-hud,#cuefield-automix-btn{display:none!important}

@@ -35,3 +35,5 @@
  body.st-map .st-dock{position:absolute!important}
  body.st-map .st-account-button{position:absolute}
 }
+
+.map-tile-warning{position:absolute;z-index:1;top:64px;left:16px;right:16px;max-width:420px;padding:16px;background:#fff;border:1px solid #b8d6e2;border-radius:12px;box-shadow:0 4px 16px #0001}.map-tile-warning[hidden]{display:none}.map-tile-warning p{font-size:13px;line-height:1.5;margin:8px 0}.map-tile-warning button{min-height:44px;padding:8px 16px;border:1px solid #159dd2;border-radius:20px;background:#fff;cursor:pointer}

@@ -8,6 +8,7 @@ import time
 import uuid
 from urllib.parse import urlsplit, quote
 import httpx
+from soundtrace_network import trust_environment, provider_error
 from fastapi import BackgroundTasks, HTTPException, Request
 
 
@@ -37,7 +38,7 @@ async def generate_music(body, stage):
     """Return validated-downstream audio bytes; endpoints/credentials never come from user input."""
     config = music_config()
     prompt = make_prompt(body)
-    async with httpx.AsyncClient(timeout=60, follow_redirects=False) as client:
+    async with httpx.AsyncClient(trust_env=trust_environment(), timeout=60, follow_redirects=False) as client:
         if config['provider'] == 'acestep':
             base = os.environ['SOUNDTRACE_ACE_URL'].rstrip('/')
             headers = {'Authorization': 'Bearer ' + os.getenv('SOUNDTRACE_ACE_KEY', '')}
@@ -151,7 +152,7 @@ def install_music(app, db, account, data, quota, validate_wav):
         except Exception as error:
             path.unlink(missing_ok=True)
             # No upstream response bodies, tokens or URLs in user-visible errors.
-            message = str(error) if isinstance(error, RuntimeError) else '音乐服务连接失败，请检查服务配置或额度后重试'
+            message = provider_error(error, '音乐服务')
             with db() as con:
                 con.execute("UPDATE music_jobs SET status='failed',stage=? WHERE id=?", (message, jid))
 
@@ -163,7 +164,10 @@ def install_music(app, db, account, data, quota, validate_wav):
         raw = await request.body()
         if len(raw) > 8000:
             raise HTTPException(413, '生成描述过长')
-        body = json.loads(raw)
+        try:
+            body = json.loads(raw)
+        except (ValueError, TypeError):
+            raise HTTPException(400, '生成参数无效')
         if not isinstance(body, dict):
             raise HTTPException(400, '生成参数无效')
         mid = body.get('memory_id')

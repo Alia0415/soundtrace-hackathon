@@ -110,6 +110,10 @@
     'js/modules/11-main-loop.js',
   ];
 
+  if (document.body.hasAttribute('data-soundtrace-engine')) {
+    modulePaths.splice(modulePaths.indexOf('js/modules/10-shell/05-startup-bindings.js'), 0, 'js/soundtrace-local-mode.js');
+  }
+
   function readModule(path) {
     const request = new XMLHttpRequest();
     request.open('GET', path + (path.indexOf('?') >= 0 ? '&' : '?') + 'v=' + moduleCacheBust, false);

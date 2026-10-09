@@ -52,7 +52,23 @@
       getContent(){return this.pin;}
       onDestroy(){this.pin.onclick=null;this.pin.onkeydown=null;}
     };
-    $('atlasCaption').textContent='腾讯地图 · 我的声音足迹';
+    const caption=$('atlasCaption');caption.textContent='腾讯地图 · 正在加载底图…';
+    const warning=make('div','map-tile-warning');warning.setAttribute('role','status');warning.hidden=true;
+    warning.append(make('strong','','底图连接暂时失败'),make('p','','请检查网络或代理后重试。声音足迹仍可从列表查看与播放。'));
+    const retryTiles=make('button','','重试底图');retryTiles.onclick=()=>location.reload();warning.append(retryTiles);$('mapWrap').append(warning);
+    const tileTimer=setTimeout(()=>{warning.hidden=false;caption.textContent='底图未能完成加载';},15000);
+    // The SDK can emit tilesloaded even when every tile request failed.
+    // Verify tile connectivity; worker-owned requests are absent from page resource timing.
+    let checkingTiles=false;
+    map.on('tilesloaded',async()=>{
+      if(checkingTiles)return;
+      const tile=performance.getEntriesByType('resource').find(e=>/^https:\/\/rt[0-3]\.map\.gtimg\.com\/tile\?/.test(e.name));
+      checkingTiles=true;
+      try{const result=await fetch(tile?.name||'https://rt0.map.gtimg.com/tile',{signal:AbortSignal.timeout(8000)});if(tile&&!result.ok)throw Error();await result.arrayBuffer();clearTimeout(tileTimer);warning.hidden=true;caption.textContent='腾讯地图 · 我的声音足迹';}
+      catch{clearTimeout(tileTimer);warning.hidden=false;caption.textContent='底图连接失败，足迹已保留';}
+    });
+    map.on('loaderror',()=>{warning.hidden=false;caption.textContent='底图连接失败，足迹已保留';});
+    window.addEventListener('pagehide',()=>clearTimeout(tileTimer),{once:true});
   }catch(error){
     map?.destroy();map=null;converted.clear();$('mapMode').textContent='我的足迹';const message=make('div','map-service-state');message.append(make('strong','',error.message));const retry=make('button','','重试连接');retry.onclick=()=>location.reload();const preview=make('a','','看看演示地图 ↗');preview.href='/demo/map';message.append(retry,preview);$('geoMap').replaceChildren(message);$('atlasCaption').textContent='你的足迹数据仍保留在右侧列表';
   }
@@ -80,7 +96,7 @@
  const displayPoint=m=>demo?[((m.lat-30.209)/.067)*(mobile?1448:1086),((m.lng-120.112)/.064)*(mobile?1086:1448)]:[m.lat,m.lng];
  items.forEach(m=>{
   const row=make('article','work');row.dataset.id=m.id;
-  const btn=make('button','footprint-open');btn.setAttribute('aria-label','查看足迹：'+m.title);const text=make('span','footprint-copy');text.append(make('b','',m.title),make('small','meta',[m.location||'未添加位置',m.example?'示例':new Date((m.captured_at||m.created)*1000).toLocaleDateString('zh-CN')].join(' · ')));btn.append(picture(m),text);btn.onclick=()=>select(m);row.append(btn);
+  const btn=make('button','footprint-open');btn.setAttribute('aria-label','查看足迹：'+m.title);const text=make('span','footprint-copy');text.append(make('b','',m.title),make('small','meta',[m.location||(m.lat!=null&&m.lng!=null?'已记录位置':'未添加位置'),m.example?'示例':new Date((m.captured_at||m.created)*1000).toLocaleDateString('zh-CN')].join(' · ')));btn.append(picture(m),text);btn.onclick=()=>select(m);row.append(btn);
   const src=media(m.music_audio||m.audio);if(src)row.append(SoundTracePlayer(src,m.title));$('list').append(row);
   if(map&&located.includes(m)&&(demo||converted.has(m.id))){
    const pin=make('div','scene-orb');pin.append(picture(m));let marker;
