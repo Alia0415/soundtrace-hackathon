@@ -211,3 +211,14 @@ body .st-dock a[aria-current=page]:not(:first-child) .st-dock-icon img{filter:in
 
 /* The restored home artwork already contains its primary entry. */
 .st-home .demo-start{display:none}
+
+/* Keep sample choices compact within the restored artwork layout. */
+.demo-samples{margin:20px auto;max-width:1000px;padding:0 20px}
+.demo-samples .demo-flow-note{display:none}
+.demo-samples h2{font-size:22px;margin:0 0 14px}
+.demo-sample-grid{gap:12px}
+.demo-sample-grid button{padding:16px;min-height:0}
+.demo-samples>p:last-child{font-size:12px;margin:12px 0;color:#687c86}
+@media(max-width:760px){.demo-sample-grid{grid-template-columns:1fr}.demo-sample-grid button{padding:14px}.demo-samples h2{font-size:19px}}
+
+.home-samples{display:inline-block;margin-top:14px;color:#087da7;font-size:14px;text-decoration:none}
