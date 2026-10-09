@@ -12,8 +12,28 @@ export async function api(path, options={}) {
       form.delete(key);form.set(key+'_upload_id',task.upload_id);
     }
   }
-  const r=await fetch(path,options); let data; try {data=await r.json();} catch {throw new Error(r.status===404?'当前服务不支持此功能，请使用完整网站服务。':'服务返回异常，请稍后重试。');}
-  if(!r.ok) throw new Error(typeof data.detail==='string'?data.detail:'请求未完成，请重试。'); return data;
+  const controller=new AbortController();
+  const abort=()=>controller.abort(options.signal?.reason);
+  options.signal?.addEventListener('abort',abort,{once:true});
+  if(options.signal?.aborted)abort();
+  let timedOut=false;
+  const timer=setTimeout(()=>{timedOut=true;controller.abort();},120_000);
+  try {
+    const r=await fetch(path,{...options,signal:controller.signal});
+    let data;
+    try {data=await r.json();} catch(error) {
+      if(controller.signal.aborted)throw error;
+      throw new Error(r.status===404?'当前服务不支持此功能，请使用完整网站服务。':'服务返回异常，请稍后重试。');
+    }
+    if(!r.ok)throw new Error(typeof data.detail==='string'?data.detail:'请求未完成，请重试。');
+    return data;
+  } catch(error) {
+    if(timedOut)throw new Error('服务响应超时。请先刷新素材库或“我的音乐”确认是否已保存，再重试。');
+    if(error instanceof TypeError)throw new Error('网络连接中断，请检查网络后重试。');
+    throw error;
+  } finally {
+    clearTimeout(timer);options.signal?.removeEventListener('abort',abort);
+  }
 }
 export async function upload(blob) {const form=new FormData();form.append('file',blob,'recording.wav');return api('/api/upload',{method:'POST',body:form});}
 export async function runJob(body, signal, onStatus) {

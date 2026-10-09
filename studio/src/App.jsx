@@ -3,7 +3,7 @@ import React,{useCallback,useEffect,useRef,useState} from 'react';
 import {WaveformPlaylistProvider} from '@waveform-playlist/browser';
 import {createClipFromSeconds,createTrack} from '@waveform-playlist/core';
 import {Limiter} from 'tone';
-import {context,decode,encodeWav,clock} from './audio';
+import {decode,encodeWav,clock} from './audio';
 import {startRecorder,recorderErrorMessage} from './recorder';
 import {readDraft,unpackDraft,clearDraft} from './drafts';
 import {api,route,runMusicJob} from './api';
@@ -85,9 +85,9 @@ export default function App(){
   }
   async function stopRecording(){if(!rec.current)return;const active=rec.current;rec.current=null;setRecording(false);setBusy('正在留下声音…');
     try{const buffer=await active.stop();await useBuffer(buffer,'此刻的声音');await saveRaw(buffer,'此刻的声音');setPromptSave(true);}catch(e){setError(e.message+'；声音仍在当前素材栏，可以重试保存。');}finally{setBusy('');}}
-  async function example(sample=window.SoundTraceDemo?.samples[0]){if(!sample)return;setBusy('正在打开演示原声…');setError('');try{await context().resume();const r=await fetch('/'+sample.audio);if(!r.ok)throw new Error('演示原声暂时不可用，请重试。');await useBuffer(await decode(await r.blob()),sample.title);setStyle(sample.style);setScene(sample.key==='rain'?'rainy-city':sample.key==='birds'?'spring-meadow':'autumn-lake');setDiary(prev=>({...prev,title:sample.title,notes:sample.hint}));}catch(e){setError(e.message);}finally{setBusy('');}}
+  async function example(sample=window.SoundTraceDemo?.samples[0]){if(!sample)return;setBusy('正在打开演示原声…');setError('');try{const r=await fetch('/'+sample.audio);if(!r.ok)throw new Error('演示原声暂时不可用，请重试。');await useBuffer(await decode(await r.blob()),sample.title);setStyle(sample.style);setScene(sample.key==='rain'?'rainy-city':sample.key==='birds'?'spring-meadow':'autumn-lake');setDiary(prev=>({...prev,title:sample.title,notes:sample.hint}));}catch(e){setError(e.message);}finally{setBusy('');}}
   async function restore(){setBusy('正在恢复草稿…');try{const saved=await unpackDraft(draft);setTracks(saved.tracks.filter(t=>!t.id.startsWith('variant-')));setSource(saved.tracks.find(t=>t.id==='field')?.clips[0]?.audioBuffer);setSourceName(saved.tracks.find(t=>t.id==='field')?.name||'此刻的声音');setStyle(saved.info.style||'ambient');setScene(saved.info.scene||'sea-window');setDiary(saved.info.diary||{...blankDiary});if(saved.info.memoryId){const entry=await api('/api/memories/'+encodeURIComponent(saved.info.memoryId)).catch(()=>null);setMemory(entry&&saved.info.sourceRef?{...entry,audio:saved.info.sourceRef}:entry);}setDraftInfo({...saved.info,draftMusic:saved.tracks.find(t=>t.id==='variant-draft'),aiMusic:saved.tracks.find(t=>t.id==='variant-ai')});setDraft(null);setPhase('editor');}catch{setError('草稿暂时无法恢复，请重试。');}finally{setBusy('');}}
-  async function newProject(){editor.current?.pause();abortJob.current?.abort();musicToken.current++;setPromptSave(false);setTracks([]);setSource(null);setMemory(null);setDiary({...blankDiary});setPhase('library');setDraftInfo(null);setEpoch(x=>x+1);setError('');history.replaceState(null,'',route(recordingEntry?'/capture':'/studio#rec'));await clearDraft().catch(()=>{});}
+  async function newProject(){editor.current?.pause();abortJob.current?.abort();musicToken.current++;setPromptSave(false);setTracks([]);setSource(null);setMemory(null);setDraft(null);setDiary({...blankDiary});setPhase('library');setDraftInfo(null);setEpoch(x=>x+1);setError('');history.replaceState(null,'',route(recordingEntry?'/capture':'/studio#rec'));await clearDraft().catch(()=>{});}
   return <>
     <header className="studio-header"><a className="brand" href={route('/')} aria-label="声迹首页"><span className="brand-mark">◉</span> 声迹 <small>SOUNDTRACE</small></a><a className="collection-link" href={route('/library')}>素材库 <span aria-hidden="true">↗</span></a><a className="collection-link" href={route('/album')}>我的音乐 <span aria-hidden="true">↗</span></a></header>
     <main id="rec" className={`studio-main ${tracks.length?'has-audio':''} phase-${phase} ${recordingEntry&&!source?'capture-entry':''} ${recording?'is-recording':''} ${micError?'mic-error':''}`}>
