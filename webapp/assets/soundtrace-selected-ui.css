@@ -2,8 +2,8 @@
    Desktop and mobile layouts are independently scoped at the shared breakpoint. */
 :root{--selected-blue:#00a8f0;--selected-yellow:#ffb800;--selected-ink:#111}
 body .st-account-dialog[data-surface=auth],body .st-account-dialog[data-surface=password],body .st-delete-dialog{color:#111;background:#fff;border:0!important;border-radius:18px!important;padding:28px 32px!important;width:min(440px,calc(100vw - 32px));max-height:92dvh;box-shadow:0 8px 40px #0000000d;font-family:var(--font-body,system-ui)}
-body .st-account-dialog[data-surface=auth]::backdrop{background:#ffffffed url('/assets/ui-selected-v3/auth-left.webp') no-repeat left bottom / min(20vw,280px) auto;backdrop-filter:blur(2px)}
-body .st-account-dialog[data-surface=auth]:before{content:'';position:fixed;right:0;bottom:0;width:min(19vw,300px);height:78vh;background:url('/assets/ui-selected-v3/auth-right.webp') no-repeat right bottom/contain;pointer-events:none;z-index:-1}
+body .st-account-dialog[data-surface=auth]::backdrop{background:#0006;backdrop-filter:blur(2px)}
+body .st-account-dialog[data-surface=auth]::before{content:none}
 body .st-account-dialog[data-surface=auth] h2{font:800 37px/1.45 var(--font-display,serif);white-space:pre-line;margin:32px 0 38px;padding:0;width:75%;position:relative;z-index:1}
 .auth-brand{width:85px;height:65px}.auth-illustration{position:absolute!important;right:0;top:80px;width:34%;height:auto;z-index:0}
 body .st-account-dialog[data-surface=auth] form,body .st-account-dialog[data-surface=password] form{position:relative}
@@ -167,7 +167,7 @@ body .st-dock a[aria-current=page]:not(:first-child) .st-dock-icon img{filter:in
 .st-community .community-tabs{top:auto!important;position:static!important;margin:0 0 8px;padding-top:0}
 .st-community .community-feed{position:relative;z-index:auto;background:#fff}
 .st-community .community-art,.st-community .community-art-right{z-index:0!important}
-.st-community .community-actions{width:100%;justify-content:flex-start!important;gap:22px!important;position:relative;padding-left:8px}
+.st-community .community-actions{width:100%;box-sizing:border-box;display:flex;flex-wrap:wrap;justify-content:flex-start!important;gap:12px 22px!important;position:relative;padding-left:8px}
 .st-community .community-actions .community-share{margin-left:auto}
 .st-community .community-action{flex-shrink:0}
 @media(min-width:761px){
@@ -209,16 +209,138 @@ body .st-dock a[aria-current=page]:not(:first-child) .st-dock-icon img{filter:in
  .modal[data-surface=profile] .avatar-upload-icon{display:block;width:22px;height:22px}
 }
 
-/* The restored home artwork already contains its primary entry. */
-.st-home .demo-start{display:none}
+/* Sound archive: scoped to management so login and password forms keep their layouts. */
+body .st-account-dialog[data-surface=management]{box-sizing:border-box;width:min(620px,calc(100vw - 32px));max-height:calc(100dvh - 48px);padding:32px;border:1px solid #dce5e8;border-radius:20px;background:#fff;box-shadow:0 24px 90px #173a5026;color:#19343e;font:14px/1.6 system-ui,sans-serif;scrollbar-width:thin;scrollbar-color:#cad9df transparent}
+body .st-account-dialog[data-surface=management] h2{font:700 26px/1.35 system-ui,sans-serif;letter-spacing:-.5px;background:none;padding:0;margin:0 44px 8px 0}
+body .st-account-dialog[data-surface=management] .st-account-close{position:absolute;right:20px;top:20px;float:none;display:grid;place-items:center;width:36px;min-width:36px;height:36px;min-height:36px;padding:0;border:0;border-radius:50%;background:#f3f6f7;color:#657880;font:400 24px/1 system-ui}
+body .st-account-dialog[data-surface=management] .st-account-intro{margin:0 0 22px;color:#7b8b92;font-size:13px}
+body .st-account-dialog[data-surface=management] .st-account-actions{align-items:center;gap:8px;margin:0;padding:0 0 24px;border-bottom:1px solid #e9eef0}
+body .st-account-dialog[data-surface=management] button:not(.st-account-close),body .st-account-dialog[data-surface=management] .st-account-actions a{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;min-height:36px;margin:0;padding:7px 12px;border:1px solid #dae5e9;border-radius:8px;background:#fff;color:#41606d;font:500 12px/1.5 system-ui;text-decoration:none;white-space:nowrap}
+body .st-account-dialog[data-surface=management] .st-account-actions a{background:#edf8fc;border-color:#edf8fc;color:#087fa6}
+body .st-account-dialog[data-surface=management] .st-account-section{font:600 13px/1.5 system-ui;letter-spacing:1px;color:#7b8b92;margin:22px 0 8px}
+body .st-account-dialog[data-surface=management] .st-account-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 16px;padding:16px 0;border-bottom:1px solid #edf1f3}
+body .st-account-dialog[data-surface=management] .st-account-row strong{font-size:14px;font-weight:600;margin:0;overflow-wrap:anywhere}
+body .st-account-dialog[data-surface=management] .st-account-row-actions{display:flex;gap:6px}
+body .st-account-dialog[data-surface=management] .st-account-row .st-account-remove{border-color:transparent;background:transparent;color:#a47b79;padding-inline:8px}
+body .st-account-dialog[data-surface=management] .st-account-row p{grid-column:1/-1;margin:0;color:#087fa6;font-size:12px}
+body .st-account-dialog[data-surface=management] .st-account-row p:empty{display:none}
+body .st-account-dialog[data-surface=management] .st-account-source{display:inline-block;margin-top:22px;font-size:12px;color:#87969c;text-decoration:none}
+body .st-account-dialog[data-surface=management] button:hover,body .st-account-dialog[data-surface=management] .st-account-actions a:hover{background:#edf6fa;border-color:#b8d6e2}
+body .st-account-dialog[data-surface=management] .st-account-remove:hover{background:#fff2f0;color:#ad4941;border-color:#f3d6d2}
+@media(max-width:480px){body .st-account-dialog[data-surface=management]{padding:24px 20px;max-height:calc(100dvh - 32px);border-radius:16px}body .st-account-dialog[data-surface=management] h2{font-size:23px}body .st-account-dialog[data-surface=management] .st-account-row{grid-template-columns:1fr;gap:10px}body .st-account-dialog[data-surface=management] .st-account-row-actions{justify-content:flex-start}body .st-account-dialog[data-surface=management] .st-account-close{top:16px;right:14px}}
+.sound-library .library-sidebar .error{display:flex;align-items:center;gap:16px;line-height:1.6;overflow-wrap:anywhere}
+.sound-library .library-sidebar .error button{flex:0 0 auto;white-space:nowrap;min-width:64px;min-height:44px;padding:8px 12px;font-size:14px;line-height:1.4}
 
-/* Keep sample choices compact within the restored artwork layout. */
-.demo-samples{margin:20px auto;max-width:1000px;padding:0 20px}
-.demo-samples .demo-flow-note{display:none}
-.demo-samples h2{font-size:22px;margin:0 0 14px}
-.demo-sample-grid{gap:12px}
-.demo-sample-grid button{padding:16px;min-height:0}
-.demo-samples>p:last-child{font-size:12px;margin:12px 0;color:#687c86}
-@media(max-width:760px){.demo-sample-grid{grid-template-columns:1fr}.demo-sample-grid button{padding:14px}.demo-samples h2{font-size:19px}}
+/* Keep the demo choices and import action together, without oversized cards. */
+[data-demo] .studio-main:has(.demo-samples){max-width:1040px;min-height:0;padding-bottom:24px;gap:0}
+[data-demo] .studio-main:has(.demo-samples) .studio-heading{margin-bottom:12px;min-height:0}
+[data-demo] .studio-main:has(.demo-samples) .creation-steps{margin-bottom:16px;padding:10px 0}
+[data-demo] .demo-samples{padding:8px 0 12px}
+[data-demo] .demo-samples h2{font-size:24px;line-height:1.4;margin:0 0 14px}
+[data-demo] .demo-samples>.demo-flow-note{display:none}
+[data-demo] .demo-sample-grid{gap:12px;margin:14px 0}
+[data-demo] .demo-sample-grid button{padding:16px;gap:8px;border-radius:12px;min-height:0}
+[data-demo] .demo-sample-icon{font-size:26px;line-height:1.1}
+[data-demo] .demo-sample-grid strong{font-size:17px;line-height:1.4}
+[data-demo] .demo-sample-grid small{font-size:12px;line-height:1.5}
+[data-demo] .demo-sample-grid button>span:last-child{font-size:12px}
+[data-demo] .demo-samples>p:last-child{margin:8px 0 0;font-size:12px}
+[data-demo] .studio-main .audio-import-scene{padding:12px 0;margin:0;min-height:0;border-top:1px solid #dce8ee;display:block}
+[data-demo] .audio-import-actions{justify-content:flex-start;gap:12px;flex-wrap:wrap}
+[data-demo] .audio-import-actions .primary{min-height:44px;min-width:0;padding:10px 22px;font-size:15px}
+[data-demo] .audio-import-actions>.quiet{display:none}
+@media(min-width:761px){
+ body[data-demo][data-st-page=studio]>.st-dock{position:absolute!important}
+ body[data-demo][data-st-page=studio] .studio-footer{max-width:1040px;margin:0 auto;padding-top:12px}
+}
+@media(max-width:600px){
+ [data-demo] .demo-samples h2{font-size:21px}
+ [data-demo] .demo-sample-grid button{padding:12px;gap:5px}
+ [data-demo] .demo-sample-grid{margin:10px 0;gap:8px}
+}
 
-.home-samples{display:inline-block;margin-top:14px;color:#087da7;font-size:14px;text-decoration:none}
+/* Material selection follows one vertical reading order on every screen. */
+body .studio-main.phase-library:has(.sound-library){max-width:900px;width:100%;padding:24px clamp(20px,4vw,40px)}
+body .sound-library{display:flex;flex-direction:column;gap:24px;min-height:0}
+body .sound-library .library-current{order:0;display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:0;border:0}
+body .sound-library .material-empty{padding:8px 0 16px}
+body .sound-library .library-current h3{font-size:26px;margin:0}
+body .sound-library .library-current p{font-size:14px;line-height:1.7;margin:8px 0}
+body .sound-library .library-sound-mark{display:none}
+body .sound-library .library-current-actions{justify-content:flex-start;margin:0}
+body .sound-library .library-sidebar{order:1;border:0;border-top:1px solid #dce8ee;padding:20px 0 0;margin:0;min-width:0}
+body .sound-library .library-tools{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 20px}
+body .sound-library .library-tools .primary{min-height:44px;font-size:15px;padding:10px 20px}
+body .sound-library .library-tools .quiet{font-size:14px}
+body .sound-library .library-heading{flex-direction:row;align-items:baseline;justify-content:space-between;margin:12px 0;gap:12px}
+body .sound-library .library-heading h2{font-size:20px;color:#111}
+body .sound-library .library-list{display:flex;flex-direction:column;max-height:none}
+body .sound-library .library-next{order:2;display:flex;flex-wrap:wrap;gap:12px;border:0;border-top:1px solid #dce8ee;padding:16px 0 0}
+body .sound-library .library-next>.raster-frame,body .sound-library .library-next>h2,body .sound-library .library-next>p,body .sound-library .library-bottom-art{display:none}
+body .sound-library .library-next a{margin:0;font-size:14px}
+
+.material-entry-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:16px 0}.material-entry-actions .outline{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 22px;border:1px solid #a6c8d7;border-radius:999px;font-size:15px;text-decoration:none;color:#17657f}
+
+/* Phone controls stay inside the visual viewport and above the home indicator. */
+@media(max-width:760px){
+ body .st-dock{box-sizing:border-box;width:100%;max-width:100vw;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))!important}
+ body[data-st-page=studio]{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+ body .st-account-dialog{box-sizing:border-box;max-width:calc(100vw - 24px)!important;max-height:calc(100dvh - 24px);overflow-x:hidden}
+ body .st-account-dialog[data-surface=auth],body .st-account-dialog[data-surface=password]{padding:24px 20px!important}
+ body .st-account-dialog input,body .studio-main input,body .studio-main textarea,body .studio-main select{box-sizing:border-box;max-width:100%;font-size:16px!important}
+ body .studio-main .save-dialog{box-sizing:border-box;max-width:100vw!important;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))!important}
+ body .studio-main .save-dialog .save-answer{padding-right:0}
+ body .studio-main .save-dialog .save-art{display:none}
+ body .creation-steps li{min-width:0}
+ body .library-current-actions{flex-direction:column;align-items:stretch}
+ body .library-current-actions button{width:100%;white-space:normal}
+ body .material-entry-actions{align-items:stretch;flex-direction:column}
+ body .material-entry-actions>*{width:100%;box-sizing:border-box}
+ body .material-downloads{overflow-wrap:anywhere}
+ body .studio-main .error{align-items:flex-start;overflow-wrap:anywhere}
+ body .studio-main .error button{flex-shrink:0;white-space:nowrap}
+ body .studio-main .workbench .editor-back,body .studio-main .workbench .quiet{min-height:44px}
+ body .demo-sample-grid button{min-height:100px}
+}
+@media(max-width:360px){
+ body .creation-steps ol{gap:4px}
+ body .creation-steps li{font-size:11px;gap:3px}
+ body .st-mode-bar{gap:4px;padding-inline:8px}
+ body .st-mode-bar>a{font-size:11px;padding-inline:6px}
+ body .st-mode-bar .demo-mode-strip summary{font-size:11px}
+}
+
+@media(max-width:760px){body .studio-heading .library-header-art{display:none}body .studio-heading>div{min-width:0}body .studio-heading h1{overflow-wrap:anywhere}}
+
+/* Import feedback remains visible even when the file picker was opened below the fold. */
+body .studio-main>.notice:not(:empty),body .studio-main>.error{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;box-sizing:border-box;width:max-content;max-width:calc(100vw - 32px);padding:12px 18px;box-shadow:0 6px 24px #173a5020;border-radius:12px;font-size:14px;line-height:1.6}
+body .studio-main>.notice:not(:empty){background:#edf8fc;color:#155978;border:1px solid #acd4e5}
+@media(max-width:760px){body .studio-main>.notice:not(:empty),body .studio-main>.error{bottom:calc(88px + env(safe-area-inset-bottom,0px));width:calc(100vw - 32px)}}
+
+/* Compact phone surfaces: content determines height instead of desktop offsets. */
+@media(max-width:760px){
+ body.st-album .album-intro{position:relative;inset:auto;height:auto;width:calc(100% - 32px);margin:8px auto 16px;display:flex;flex-direction:column;gap:12px}
+ body.st-album .album-title-block{width:100%;min-width:0}
+ body.st-album .music-library-help{margin:0 0 12px;font-size:13px;line-height:1.6;color:#697b83}
+ body.st-album .profile-strip{width:100%;box-sizing:border-box;gap:10px}
+ body.st-album .profile-ava{width:40px;height:40px;min-width:40px}
+ body.st-album .profile-strip-info strong{font-size:16px;overflow-wrap:anywhere}
+ body.st-album .profile-strip-info small{font-size:11px;white-space:normal}
+ body.st-album .profile-checkin-mini{min-height:40px;padding:6px 12px;flex-shrink:0}
+ body.st-album .album-intro .stage-entry,body.st-album .album-intro .stage-entry:hover{position:static;transform:none!important;width:auto;min-height:40px;padding:8px 18px!important;font-size:15px!important;align-self:flex-start}
+ body.st-album .scene-position{position:relative;inset:auto;width:calc(100% - 32px);max-width:none;margin:0 auto 8px;padding:0;gap:6px 10px}
+ body.st-album .scene-position #sceneDescription{font-size:22px;line-height:1.3}
+ body.st-album .scene-position #sceneIndex{font-size:12px}
+ body.st-album .scene-progress{flex-basis:auto;margin:0 0 0 auto;gap:7px}
+ body .st-account-dialog[data-surface=auth]{width:380px;height:fit-content;max-height:calc(100dvh - 24px);margin:auto;inset:0;border-radius:16px!important;padding:20px!important;scrollbar-width:thin}
+ body .st-account-dialog[data-surface=auth] .auth-brand{width:64px;height:44px}
+ body .st-account-dialog[data-surface=auth] .auth-illustration{display:none}
+ body .st-account-dialog[data-surface=auth] h2{width:auto;font-size:26px!important;line-height:1.3;white-space:normal;margin:18px 0!important}
+ body .st-account-dialog[data-surface=auth] label{font-size:14px;margin:12px 0!important}
+ body .st-account-dialog[data-surface=auth] input{min-height:46px;padding:10px 46px 10px 12px}
+ body .st-account-dialog[data-surface=auth] .st-account-actions{gap:10px;margin-top:12px!important}
+ body .st-account-dialog[data-surface=auth] button:not(.password-reveal):not(.st-account-close){min-height:44px;font-size:15px}
+ body .st-account-dialog[data-surface=auth] .st-account-error{min-height:0;margin:8px 0;font-size:12px}
+ body .st-account-dialog[data-surface=auth] .st-account-error:empty{display:none}
+ body .st-account-dialog[data-surface=auth] .st-account-close{width:36px;height:36px;min-height:36px;top:14px;right:14px}
+}

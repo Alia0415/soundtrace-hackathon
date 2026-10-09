@@ -88,14 +88,16 @@
   };
   async function accountPanel() {
     shell('你的声音档案', 'management');
+    const intro = document.createElement('p'); intro.className = 'st-account-intro'; intro.textContent = '管理个人资料，整理值得留下的声音。'; dialog.append(intro);
     const actions = document.createElement('div'); actions.className = 'st-account-actions';
     const profile = document.createElement('a'); profile.href = '/album?profile=1'; profile.textContent = '编辑个人资料';
     const logout = document.createElement('button'); logout.textContent = '退出登录';
     logout.onclick = async () => {await nativeFetch('/api/auth/logout', {method:'POST'});localStorage.removeItem('soundtrace_likes');location.reload();};
     const change = document.createElement('button'); change.textContent = '修改密码'; change.onclick = passwordForm;
     actions.append(profile, change, logout); dialog.append(actions);
-    const source = document.createElement('a');source.href='/source';source.textContent='开源源码与许可';source.style.display='block';source.style.marginTop='16px';dialog.append(source);
-    const list = document.createElement('div'); list.textContent = '正在读取记忆…'; dialog.append(list);
+    const section = document.createElement('h3'); section.className = 'st-account-section'; section.textContent = '我的声音'; dialog.append(section);
+    const list = document.createElement('div'); list.className = 'st-account-list'; list.textContent = '正在读取记忆…'; dialog.append(list);
+    const source = document.createElement('a');source.href='/source';source.textContent='开源源码与许可 ↗';source.className='st-account-source';dialog.append(source);
     if (!dialog.open) dialog.showModal();
     try {
       const result = await window.fetch('/api/memories').then(r => r.json()); list.replaceChildren();
@@ -104,7 +106,7 @@
         const row = document.createElement('div'); row.className = 'st-account-row';
         const title = document.createElement('strong'); title.textContent = memory.title;
         const publish = document.createElement('button'); publish.textContent = '发布到社区';
-        const remove = document.createElement('button'); remove.textContent = '删除记忆';
+        const remove = document.createElement('button'); remove.textContent = '删除'; remove.className = 'st-account-remove'; remove.setAttribute('aria-label', '删除记忆：' + memory.title);
         const status = document.createElement('p'); status.setAttribute('role', 'status');
         publish.onclick = async () => {
           publish.disabled = true;
@@ -117,7 +119,8 @@
           try {const r = await window.fetch(`/api/memories/${memory.id}`, {method:'DELETE'});if(!r.ok)throw new Error('删除失败');row.remove();window.dispatchEvent(new Event('soundtrace-content-change'));}
           catch(e){status.textContent = e.message;remove.disabled = false;}
         };
-        row.append(title, publish, remove, status); list.append(row);
+        const controls = document.createElement('div'); controls.className = 'st-account-row-actions'; controls.append(publish, remove);
+        row.append(title, controls, status); list.append(row);
       }
     } catch { list.textContent = '暂时无法读取记忆，请重新打开。'; }
   }
