@@ -1,0 +1,88 @@
+/* Home-only layout: live text and explicit destinations keep the artwork decorative. */
+body.st-home-clear{padding-bottom:32px!important}
+.st-home-clear .home-header{max-width:1240px;margin:auto;height:96px;padding:16px 40px}
+.st-home-clear main{max-width:1160px;padding:0 32px!important}
+.moment-hero{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;padding:32px 0 28px}
+.moment-eyebrow{margin:0 0 18px;font-size:12px;letter-spacing:2px;color:#50707f;font-weight:600}
+.moment-copy h1{font-size:clamp(44px,4.5vw,66px);line-height:1.23;margin:0 0 22px;font-weight:800}
+.moment-intro{font-size:16px;color:#555;line-height:1.9;margin:0 0 28px}
+.moment-record{display:inline-flex;align-items:center;gap:12px;background:#00a8f0;border:2px solid #00a8f0;border-radius:30px 27px 30px 25px;min-height:58px;padding:12px 25px;color:#072e40;font-size:18px;font-weight:700;transition:background .15s}
+.moment-record:hover{background:#61ccfa}
+.moment-record svg{width:25px;height:27px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.moment-record>span{margin-left:16px}
+.moment-hint{font-size:12px;color:#666;margin:12px 0 26px}
+.moment-demo{display:flex;align-items:center;gap:12px;width:fit-content;min-height:60px;padding:8px 0}
+.moment-play{border:1.5px solid #111;border-radius:50%;width:39px;height:39px;display:grid;place-items:center;font-size:13px;padding-left:2px}
+.moment-demo small,.moment-demo strong{display:block}
+.moment-demo small{font-size:12px;color:#666;margin-bottom:2px}
+.moment-demo strong{font-size:14px;font-weight:600}
+.moment-demo-arrow{margin-left:22px;color:#0079ad}
+.moment-demo:hover strong{text-decoration:underline;text-underline-offset:4px}
+.moment-art{margin:0;min-width:0}
+.moment-art img{display:block;width:100%;max-height:470px;object-fit:contain}
+.moment-art figcaption{text-align:center;font-size:12px;color:#666;margin:8px 0 0}
+.moment-process{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;border-block:1px solid #dedede;padding:24px 0}
+.moment-process>div{display:flex;align-items:flex-start;gap:14px}
+.moment-process>div>span{font:italic 25px Georgia,serif;color:#0079ad;padding-top:4px}
+.moment-process p{margin:0}
+.moment-process strong,.moment-process small{display:block}
+.moment-process strong{font-size:14px;font-weight:600;margin-bottom:4px}
+.moment-process small{font-size:12px;color:#666;line-height:1.7}
+.moment-discover{padding:28px 0 12px}
+.moment-section-heading{display:flex;align-items:baseline;gap:22px;margin-bottom:18px}
+.moment-section-heading h2{font-family:var(--font-body);font-size:19px;margin:0}
+.moment-section-heading p{font-size:12px;color:#666;margin:0}
+.moment-destinations{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.moment-destinations>a{display:flex;align-items:center;gap:14px;border:1px solid #dedede;border-radius:14px;padding:20px 18px;transition:border-color .15s,background .15s}
+.moment-destinations>a:hover{border-color:#00a8f0;background:#f3fbff}
+.moment-destinations img{width:36px;height:36px;object-fit:contain}
+.moment-destinations a>div{flex:1}
+.moment-destinations h3{font-size:16px;font-weight:600;margin:0 0 6px;display:flex;justify-content:space-between;gap:8px}
+.moment-destinations h3 span{color:#0079ad;font-size:16px}
+.moment-destinations p{font-size:12px;color:#666;margin:0}
+@media(max-width:900px) and (min-width:761px){.moment-hero{gap:20px}.moment-destinations>a{padding:16px 12px;gap:8px}.moment-destinations img{width:28px;height:28px}}
+@media(max-width:760px){
+ body.st-home-clear{padding-bottom:100px!important}
+ .st-home-clear .home-header{height:76px;padding:10px 24px}
+ .st-home-clear main{padding:0 24px!important}
+ .moment-hero{grid-template-columns:1fr;gap:16px;padding:24px 0}
+ .moment-eyebrow{font-size:11px;margin-bottom:14px}
+ .moment-copy h1{font-size:44px;margin-bottom:18px}
+ .moment-intro{font-size:15px;margin-bottom:22px}
+ .moment-record{min-height:56px;font-size:17px}
+ .moment-hint{margin-bottom:16px}
+ .moment-art{display:none}
+ .moment-process{grid-template-columns:1fr;gap:18px;padding:22px 0}
+ .moment-process>div{gap:18px}
+ .moment-process>div>span{font-size:22px}
+ .moment-process strong{font-size:14px;margin:0 0 2px}
+ .moment-section-heading{display:block}
+ .moment-section-heading p{margin-top:8px}
+ .moment-destinations{grid-template-columns:1fr;gap:12px}
+ .moment-destinations>a{padding:18px}
+}
+@media(prefers-reduced-motion:reduce){.moment-record,.moment-destinations>a{transition:none}}
+
+/* One coordinate system keeps animated ink aligned with the original illustration. */
+.moment-animation{position:relative;width:min(100%,465px);margin:auto;aspect-ratio:890/900}
+.moment-animation>img{width:100%;height:100%;max-height:none;object-fit:contain}
+.moment-motion{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sound-travel{stroke:#0079ad;stroke-width:5;stroke-linecap:round;stroke-dasharray:55 720;animation:sound-travel 4s linear infinite}
+.sea-glints{animation:sea-glints 2.8s ease-in-out infinite}
+.sea-ripple{transform-box:fill-box;transform-origin:center;animation:sea-ripple 2.6s ease-out infinite}
+.ripple-two{animation-delay:-1.4s}.ripple-three{animation-delay:-2.7s}
+.sun-twinkle{transform-box:fill-box;transform-origin:center;animation:sun-twinkle 2.4s ease-in-out infinite}
+.twinkle-late{animation-delay:-1.2s}
+.floating-note{color:#009ee5}
+.note-drift{opacity:0;animation:note-float 4.8s ease-in-out infinite}
+.note-two{color:#e9aa00}.note-two .note-drift{animation-delay:-1.6s}
+.note-three .note-drift{animation-delay:-3.2s}
+@keyframes note-float{0%{opacity:0;transform:translate(0,8px) rotate(-12deg) scale(.8)}18%{opacity:.95}55%{opacity:1;transform:translate(18px,-38px) rotate(9deg) scale(1)}100%{opacity:0;transform:translate(42px,-90px) rotate(-6deg) scale(.9)}}
+.moment-art[data-motion=paused] .moment-motion *{animation-play-state:paused!important}
+.moment-art[data-motion=paused] .moment-motion{visibility:hidden}
+@keyframes sound-travel{to{stroke-dashoffset:-775}}
+@keyframes sea-glints{0%,100%{transform:translateX(-14px);opacity:.3}50%{transform:translateX(14px);opacity:1}}
+@keyframes sea-ripple{0%{transform:translate(-12px,-4px) scale(.7);opacity:0}25%,55%{opacity:1}100%{transform:translate(16px,8px) scale(1.5);opacity:0}}
+@keyframes sun-twinkle{0%,100%{transform:scale(.8) rotate(-9deg);opacity:.25}50%{transform:scale(1.14) rotate(5deg);opacity:1}}
+@media(max-width:760px){.moment-art{display:block;width:100%}.moment-animation{max-width:320px}.moment-art figcaption{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.moment-art:not([data-motion=playing]) .moment-motion *{animation:none}}

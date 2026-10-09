@@ -1,56 +1,81 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<script src="/assets/soundtrace-raster.js?v=8" defer></script>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>声迹 · 把此刻留在声音里</title>
   <script src="/assets/soundtrace-shell.js?v=5" defer></script>
-<link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
-<link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
-<link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=4">
+  <link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
+  <link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
+  <link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=4">
+  <link rel="stylesheet" href="/assets/soundtrace-home.css?v=4">
 </head>
-<body class="st-home st-home-calm">
+<body class="st-home st-home-clear">
   <header class="home-header">
     <a class="home-brand" href="/" aria-label="声迹首页">声迹<span>SoundTrace</span></a>
   </header>
   <main>
-    <section class="home-scene" aria-labelledby="homeTitle" id="homeScene">
-      <div class="home-landscape" aria-hidden="true"><span class="home-art-desktop" data-raster="home-desktop"></span><span class="home-art-mobile" data-raster="home-mobile"></span></div>
-      <div class="home-story">
+    <section class="moment-hero" aria-labelledby="homeTitle">
+      <div class="moment-copy">
+        <p class="moment-eyebrow">声迹 SOUNDTRACE · 声音记忆</p>
         <h1 id="homeTitle">此刻，<br>听见生活。</h1>
-        <a class="home-record original-art-button" href="/capture" aria-label="录一段声音"><span class="home-button-desktop" data-raster="home-record-desktop"></span><span class="home-button-mobile" data-raster="home-record-mobile"></span><span class="sr-only">录一段声音</span></a>
+        <p class="moment-intro">录下身边的声音，制作音乐日记，<br class="desktop-break">把值得记住的瞬间收藏起来。</p>
+        <a class="moment-record" href="/capture"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></svg>开始记录声音 <span aria-hidden="true">↗</span></a>
+        <p class="moment-hint">支持麦克风录音，也可以导入已有音频</p>
+        <a class="moment-demo" href="/album?scene=sea-window&amp;listen=1&amp;demo=1">
+          <span class="moment-play" aria-hidden="true">▶</span>
+          <span><small>想先体验一下？</small><strong>试听示例 · 海港午后</strong></span>
+          <span class="moment-demo-arrow" aria-hidden="true">↗</span>
+        </a>
       </div>
-      <a class="home-listen" href="/album?scene=sea-window&amp;listen=1&amp;demo=1" aria-label="试听海港午后的示例声音">
-        <span class="home-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7z"/></svg></span>
-        <span><strong>海港午后</strong><small>听一段示例声音</small></span>
-      </a>
-      <a class="home-explore original-art-button" href="/map" aria-label="声音地图"><span class="home-button-desktop" data-raster="home-map-desktop"></span><span class="home-button-mobile" data-raster="home-map-mobile"></span><span class="sr-only">声音地图</span></a>
+      <figure class="moment-art" data-motion="paused">
+        <div class="moment-animation">
+        <img src="/assets/ui-selected-v3/home-desktop.webp" alt="手绘纸杯传声筒连接海边风景，桌上摆着唱片和磁带" fetchpriority="high">
+        <svg class="moment-motion" viewBox="0 0 890 900" fill="none" aria-hidden="true">
+          <path class="sound-travel" d="M257 426 C330 396 381 403 397 464 C413 518 352 495 382 475 C408 449 458 542 562 539 C620 539 663 515 625 493 C601 475 636 454 668 471 C700 486 717 502 746 496"/>
+          <g class="sea-glints" stroke="#fff" stroke-width="6" stroke-linecap="round">
+            <path d="M533 395h45m64 8h47m-98 15h36m42 14h49"/>
+            <path d="M607 386h28m64 28h30m-174 31h28"/>
+          </g>
+          <g stroke="#00a8f0" stroke-width="4" stroke-linecap="round">
+            <path class="sea-ripple ripple-one" d="M566 515q29 10 47-6"/>
+            <path class="sea-ripple ripple-two" d="M646 534q36-11 24-24"/>
+            <path class="sea-ripple ripple-three" d="M439 444h32m46 17h26"/>
+          </g>
+          <path d="M42 308 84 344 115 319 94 252 73 256 92 309 54 300Z M670 67 709 98 739 74 719 23 698 26 711 65 682 60Z" fill="white"/>
+          <g class="sun-twinkle" stroke="#ffba16" stroke-width="6" stroke-linecap="round">
+            <path d="m50 314 30 22m6-71 20 52"/>
+          </g>
+          <g class="sun-twinkle twinkle-late" stroke="#ffba16" stroke-width="6" stroke-linecap="round">
+            <path d="m680 71 27 17m2-54 18 34"/>
+          </g>
+          <g class="floating-note note-one" transform="translate(320 398)">
+            <g class="note-drift"><ellipse cx="0" cy="0" rx="9" ry="6" transform="rotate(-20)" fill="currentColor"/><path d="M8-2v-32q17 3 15 15" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></g>
+          </g>
+          <g class="floating-note note-two" transform="translate(437 445)">
+            <g class="note-drift"><ellipse cx="0" cy="0" rx="9" ry="6" transform="rotate(-20)" fill="currentColor"/><ellipse cx="27" cy="-7" rx="9" ry="6" transform="rotate(-20 27 -7)" fill="currentColor"/><path d="M8-2v-30l27-7v30M8-25l27-7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+          </g>
+          <g class="floating-note note-three" transform="translate(580 514)">
+            <g class="note-drift"><ellipse cx="0" cy="0" rx="9" ry="6" transform="rotate(-20)" fill="currentColor"/><path d="M8-2v-32q17 3 15 15" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></g>
+          </g>
+        </svg>
+        </div>
+        <figcaption>让风声、海浪声，成为你的下一段记忆。</figcaption>
+      </figure>
+    </section>
+    <section class="moment-process" aria-label="记录声音的三个步骤">
+      <div><span>01</span><p><strong>采集声音</strong><small>录音或导入，留下此刻的原声</small></p></div>
+      <div><span>02</span><p><strong>制作音乐日记</strong><small>在工作台编辑声音、搭配音乐</small></p></div>
+      <div><span>03</span><p><strong>收藏与分享</strong><small>放进收藏间，也可以分享到社区</small></p></div>
+    </section>
+    <section class="moment-discover" aria-labelledby="discoverTitle">
+      <div class="moment-section-heading"><h2 id="discoverTitle">从这里，继续听见</h2><p>探索别处的声音，或重温自己的记忆。</p></div>
+      <div class="moment-destinations">
+        <a href="/map"><img src="/assets/ui-selected-v3/nav-map.webp" alt=""><div><h3>声音地图 <span aria-hidden="true">↗</span></h3><p>跟着地点，发现声音里的风景</p></div></a>
+        <a href="/community"><img src="/assets/ui-selected-v3/nav-community.webp" alt=""><div><h3>声音社区 <span aria-hidden="true">↗</span></h3><p>听听大家分享的日常与灵感</p></div></a>
+        <a href="/album"><img src="/assets/ui-selected-v3/nav-album.webp" alt=""><div><h3>我的收藏 <span aria-hidden="true">↗</span></h3><p>重温保存的声音与音乐日记</p></div></a>
+      </div>
     </section>
   </main>
-  <script>
-    // 手机版：此刻页双指捏合（缩放）即可进入声音地图
-    (() => {
-      const scene = document.getElementById('homeScene');
-      if (!scene) return;
-      let base = 0, active = false;
-      scene.addEventListener('touchstart', e => {
-        if (e.touches.length === 2) {
-          const [a, b] = e.touches;
-          base = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-          active = true;
-        }
-      }, { passive: true });
-      scene.addEventListener('touchmove', e => {
-        if (!active || e.touches.length !== 2) return;
-        const [a, b] = e.touches;
-        const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-        if (base && Math.abs(dist - base) / base > 0.25) {
-          active = false;
-          location.href = window.SoundTraceRoute?.('/map') || '/map';
-        }
-      }, { passive: true });
-      scene.addEventListener('touchend', () => { active = false; }, { passive: true });
-    })();
-  </script>
+  <script src="/assets/soundtrace-home.js?v=2" defer></script>
 </body>
 </html>
