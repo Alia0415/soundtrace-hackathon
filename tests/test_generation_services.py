@@ -79,10 +79,10 @@ class GenerationServices(unittest.TestCase):
             self.assertIsNone(alice.get('/api/memories/'+mid).json()['music_audio'])
 
     def test_map_config_keeps_security_code_private_and_demo_entry_is_scoped(self):
-        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'SOUNDTRACE_AMAP_KEY':'public-key','SOUNDTRACE_AMAP_SECURITY_CODE':'private-security'}):
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(os.environ,{'SOUNDTRACE_TENCENT_MAP_KEY':'private-map-key','SOUNDTRACE_TENCENT_MAP_SERVICE_KEY':'private-service-key'}):
             client=TestClient(create_app(tmp))
-            config=client.get('/api/map/config');self.assertTrue(config.json()['enabled']);self.assertNotIn('private-security',config.text)
-            self.assertEqual(client.get('/_AMapService/arbitrary-path').status_code,404)
+            config=client.get('/api/map/config');self.assertTrue(config.json()['enabled']);self.assertEqual(config.json()['provider'],'tencent');self.assertNotIn('private-map-key',config.text);self.assertNotIn('private-service-key',config.text)
+            self.assertEqual(client.get('/_TMapService/arbitrary-path').status_code,404)
             self.assertIn('soundtrace-demo.js',client.get('/demo/album').text)
             self.assertNotIn('soundtrace-demo.js',client.get('/album').text)
             self.assertIn('href="/demo"',client.get('/').text)

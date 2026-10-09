@@ -13,7 +13,7 @@
  $('mapMode').textContent=demo?'示例足迹':'我的足迹';$('footprintCount').textContent=items.length+' 段声音';
  const located=items.filter(m=>m.lat!=null&&m.lng!=null&&Number.isFinite(Number(m.lat))&&Number.isFinite(Number(m.lng)));
  const mobile=matchMedia('(max-width:760px)').matches;
- let map=null,converted=new Map();
+ let map=null,converted=new Map(),MemoryMarker;
  if(demo){
   map=L.map('geoMap',{crs:L.CRS.Simple,minZoom:-4,maxZoom:3,zoomSnap:0,zoomControl:false,attributionControl:false});L.control.zoom({position:'topleft'}).addTo(map);
   const bounds=mobile?[[0,0],[1448,1086]]:[[0,0],[1086,1448]];
@@ -23,17 +23,38 @@
  }else{
   try{
     const response=await fetch('/api/map/config');if(!response.ok)throw Error('无法读取地图配置');const config=await response.json();
-    if(!config.enabled)throw Error('真实地图待启用：需要配置高德地图 Key 与安全密钥');
-    window._AMapSecurityConfig={serviceHost:location.origin+config.service_host};
-    await new Promise((resolve,reject)=>{if(window.AMap){resolve();return;}const s=document.createElement('script');s.src='https://webapi.amap.com/maps?v=2.0&key='+encodeURIComponent(config.key);s.onload=resolve;s.onerror=()=>reject(Error('高德地图加载失败，请检查网络与域名白名单'));document.head.append(s);});
-    map=new AMap.Map('geoMap',{zoom:4,center:[104.1,35.8],viewMode:'2D',mapStyle:config.style,features:['bg','road','building'],showLabel:false});
-    AMap.plugin('AMap.ToolBar',()=>map.addControl(new AMap.ToolBar({position:'LT'})));
+    if(!config.enabled)throw Error('真实地图待启用：需要配置腾讯地图 Key');
+    window._TMapSecurityConfig={serviceHost:location.origin+config.service_host};
+    await new Promise((resolve,reject)=>{
+      if(window.TMap?.Map){resolve();return;}
+      const script=document.createElement('script');
+      const done=error=>{clearTimeout(timer);delete window.soundtraceTencentReady;error?reject(error):resolve();};
+      const timer=setTimeout(()=>done(Error('腾讯地图加载超时，请检查网络与域名白名单')),20000);
+      window.soundtraceTencentReady=()=>done();
+      script.src='https://map.qq.com/api/gljs?v=1&callback=soundtraceTencentReady';
+      script.onerror=()=>done(Error('腾讯地图加载失败，请检查网络与域名白名单'));document.head.append(script);
+    });
     if(located.length){
-      for(let start=0;start<located.length;start+=40){const chunk=located.slice(start,start+40);const points=await new Promise((resolve,reject)=>AMap.convertFrom(chunk.map(m=>[Number(m.lng),Number(m.lat)]),'gps',(status,result)=>{if(status==='complete')resolve(result.locations);else reject(Error('位置转换失败，足迹仍保留在列表中'));}));chunk.forEach((m,i)=>converted.set(m.id,points[i]));}
+      for(let start=0;start<located.length;start+=40){
+        const chunk=located.slice(start,start+40);
+        const response=await fetch('/api/map/coordinates',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({locations:chunk.map(m=>[Number(m.lat),Number(m.lng)])})});
+        const result=await response.json();
+        if(!response.ok)throw Error(result.detail||'位置转换失败，足迹仍保留在列表中');
+        if(!Array.isArray(result.locations)||result.locations.length!==chunk.length)throw Error('位置转换结果不完整，足迹仍保留在列表中');
+        chunk.forEach((m,i)=>converted.set(m.id,new TMap.LatLng(result.locations[i].lat,result.locations[i].lng)));
+      }
     }
-    $('atlasCaption').textContent='高德地图 · 我的声音足迹';
+    map=new TMap.Map('geoMap',{zoom:4,center:new TMap.LatLng(35.8,104.1),viewMode:'2D',...(config.style?{mapStyleId:config.style}:{})});
+    MemoryMarker=class extends TMap.DOMOverlay{
+      onInit(options){this.position=options.position;this.pin=options.pin;}
+      createDOM(){return this.pin;}
+      updateDOM(){const p=this.getMap().projectToContainer(this.position);this.pin.style.cssText=`position:absolute;left:${p.x}px;top:${p.y}px;transform:translate(-32px,-72px)`;}
+      getContent(){return this.pin;}
+      onDestroy(){this.pin.onclick=null;this.pin.onkeydown=null;}
+    };
+    $('atlasCaption').textContent='腾讯地图 · 我的声音足迹';
   }catch(error){
-    $('mapMode').textContent='我的足迹';const message=make('div','map-service-state');message.append(make('strong','',error.message));const retry=make('button','','重试连接');retry.onclick=()=>location.reload();const preview=make('a','','看看演示地图 ↗');preview.href='/demo/map';message.append(retry,preview);$('geoMap').append(message);$('atlasCaption').textContent='你的足迹数据仍保留在右侧列表';
+    map?.destroy();map=null;converted.clear();$('mapMode').textContent='我的足迹';const message=make('div','map-service-state');message.append(make('strong','',error.message));const retry=make('button','','重试连接');retry.onclick=()=>location.reload();const preview=make('a','','看看演示地图 ↗');preview.href='/demo/map';message.append(retry,preview);$('geoMap').replaceChildren(message);$('atlasCaption').textContent='你的足迹数据仍保留在右侧列表';
   }
  }
  const markers=new Map();
@@ -64,12 +85,12 @@
   if(map&&located.includes(m)&&(demo||converted.has(m.id))){
    const pin=make('div','scene-orb');pin.append(picture(m));let marker;
    if(demo){const icon=L.divIcon({className:'atlas-pin',html:pin.outerHTML,iconSize:[64,76],iconAnchor:[32,72]});marker=L.marker(displayPoint(m),{icon,title:m.title,keyboard:true}).addTo(map).on('click',()=>select(m));}
-   else{pin.tabIndex=0;pin.setAttribute('role','button');pin.setAttribute('aria-label',m.title);pin.onkeydown=e=>{if(e.key==='Enter'||e.key===' ')select(m);};marker=new AMap.Marker({position:converted.get(m.id),content:pin,offset:new AMap.Pixel(-32,-72),title:m.title});map.add(marker);marker.on('click',()=>select(m));}
+   else{pin.tabIndex=0;pin.setAttribute('role','button');pin.setAttribute('aria-label',m.title);pin.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(m);}};pin.onclick=()=>select(m);marker=new MemoryMarker({map,position:converted.get(m.id),pin,isStopPropagation:true});}
    markers.set(m.id,marker);
   }else if(!located.includes(m)){const b=make('button','unlocated-memory');b.setAttribute('aria-label','未添加位置：'+m.title);b.append(picture(m));b.onclick=()=>select(m);$('unlocated').append(b);}
  });
  if(demo&&located.length>1)L.polyline(located.slice().reverse().map(displayPoint),{color:'#222',weight:2,dashArray:'5 10',opacity:.45,interactive:false}).addTo(map);
- if(!demo&&markers.size)map.setFitView([...markers.values()],false,[80,80,80,80],14);
+ if(!demo&&markers.size){const points=[...converted.values()],bounds=new TMap.LatLngBounds(points[0],points[0]);points.slice(1).forEach(p=>bounds.extend(p));map.fitBounds(bounds,{padding:80,maxZoom:14});}
  if(!items.length)$('list').append(make('p','meta','还没有声音足迹。录下一段声音，在制作日记时选择记录位置。'));
- $('mapMemory').hidden=true;if(map)new ResizeObserver(()=>demo?map.invalidateSize():map.resize()).observe($('mapWrap'));
+ $('mapMemory').hidden=true;if(demo&&map)new ResizeObserver(()=>map.invalidateSize()).observe($('mapWrap'));
 })().catch(()=>{document.getElementById('mapMode').textContent='地图暂时无法显示，请刷新重试';});

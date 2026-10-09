@@ -70,23 +70,7 @@ with tempfile.TemporaryDirectory() as folder:
             assert context.request.get('http://127.0.0.1:8095/api/feed').json()['posts']==[]
             page.goto('http://127.0.0.1:8095/map',wait_until='networkidle');assert page.locator('.atlas-pin').count()==0
             assert page.locator('.map-service-state').count()==1
-            # Verify production adapter geography across cities using a fake SDK (no real key/billing).
-            fixtures=[{'id':'beijing','title':'北京的风','lat':39.9,'lng':116.4,'created':1,'audio':'outputs/seeds/seed_tape_water.wav'},
-                      {'id':'shanghai','title':'上海的雨','lat':31.2,'lng':121.4,'created':2,'audio':'outputs/seeds/seed_tape_water.wav'}]
-            page.route('**/api/memories',lambda r:r.fulfill(json={'memories':fixtures}))
-            page.route('**/api/map/config',lambda r:r.fulfill(json={'enabled':True,'key':'test-map-key','style':'amap://styles/test-doodle','service_host':'/_AMapService'}))
-            sdk="""window.sdkCoordinates=[];window.sdkMarkers=[];window.AMap={
-                Map:class{constructor(id,options){window.sdkOptions=options;this.host=document.getElementById(id);}add(marker){if(marker.content){this.host.append(marker.content);window.sdkMarkers.push(marker.position);}}addControl(){}setFitView(markers){window.sdkFitCount=markers.length;}resize(){}},
-                Marker:class{constructor(o){this.position=o.position;this.content=o.content;}on(name,fn){this.content.onclick=fn;}getContent(){return this.content;}},Pixel:class{},ToolBar:class{},plugin:(name,fn)=>fn(),
-                convertFrom:(coords,type,fn)=>{window.sdkCoordinates=coords;window.sdkCoordinateType=type;fn('complete',{locations:coords.map(p=>[p[0]+.005,p[1]+.005])});}};"""
-            page.route('https://webapi.amap.com/maps?**',lambda r:r.fulfill(body=sdk,content_type='application/javascript'))
-            page.goto('http://127.0.0.1:8095/map',wait_until='networkidle')
-            page.wait_for_function('window.sdkFitCount===2')
-            assert page.evaluate('window.sdkCoordinateType')=='gps'
-            assert sorted(page.evaluate('window.sdkCoordinates'))==[[116.4,39.9],[121.4,31.2]]
-            assert page.evaluate('window.sdkOptions.mapStyle')=='amap://styles/test-doodle'
-            assert page.locator('.scene-orb').count()==2
-            page.get_by_role('button',name='查看足迹：北京的风',exact=True).click();page.get_by_role('heading',name='北京的风',exact=True).wait_for()
+            # Production Tencent SDK and coordinate behavior is covered separately in map_browser_check.py.
             assert not errors,errors
             browser.close();print('PASS: demo layouts, six scenes, wizard, editor, saved collection, feed/reply/send, map, reload and production data isolation')
     finally:server.should_exit=True;worker.join(timeout=5)

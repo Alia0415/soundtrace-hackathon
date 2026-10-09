@@ -897,7 +897,7 @@ def create_app(data_dir=None, public_url=None):
     install_processing(app, db, account, data, quota, validate_wav)
     install_music(app, db, account, data, quota, validate_wav)
     install_art(app, db, account, data, quota, normalize_image, cover)
-    install_maps(app)
+    install_maps(app, account)
 
     app.mount('/assets', StaticFiles(directory=ROOT / 'webapp' / 'assets'), name='assets')
     app.mount('/mineradio', StaticFiles(directory=ROOT / 'third_party' / 'Mineradio-paused-main' / 'public'), name='mineradio')

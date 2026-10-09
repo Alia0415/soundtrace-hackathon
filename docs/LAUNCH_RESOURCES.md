@@ -7,7 +7,7 @@
 | 资源 | 需要提供什么 | 配置/用途 | 当前情况 |
 | --- | --- | --- | --- |
 | 域名与服务器 | 域名、国内可直接访问的 Linux 服务器地址、部署与 DNS 操作权限；可运行 Docker，开放 80/443 | 域名填写 `SOUNDTRACE_DOMAIN`；服务器运行网站、数据库、媒体与 HTTPS | 本地 8093 可用；公网部署目标未提供 |
-| 高德地图 | Web 端 JS API Key、安全密钥、正式域名白名单；自定义地图样式 ID | `SOUNDTRACE_AMAP_KEY`、`SOUNDTRACE_AMAP_SECURITY_CODE`、`SOUNDTRACE_AMAP_STYLE` | 真实地图接口已接；凭据与样式待提供。支持多地点和坐标转换 |
+| 腾讯地图 | 开通 JSAPI GL 和 WebService 的 Key，配置域名/IP 访问限制；样式 ID 可选 | `SOUNDTRACE_TENCENT_MAP_KEY`、可选 `SOUNDTRACE_TENCENT_MAP_SERVICE_KEY`、`SOUNDTRACE_TENCENT_MAP_STYLE` | 已接底图、坐标转换与多地点标记；生产权限与域名需在腾讯控制台配置 |
 | 音乐生成 | **默认 Mureka**：国内 API Key、可用音乐模型、余额与测试预算；**或 ACE-Step 1.5**：已部署服务的 URL、API Key、GPU 资源 | Mureka：`SOUNDTRACE_MUREKA_KEY`、`SOUNDTRACE_MUREKA_MODEL`；自部署：`SOUNDTRACE_MUSIC_PROVIDER=acestep`、`SOUNDTRACE_ACE_URL`、`SOUNDTRACE_ACE_KEY` | 两套协议已接，真实模型输出尚未试听。普通网站服务无需 GPU；选自部署音乐时另配 GPU |
 | 照片手绘生成 | **火山方舟/豆包 Seedream**：API Key、已开通图生图的模型 ID 或推理接入点 ID、余额与测试预算 | `SOUNDTRACE_ARK_KEY`、`SOUNDTRACE_IMAGE_MODEL`。默认准备 `doubao-seedream-5-0-pro-260628`，以账号实际开通型号为准 | 本轮已接国内图生图接口、私有图片存储、状态查询与失败回退。未提供 Key，真实手绘效果待联调 |
 
@@ -54,8 +54,8 @@ API 密钥填写项目根目录的 `.env.production`，从 `deploy/production.en
 
 1. 火山方舟 Key + 可用模型 ID，Mureka Key + 测试预算；先验证真实图像、音乐质量。
 2. 3–6 张实际照片、匹配笔记/录音及地点；验收“原照片 → 手绘 → 收藏/地图/社区”完整流程。
-3. 高德 Key + 安全密钥 + 样式 ID；验收真实多城市地图。
+3. 腾讯地图 Key + JSAPI GL/WebService 权限 + 正式域名限制；样式 ID 可选，验收真实多城市地图。
 4. 域名 + 服务器/DNS 权限 + 持久盘/备份目标；执行 HTTPS 公网部署。
 5. 公开服务文本、审核/举报联系人及账号恢复服务；补齐功能后开放正常注册发布。
 
-参考：豆包 [官方图生图 API](https://docs.volcengine.com/docs/ark/image-generation-api?lang=zh)、[官方模型列表](https://docs.volcengine.com/docs/ark/model-list?lang=zh)；高德与音乐协议来源见 [演示与正式版说明](DEMO_AND_PRODUCTION.md)。没有使用这些账号凭据实际调用前，不给出“实际音质最佳”或“手绘已达到参考稿效果”的结论。
+参考：豆包 [官方图生图 API](https://docs.volcengine.com/docs/ark/image-generation-api?lang=zh)、[官方模型列表](https://docs.volcengine.com/docs/ark/model-list?lang=zh)；腾讯地图与音乐协议来源见 [演示与正式版说明](DEMO_AND_PRODUCTION.md)。没有使用这些账号凭据实际调用前，不给出“实际音质最佳”或“手绘已达到参考稿效果”的结论。
