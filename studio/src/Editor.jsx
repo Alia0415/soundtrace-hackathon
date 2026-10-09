@@ -34,7 +34,7 @@ export default function Editor({tracks,setTracks,style,scene,setScene,ai,soundPr
   const trackSnapshot=useMemo(()=>tracks.map((t,i)=>({...t,...data.trackStates[i]})),[tracks,data.trackStates]);
   useEffect(()=>{if(!data.isReady||!tracks.length)return;setSavedLocal('');
     const timer=setTimeout(()=>{const alts=[draftMusic&&{...(version==='draft'?music:draftMusic),id:'variant-draft'},aiMusic&&{...(version==='ai'?music:aiMusic),id:'variant-ai'}].filter(Boolean);
-      saveDraft([...trackSnapshot,...alts],{style,scene,version,balance,diary,memoryId:memory?.id}).then(()=>{if(mounted.current)setSavedLocal('草稿已保存在此设备');}).catch(()=>{if(mounted.current)setSavedLocal('设备空间不足，请保存或下载作品');});
+      saveDraft([...trackSnapshot,...alts],{style,scene,version,balance,diary,memoryId:memory?.id,sourceRef:memory?.audio}).then(()=>{if(mounted.current)setSavedLocal('草稿已保存在此设备');}).catch(()=>{if(mounted.current)setSavedLocal('设备空间不足，请保存或下载作品');});
     },800);return()=>clearTimeout(timer);
   },[trackSnapshot,draftMusic,aiMusic,style,scene,version,balance,data.isReady,diary,memory?.id]);
   function mix(value){setBalance(value);tracks.forEach((t,i)=>controls.setTrackVolume(i,t.id==='music'?value/100:(1-value/100)*.95));}
@@ -42,7 +42,7 @@ export default function Editor({tracks,setTracks,style,scene,setScene,ai,soundPr
     if(type==='generate'&&window.SoundTraceDemo){changeStyle(style,data.duration);return;}
     if((type==='generate'?!ai:!soundProcessing)||jobStatus||busy||recording)return;setError('');setGenerationFailed(false);setJobStatus('正在准备声音…');const controller=new AbortController();abortJob.current=controller;
     try{
-      const results=type==='extract'?await runSoundJob({memory_id:memory?.id,type:'extract',target},controller.signal,setJobStatus):await runMusicJob({memory_id:memory?.id,style,prompt:diary?.prompt||'',title:diary?.title||memory?.title,notes:diary?.notes,mood:diaryValue(diary,'mood'),weather:diaryValue(diary,'weather'),activity:diaryValue(diary,'activity'),duration:Math.min(120,Math.max(30,Math.ceil(source.duration)))},controller.signal,setJobStatus);
+      const results=type==='extract'?await runSoundJob({memory_id:memory?.id,source_ref:memory?.audio,type:'extract',target},controller.signal,setJobStatus):await runMusicJob({memory_id:memory?.id,source_ref:memory?.audio,style,prompt:diary?.prompt||'',title:diary?.title||memory?.title,notes:diary?.notes,mood:diaryValue(diary,'mood'),weather:diaryValue(diary,'weather'),activity:diaryValue(diary,'activity'),duration:Math.min(120,Math.max(30,Math.ceil(source.duration)))},controller.signal,setJobStatus);
       if(!mounted.current)return;
       const path=type==='generate'?results.generated:type==='hum'?(results.melody||results.synth||results.synthesized):results.denoised;
       if(!path)throw new Error('服务未返回可用的音频，原草稿仍然保留。');
@@ -68,7 +68,7 @@ export default function Editor({tracks,setTracks,style,scene,setScene,ai,soundPr
   async function analyze(){
     if(!soundProcessing||jobStatus||busy||recording)return;
     setError('');setJobStatus('正在辨认声音…');const controller=new AbortController();abortJob.current=controller;
-    try{const result=await runSoundJob({memory_id:memory?.id,type:'analyze'},controller.signal,setJobStatus);if(mounted.current)setTags(result.tags||[]);}
+    try{const result=await runSoundJob({memory_id:memory?.id,source_ref:memory?.audio,type:'analyze'},controller.signal,setJobStatus);if(mounted.current)setTags(result.tags||[]);}
     catch(e){if(e.name!=='AbortError'&&mounted.current)setError(e.message);}
     finally{if(mounted.current&&abortJob.current===controller){abortJob.current=null;setJobStatus('');}}
   }

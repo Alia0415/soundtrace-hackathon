@@ -85,7 +85,7 @@ class GenerationServices(unittest.TestCase):
             self.assertEqual(client.get('/_TMapService/arbitrary-path').status_code,404)
             self.assertIn('soundtrace-demo.js',client.get('/demo/album').text)
             self.assertNotIn('soundtrace-demo.js',client.get('/album').text)
-            self.assertIn('href="/demo"',client.get('/').text)
+            self.assertIn('href="/" aria-label="声迹首页"',client.get('/').text)
             self.assertIn('studio-root',client.get('/capture').text)
             self.assertNotIn('fTitle',client.get('/capture').text)
 

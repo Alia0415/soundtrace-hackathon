@@ -1,5 +1,6 @@
 """Multi-user web service, independent of GPU dependencies and legacy personal data."""
 import hashlib
+import asyncio
 import hmac
 import io
 import json
@@ -401,7 +402,7 @@ def create_app(data_dir=None, public_url=None):
             if m.get('music_audio'):
                 result.append({'id': 'memory-vinyl-' + m['id'], 'memory_id': m['id'], 'title': m['title'],
                                'kind': 'mix', 'collectible': 'vinyl', 'audio': m['music_audio'], 'img': m['cover_vinyl'],
-                               'cover': m['cover_vinyl'], 'created': m['created'], 'metadata': m})
+                               'cover': m['cover_vinyl'], 'duration': m.get('music_duration',m['duration']), 'created': m['created'], 'metadata': {**m,'duration':m.get('music_duration',m['duration'])}})
         return {'works': result}
 
     @app.get('/api/materials')
@@ -409,6 +410,24 @@ def create_app(data_dir=None, public_url=None):
         return {'materials': [{'id': 'mem_' + m['id'], 'name': m['title'], 'audio': m['audio'],
                 'cover': m['cover_tape'], 'memory': True, 'metadata': {**m, 'story': m.get('notes')}, 'created': m['created']}
                 for m in own_records(request, 'memory')]}
+
+    @app.get('/api/material-library')
+    def material_library(request: Request):
+        user = account(request)
+        with db() as con:
+            rows = con.execute("SELECT r.payload,m.ref,m.role,m.bytes FROM media m JOIN records r ON r.id=m.record_id WHERE m.owner=? AND r.kind='memory' AND m.mime='audio/wav' AND m.role IN ('memory','extracted') ORDER BY r.created DESC", (user['id'],)).fetchall()
+        items = []
+        for row in rows:
+            memory = json.loads(row['payload'])
+            if row['role'] != 'extracted' and row['ref'] != memory['audio']:
+                continue
+            info = memory.get('material_labels', {}).get(row['ref'], {})
+            material_title = memory.get('material_title') or (Path(memory['original_filename']).stem if memory.get('original_filename') else memory['title'])
+            items.append({**memory, 'material_id': row['ref'], 'audio': row['ref'],
+                          'title': info.get('title', material_title), 'duration': info.get('duration', memory['duration']),
+                          'material_kind': 'separated' if row['role']=='extracted' else 'original',
+                          'original_title': material_title, 'bytes': row['bytes']})
+        return {'materials': items}
 
     @app.get('/api/photos')
     def photos(request: Request):
@@ -575,7 +594,7 @@ def create_app(data_dir=None, public_url=None):
                     raise HTTPException(400, '地点坐标无效')
             if form.get('music_audio') is not None or form.get('music_audio_upload_id'):
                 music = await audio_from_form(form, 'music_audio', user)
-                validate_wav(music)
+                entry['music_duration'] = validate_wav(music)
                 entry['music_audio'] = store('music.wav', music, 'audio/wav')
             for key, count, limit in (('images', 6, 12_000_000), ('videos', 2, 60_000_000), ('audio_files', 4, 30_000_000)):
                 uploads = form.getlist(key)
@@ -608,6 +627,53 @@ def create_app(data_dir=None, public_url=None):
         except Exception:
             shutil.rmtree(folder)
             raise
+
+    @app.post('/api/material-import', status_code=201)
+    async def import_material(request: Request):
+        from soundtrace_media import convert, FORMATS
+        user = account(request)
+        form = await upload_form(request, max_files=1, max_fields=5)
+        upload = form.get('file')
+        filename = str(form.get('filename') or getattr(upload, 'filename', '') or '')
+        suffix = Path(filename).suffix.lower()
+        if suffix not in FORMATS:
+            raise HTTPException(400, '支持 MP4、MOV、WebM、MKV 视频及 WAV、MP3、M4A、FLAC、OGG 音频')
+        raw = await audio_from_form(form, 'file', user)
+        try:
+            content = await asyncio.to_thread(convert, raw, suffix)
+        except RuntimeError as error:
+            raise HTTPException(400, str(error))
+        duration = validate_wav(content)
+        mid = uuid.uuid4().hex
+        folder = data / 'users' / user['id'] / mid
+        folder.mkdir(parents=True)
+        files = []
+        def store(name, blob, mime):
+            (folder/name).write_bytes(blob)
+            ref = f"outputs/users/{user['id']}/{mid}/{name}"
+            files.append({'ref':ref, 'bytes':len(blob), 'mime':mime})
+            return ref
+        try:
+            entry = {'id':mid, 'title':str(form.get('title') or Path(filename).stem or '上传素材')[:80],
+                     'created':time.time(), 'captured_at':time.time(), 'duration':duration,
+                     'audio':store('audio.wav',content,'audio/wav'), 'music_audio':None,
+                     'images':[], 'videos':[], 'audio_files':[], 'scene':SCENES[0],
+                     'lat':None, 'lng':None, 'notes':'', 'original_filename':Path(filename).name[:180]}
+            entry['original_file'] = store('original'+suffix,raw,'application/octet-stream')
+            entry['material_title'] = entry['title']
+            entry['source_type'] = 'video' if suffix in ('.mp4','.mov','.webm','.mkv') else 'audio'
+            for kind in ('tape','vinyl'):
+                file = cover(folder,entry['title'],None,kind)
+                entry['cover_'+kind] = store(file.name,file.read_bytes(),'image/jpeg')
+            entry['art_status'] = 'text_only'
+            result = commit_record(user,entry,'memory',files)
+        except Exception:
+            for file in folder.iterdir():
+                file.unlink()
+            folder.rmdir()
+            raise
+        discard_staged_audio(form.get('file_upload_id'),user)
+        return result
 
     @app.post('/api/studio/works', status_code=201)
     async def save_work(request: Request):
@@ -650,7 +716,7 @@ def create_app(data_dir=None, public_url=None):
         memory_detail(mid, request)
         form = await upload_form(request, max_files=7, max_fields=24)
         content = await audio_from_form(form, 'music_audio', user)
-        validate_wav(content)
+        music_duration = validate_wav(content)
         uploads = form.getlist('images')
         if len(uploads) > 6:
             raise HTTPException(400, '最多保存 6 张照片')
@@ -670,6 +736,13 @@ def create_app(data_dir=None, public_url=None):
                 if not row:
                     raise HTTPException(404, '声音素材已被删除')
                 entry = json.loads(row['payload'])
+                entry.setdefault('material_title',Path(entry['original_filename']).stem if entry.get('original_filename') else entry['title'])
+                entry['music_duration'] = music_duration
+                source_ref = form.get('music_source_ref')
+                if source_ref is not None:
+                    if not isinstance(source_ref,str) or not con.execute("SELECT 1 FROM media WHERE ref=? AND owner=? AND record_id=? AND mime='audio/wav'",(source_ref,user['id'],mid)).fetchone():
+                        raise HTTPException(400, '创作素材不存在或无权使用')
+                    entry['music_source_ref'] = source_ref
                 if len(entry.get('images',[])) + len(pictures) > 6:
                     raise HTTPException(400, '原有照片与新照片合计不能超过 6 张')
                 for key, limit in (('title',80),('notes',1200),('mood',32),('weather',100),('activity',32),('location',100),('music_prompt',500),('music_style',32),('project',24000)):
@@ -826,7 +899,7 @@ def create_app(data_dir=None, public_url=None):
         from soundtrace_art import art_config
         from soundtrace_processing import processing_config
         config = music_config()
-        return {'editing': True, 'storage': True, 'accounts': True, 'ai': config['enabled'], 'music_provider': config['provider'], 'image_generation': art_config()['enabled'], 'sound_analysis': processing_config()['enabled'], 'local_humming': True, 'speech_to_text': os.getenv('SOUNDTRACE_ENABLE_STT') == '1'}
+        return {'editing': True, 'storage': True, 'accounts': True, 'ai': config['enabled'], 'music_provider': config['provider'], 'image_generation': art_config()['enabled'], 'sound_analysis': processing_config()['enabled'], 'stem_separation': processing_config()['stem_separation'], 'local_humming': True, 'speech_to_text': os.getenv('SOUNDTRACE_ENABLE_STT') == '1'}
 
     @app.get('/api/inbox')
     @app.get('/api/exchange')
@@ -912,7 +985,7 @@ def create_app(data_dir=None, public_url=None):
 
     app.mount('/assets', StaticFiles(directory=ROOT / 'webapp' / 'assets'), name='assets')
     app.mount('/mineradio', StaticFiles(directory=ROOT / 'third_party' / 'Mineradio-paused-main' / 'public'), name='mineradio')
-    pages = {'/': 'home.html', '/capture': 'index.html', '/studio': 'index.html', '/album': 'album-room.html',
+    pages = {'/': 'home.html', '/capture': 'index.html', '/studio': 'index.html', '/library': 'index.html', '/album': 'album-room.html',
              '/map': 'map.html', '/community': 'community.html'}
 
     @app.get('/me')

@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const pathname=location.pathname.replace(/^\/demo(?=\/|$)/,'')||'/';
-  const page = pathname === '/studio' ? 'studio' : pathname === '/album' ? 'album' : pathname === '/community' ? 'community' : pathname === '/map' ? 'map' : 'home';
+  const page = ['/studio','/capture','/library'].includes(pathname) ? 'studio' : pathname === '/album' ? 'album' : pathname === '/community' ? 'community' : pathname === '/map' ? 'map' : 'home';
   document.body.dataset.stPage = page;
   // 我的=收藏间（功能合并页）；记录页经首页”录一段声音”进入，导航位由声音地图接替
   const links = [

@@ -38,8 +38,12 @@ async def generate_music(body, stage):
     """Return validated-downstream audio bytes; endpoints/credentials never come from user input."""
     config = music_config()
     prompt = make_prompt(body)
+    conditioned = bool(body.get('_source_audio'))
+    query_kind = 'instrumental'
     async with httpx.AsyncClient(trust_env=trust_environment(), timeout=60, follow_redirects=False) as client:
         if config['provider'] == 'acestep':
+            if conditioned:
+                raise RuntimeError('当前 ACE 服务未接通素材条件生成，请使用 Mureka 音轨生成服务')
             base = os.environ['SOUNDTRACE_ACE_URL'].rstrip('/')
             headers = {'Authorization': 'Bearer ' + os.getenv('SOUNDTRACE_ACE_KEY', '')}
             params = {'prompt': prompt, 'lyrics': '[Instrumental]', 'task_type': 'text2music',
@@ -57,7 +61,19 @@ async def generate_music(body, stage):
         else:
             base = 'https://api.mureka.cn'
             headers = {'Authorization': 'Bearer ' + os.environ['SOUNDTRACE_MUREKA_KEY']}
-            response = await client.post(base + '/v1/instrumental/generate', headers=headers,
+            if conditioned:
+                from soundtrace_media import convert
+                stage('正在将所选声音素材提交给音乐模型')
+                reference = await asyncio.to_thread(convert, body['_source_audio'], '.wav', True)
+                upload = await client.post(base + '/v1/files/upload', headers=headers,
+                                           data={'purpose': 'audio'}, files={'file': ('material.mp3', reference, 'audio/mpeg')})
+                upload.raise_for_status()
+                response = await client.post(base + '/v1/track/generate', headers=headers,
+                                             json={'upload_audio_id': upload.json()['id'], 'generate_type': 'Instrumental',
+                                                   'prompt': (prompt+' Follow the timing and musical character of the supplied audio.')[:1024]})
+                query_kind = 'song'
+            else:
+                response = await client.post(base + '/v1/instrumental/generate', headers=headers,
                                          json={'model': os.getenv('SOUNDTRACE_MUREKA_MODEL', 'mureka-9.5'),
                                                'n': 1, 'prompt': prompt, 'stream': False})
             response.raise_for_status()
@@ -83,7 +99,7 @@ async def generate_music(body, stage):
                     raise RuntimeError('音乐服务返回了无效音频地址')
                 audio_url = base + file
             else:
-                response = await client.get(base + '/v1/instrumental/query/' + quote(str(task), safe=''), headers=headers)
+                response = await client.get(base + '/v1/'+query_kind+'/query/' + quote(str(task), safe=''), headers=headers)
                 response.raise_for_status()
                 result = response.json()
                 if result['status'] in ('failed', 'timeouted', 'cancelled'):
@@ -130,6 +146,12 @@ def install_music(app, db, account, data, quota, validate_wav):
         path = data / 'users' / owner / mid / ('generated-' + jid + '.wav')
         try:
             stage('正在向音乐服务提交任务')
+            ref = body.get('source_ref')
+            if ref:
+                source = (data / ref.removeprefix('outputs/')).resolve()
+                if not source.is_relative_to(data):
+                    raise RuntimeError('声音素材路径无效')
+                body = dict(body, _source_audio=source.read_bytes())
             content = await generate_music(body, stage)
             duration = validate_wav(content)
             ref = f'outputs/users/{owner}/{mid}/{path.name}'
@@ -147,7 +169,8 @@ def install_music(app, db, account, data, quota, validate_wav):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(content)
                 con.execute('INSERT INTO media VALUES(?,?,?,?,?,?)', (ref, owner, mid, len(content), 'audio/wav', 'generated'))
-                result = {'generated': ref, 'duration': duration, 'provider': music_config()['provider']}
+                result = {'generated': ref, 'duration': duration, 'provider': music_config()['provider'],
+                          'source_ref': body.get('source_ref'), 'generation_mode': 'audio-conditioned' if body.get('_source_audio') and music_config()['provider']=='mureka' else 'text'}
                 con.execute("UPDATE music_jobs SET status='done',stage='音乐已生成',result=? WHERE id=?", (json.dumps(result), jid))
         except Exception as error:
             path.unlink(missing_ok=True)
@@ -178,8 +201,14 @@ def install_music(app, db, account, data, quota, validate_wav):
         jid = uuid.uuid4().hex
         with db() as con:
             con.execute('BEGIN IMMEDIATE')
-            if not con.execute("SELECT 1 FROM records WHERE id=? AND owner=? AND kind='memory'", (mid, user['id'])).fetchone():
+            record = con.execute("SELECT payload FROM records WHERE id=? AND owner=? AND kind='memory'", (mid, user['id'])).fetchone()
+            if not record:
                 raise HTTPException(404, '声音素材不存在')
+            ref = body.get('source_ref') or json.loads(record['payload'])['audio']
+            if not isinstance(ref, str) or not con.execute("SELECT 1 FROM media WHERE ref=? AND owner=? AND record_id=? AND mime='audio/wav'", (ref,user['id'],mid)).fetchone():
+                raise HTTPException(404, '所选声音素材不存在或无权使用')
+            body['source_ref'] = ref
+            body.pop('_source_audio', None)
             if con.execute("SELECT 1 FROM music_jobs WHERE owner=? AND status IN ('queued','running')", (user['id'],)).fetchone():
                 raise HTTPException(409, '上一首音乐仍在制作，请稍候')
             limit = int(os.getenv('SOUNDTRACE_MUSIC_DAILY_LIMIT', '5'))

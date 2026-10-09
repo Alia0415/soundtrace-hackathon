@@ -43,6 +43,7 @@ export default function SaveDialog({close,render,scene,setScene,version,project,
       if(!rawOnly){const mix=await render();form.append('music_audio',mix.blob,'music.wav');}
       form.append('captured_at',String(recordedAt.current/1000));form.append('scene',scene);
       form.append('project',JSON.stringify(project));
+        if(sourceMemory?.audio)form.append('music_source_ref',sourceMemory.audio);
       if(!rawOnly){form.set('mood',mood);form.set('weather',weather);form.append('activity',diaryValue(diary,'activity'));form.append('music_prompt',diary?.prompt||'');form.append('music_style',project?.style||'ambient');form.append('include_location',String(geo.lat!=null));form.append('background_mode',diary?.backgroundMode==='stylized'?'stylized':'photo');}
       if(!skip){
         form.append('title',title.trim());form.append('notes',notes.trim());form.set('mood',mood);

@@ -1,5 +1,8 @@
 """Authenticated multi-user boundary for the existing private AudioSep/CLAP worker."""
 import asyncio
+import base64
+import io
+import zipfile
 import json
 import os
 import re
@@ -8,12 +11,45 @@ import uuid
 from urllib.parse import urlsplit
 
 import httpx
-from soundtrace_network import trust_environment
+from soundtrace_network import trust_environment, provider_error
 from fastapi import BackgroundTasks, HTTPException, Request
 
 
 def processing_config():
-    return {'enabled': bool(os.getenv('SOUNDTRACE_GPU_URL', '').strip()), 'provider': 'audiosep-clap'}
+    return {'enabled': bool(os.getenv('SOUNDTRACE_GPU_URL', '').strip()), 'provider': 'audiosep-clap',
+            'stem_separation': bool(os.getenv('SOUNDTRACE_MUREKA_KEY'))}
+
+
+async def separate_stems(content, stage):
+    from soundtrace_media import convert, download_public
+    stage('正在分离人声、伴奏与乐器声部')
+    compressed = await asyncio.to_thread(convert, content, '.wav', True)
+    async with httpx.AsyncClient(trust_env=trust_environment(), timeout=300, follow_redirects=False) as client:
+        response = await client.post('https://api.mureka.cn/v1/song/stem',
+                                     headers={'Authorization':'Bearer '+os.environ['SOUNDTRACE_MUREKA_KEY']},
+                                     json={'url':'data:audio/mp3;base64,'+base64.b64encode(compressed).decode(), 'model':'audio-separation-1'})
+        response.raise_for_status()
+        stage('正在下载并保存分离素材')
+        archive = await download_public(client, response.json()['zip_url'], 200_000_000)
+    labels = {'vocals':'人声', 'bass':'贝斯', 'drums':'鼓声', 'other':'其他声音', 'instrumental':'伴奏', 'song伴奏':'伴奏'}
+    outputs = []
+    with zipfile.ZipFile(io.BytesIO(archive)) as zipped:
+        infos = zipped.infolist()
+        if len(infos)>16 or sum(i.file_size for i in infos)>240_000_000:
+            raise RuntimeError('分轨结果过大，原素材已保留')
+        for info in infos:
+            # Read bytes only: no archive-controlled paths are written to disk.
+            name = info.filename.replace('\\','/').split('/')[-1]
+            stem = name.rsplit('.',1)[0].lower()
+            if stem not in labels or not name.lower().endswith('.wav'):
+                continue
+            if info.file_size>60_000_000:
+                raise RuntimeError('分轨结果过大，原素材已保留')
+            wav = await asyncio.to_thread(convert,zipped.read(info),'.wav')
+            outputs.append({'title':labels[stem], 'audio':wav})
+    if not outputs:
+        raise RuntimeError('分离服务未返回可用声部，原素材已保留')
+    return {'stems':outputs}
 
 
 class ProcessingCancelled(Exception):
@@ -87,6 +123,7 @@ def install_processing(app, db, account, data, quota, validate_wav):
 
     async def work(jid, owner, mid, ref, kind, target):
         output = data / 'users' / owner / mid / ('extracted-' + jid + '.wav')
+        created_files = []
         def stage(message):
             with db() as con:
                 row = con.execute('SELECT cancel_requested FROM sound_jobs WHERE id=?', (jid,)).fetchone()
@@ -98,7 +135,7 @@ def install_processing(app, db, account, data, quota, validate_wav):
             source = (data / ref.removeprefix('outputs/')).resolve()
             if not source.is_relative_to(data):
                 raise RuntimeError('原声音频路径无效')
-            result = await process_audio(source.read_bytes(), kind, target, stage)
+            result = await separate_stems(source.read_bytes(), stage) if kind=='separate' else await process_audio(source.read_bytes(), kind, target, stage)
             stage('正在保存结果')
             with db() as con:
                 con.execute('BEGIN IMMEDIATE')
@@ -106,36 +143,52 @@ def install_processing(app, db, account, data, quota, validate_wav):
                 if not row or row['cancel_requested']:
                     raise ProcessingCancelled()
                 if 'audio' in result:
-                    content = result['audio']; duration = validate_wav(content)
-                    used = con.execute('SELECT COALESCE(SUM(bytes),0) FROM media WHERE owner=?', (owner,)).fetchone()[0]
-                    if used + len(content) > quota:
-                        raise RuntimeError('存储空间不足，原声已保留')
-                    output.parent.mkdir(parents=True, exist_ok=True); output.write_bytes(content)
-                    out_ref = f'outputs/users/{owner}/{mid}/{output.name}'
-                    con.execute('INSERT INTO media VALUES(?,?,?,?,?,?)', (out_ref, owner, mid, len(content), 'audio/wav', 'extracted'))
-                    result = {'denoised': out_ref, 'duration': duration}
+                    result = {'stems':[{'title':target, 'audio':result['audio']}]}
+                if 'stems' in result:
+                    record = con.execute('SELECT payload FROM records WHERE id=? AND owner=?',(mid,owner)).fetchone()
+                    memory = json.loads(record['payload'])
+                    saved = []
+                    used = con.execute('SELECT COALESCE(SUM(bytes),0) FROM media WHERE owner=?',(owner,)).fetchone()[0]
+                    for index, stem in enumerate(result['stems']):
+                        content = stem['audio']; duration = validate_wav(content)
+                        used += len(content)
+                        if used>quota:
+                            raise RuntimeError('存储空间不足，原声已保留')
+                        path = output.with_name(f'extracted-{jid}-{index}.wav')
+                        path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(content);created_files.append(path)
+                        out_ref = 'outputs/'+path.relative_to(data).as_posix()
+                        con.execute('INSERT INTO media VALUES(?,?,?,?,?,?)',(out_ref,owner,mid,len(content),'audio/wav','extracted'))
+                        label = {'title':stem['title'], 'duration':duration, 'source_ref':ref, 'provider':'mureka' if kind=='separate' else 'audiosep'}
+                        memory.setdefault('material_labels',{})[out_ref] = label
+                        saved.append({**label,'audio':out_ref})
+                    con.execute('UPDATE records SET payload=? WHERE id=?',(json.dumps(memory,ensure_ascii=False),mid))
+                    result = {'stems':saved,'denoised':saved[0]['audio'],'duration':saved[0]['duration']}
                 con.execute("UPDATE sound_jobs SET status='done',stage='处理完成',result=? WHERE id=?", (json.dumps(result, ensure_ascii=False), jid))
         except ProcessingCancelled:
             output.unlink(missing_ok=True)
+            for path in created_files:path.unlink(missing_ok=True)
             with db() as con:
                 con.execute("UPDATE sound_jobs SET status='cancelled',stage='已停止等待，原声已保留' WHERE id=?", (jid,))
         except Exception as error:
             output.unlink(missing_ok=True)
-            message = str(error) if isinstance(error, RuntimeError) else '声音处理服务连接失败，请检查服务配置或模型'
+            for path in created_files:path.unlink(missing_ok=True)
+            message = provider_error(error, '声音分离服务')
             with db() as con:
                 con.execute("UPDATE sound_jobs SET status='failed',stage=? WHERE id=?", (message, jid))
 
     @app.post('/api/sound/jobs', status_code=202)
     async def create(request: Request, background: BackgroundTasks):
         user = account(request)
-        if not processing_config()['enabled']:
-            raise HTTPException(503, '声音辨识与提取服务尚未配置；哼唱转旋律可在本机使用')
+        if not processing_config()['enabled'] and not processing_config()['stem_separation']:
+            raise HTTPException(503, '声音处理服务尚未配置，原素材已保留')
         raw = await request.body()
         if len(raw) > 4000:
             raise HTTPException(413, '参数过长')
         body = json.loads(raw)
-        if not isinstance(body, dict) or body.get('type') not in ('analyze', 'extract') or not isinstance(body.get('memory_id'), str):
+        if not isinstance(body, dict) or body.get('type') not in ('analyze', 'extract', 'separate') or not isinstance(body.get('memory_id'), str):
             raise HTTPException(400, '声音处理参数无效')
+        if not processing_config()['stem_separation' if body['type']=='separate' else 'enabled']:
+            raise HTTPException(503, '所选声音分离服务尚未配置，原素材已保留')
         target = body.get('target', '')
         if not isinstance(target, str) or len(target) > 120 or (body['type'] == 'extract' and not target.strip()):
             raise HTTPException(400, '请填写不超过 120 字的目标声源')
@@ -145,6 +198,9 @@ def install_processing(app, db, account, data, quota, validate_wav):
             record = con.execute("SELECT payload FROM records WHERE id=? AND owner=? AND kind='memory'", (mid, user['id'])).fetchone()
             if not record:
                 raise HTTPException(404, '声音素材不存在')
+            source_ref = body.get('source_ref') or json.loads(record['payload'])['audio']
+            if not isinstance(source_ref, str) or not con.execute("SELECT 1 FROM media WHERE ref=? AND owner=? AND record_id=? AND mime='audio/wav'", (source_ref,user['id'],mid)).fetchone():
+                raise HTTPException(404, '声音素材不存在或无权使用')
             if con.execute("SELECT 1 FROM sound_jobs WHERE owner=? AND status IN ('queued','running')", (user['id'],)).fetchone():
                 raise HTTPException(409, '上一段声音仍在处理，请稍候')
             count = con.execute('SELECT COUNT(*) FROM sound_jobs WHERE owner=? AND created>?', (user['id'], time.time()-86400)).fetchone()[0]
@@ -152,7 +208,7 @@ def install_processing(app, db, account, data, quota, validate_wav):
                 raise HTTPException(429, '已达到今日声音处理次数上限')
             con.execute('INSERT INTO sound_jobs(id,owner,memory_id,status,stage,created) VALUES(?,?,?,?,?,?)',
                         (jid, user['id'], mid, 'queued', '正在排队', time.time()))
-        background.add_task(work, jid, user['id'], mid, json.loads(record['payload'])['audio'], body['type'], target)
+        background.add_task(work, jid, user['id'], mid, source_ref, body['type'], target)
         return {'job_id': jid}
 
     @app.get('/api/sound/jobs/{jid}')

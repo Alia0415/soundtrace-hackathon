@@ -1,8 +1,8 @@
 export async function api(path, options={}) {
   // Keep each audio request below cloud gateway limits, without changing the WAV.
-  if(path.startsWith('/api/memories') && options.body instanceof FormData && !window.SoundTraceDemo) {
+  if((path.startsWith('/api/memories') || path==='/api/material-import') && options.body instanceof FormData && !window.SoundTraceDemo) {
     const form=options.body;
-    for(const key of ['audio','music_audio']) {
+    for(const key of ['audio','music_audio','file']) {
       const file=form.get(key);
       if(!(file instanceof Blob) || file.size<=4_000_000)continue;
       const task=await api('/api/audio-uploads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({size:file.size}),signal:options.signal});

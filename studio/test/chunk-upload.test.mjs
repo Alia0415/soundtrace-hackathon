@@ -25,3 +25,19 @@ test('large audio is preserved across bounded requests and failures prevent savi
     assert.equal(saved,false);assert.equal(retry.get('music_audio').size,raw.length);
   }finally{globalThis.fetch=oldFetch;globalThis.window=oldWindow;}
 });
+
+test('large video retains its filename when staged for material import',async()=>{
+  const oldFetch=globalThis.fetch,oldWindow=globalThis.window;
+  globalThis.window={};let uploaded=0;
+  globalThis.fetch=async(path,options)=>{
+    if(path==='/api/audio-uploads')return Response.json({upload_id:'video',chunk_size:4_000_000});
+    if(options.method==='PUT'){uploaded+=options.body.size;return Response.json({});}
+    assert.equal(path,'/api/material-import');assert.equal(options.body.get('file'),null);
+    assert.equal(options.body.get('file_upload_id'),'video');assert.equal(options.body.get('filename'),'trip.mp4');
+    return Response.json({id:'material'});
+  };
+  try{
+    const form=new FormData();form.set('file',new Blob([new Uint8Array(8_000_013)]),'trip.mp4');form.set('filename','trip.mp4');
+    assert.equal((await api('/api/material-import',{method:'POST',body:form})).id,'material');assert.equal(uploaded,8_000_013);
+  }finally{globalThis.fetch=oldFetch;globalThis.window=oldWindow;}
+});

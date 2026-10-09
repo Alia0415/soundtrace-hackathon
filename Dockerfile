@@ -14,13 +14,13 @@ RUN python tools/package_public.py
 FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 SOUNDTRACE_DATA_DIR=/data
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends fonts-noto-cjk \
+RUN apt-get update && apt-get install -y --no-install-recommends fonts-noto-cjk ffmpeg \
     && rm -rf /var/lib/apt/lists/* \
     && useradd --uid 10001 --create-home soundtrace \
     && mkdir /data && chown soundtrace:soundtrace /data
 COPY requirements-public.txt ./
 RUN pip install --no-cache-dir -r requirements-public.txt
-COPY soundtrace_public.py soundtrace_storage.py soundtrace_music.py soundtrace_maps.py soundtrace_art.py soundtrace_processing.py soundtrace_network.py soundtrace_uploads.py ./
+COPY soundtrace_public.py soundtrace_storage.py soundtrace_music.py soundtrace_maps.py soundtrace_art.py soundtrace_processing.py soundtrace_network.py soundtrace_uploads.py soundtrace_media.py ./
 COPY webapp ./webapp
 COPY --from=frontend /build/webapp/assets/studio ./webapp/assets/studio
 COPY third_party/Mineradio-paused-main/public ./third_party/Mineradio-paused-main/public
