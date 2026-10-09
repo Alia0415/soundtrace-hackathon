@@ -42,7 +42,7 @@ export default function App(){
     if(buffer.duration<.25) throw new Error('声音太短，请至少录下半秒。');
     if(buffer.duration>300) throw new Error('每次可导入最多 5 分钟的声音，请先截取想留下的部分。');
     editor.current?.pause();abortJob.current?.abort();setDraftInfo(null);setEpoch(x=>x+1);
-    musicToken.current++;setSource(buffer);setSourceName(name);setMemory(null);setTracks([]);setPhase('library');setDiary({...blankDiary});setDraft(null);setPromptSave(false);setMicError(false);setMusicFailed(false);
+    musicToken.current++;setSource(buffer);setSourceName(name);setMemory(null);setTracks([]);setPhase('library');setDiary({...blankDiary});setDraft(null);setPromptSave(false);setMicError(false);setMusicFailed(false);window.scrollTo({top:0,behavior:'instant'});
   }
   async function changeBed(next,duration,initial){
     const token=++musicToken.current;setStyle(next);setError('');setMusicFailed(false);
@@ -73,7 +73,7 @@ export default function App(){
   }
   async function createDiary(nextStyle=style){const base=tracks.length?tracks.filter(track=>track.id!=='music'):[makeTrack(source,sourceName,'field','#3a9bc4',.57)];setEpoch(x=>x+1);setDraftInfo(null);setTracks(base);if(await changeBed(nextStyle,source.duration,base))setPhase('editor');}
   async function importFile(file){if(!file)return;setError('');setBusy('正在打开声音…');
-    try{await context().resume();if(file.size>60_000_000)throw new Error('请选择不超过 60 MB 的音频或视频。');
+    try{if(file.size>60_000_000)throw new Error('请选择不超过 60 MB 的音频或视频。');
       if(window.SoundTraceDemo){await useBuffer(await decode(file),file.name.replace(/\.[^.]+$/,''));}
       else{await window.soundtraceAccountReady;const form=new FormData();form.append('file',file,file.name);form.append('filename',file.name);form.append('title',file.name.replace(/\.[^.]+$/,''));setBusy('正在上传素材并提取音轨…');const saved=await api('/api/material-import',{method:'POST',body:form});await selectMemory(saved);setLibraryRevision(x=>x+1);}
     }

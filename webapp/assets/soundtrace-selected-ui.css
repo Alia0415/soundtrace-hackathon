@@ -311,3 +311,8 @@ body .sound-library .library-next a{margin:0;font-size:14px}
 }
 
 @media(max-width:760px){body .studio-heading .library-header-art{display:none}body .studio-heading>div{min-width:0}body .studio-heading h1{overflow-wrap:anywhere}}
+
+/* Import feedback remains visible even when the file picker was opened below the fold. */
+body .studio-main>.notice:not(:empty),body .studio-main>.error{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;box-sizing:border-box;width:max-content;max-width:calc(100vw - 32px);padding:12px 18px;box-shadow:0 6px 24px #173a5020;border-radius:12px;font-size:14px;line-height:1.6}
+body .studio-main>.notice:not(:empty){background:#edf8fc;color:#155978;border:1px solid #acd4e5}
+@media(max-width:760px){body .studio-main>.notice:not(:empty),body .studio-main>.error{bottom:calc(88px + env(safe-area-inset-bottom,0px));width:calc(100vw - 32px)}}
