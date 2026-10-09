@@ -22,3 +22,5 @@ body{overflow:hidden!important}
 
 /* This embed only plays SoundTrace media; cloud-account controls are not connected. */
 #control-title-badges,#quality-control,#heart-btn,#collect-btn,#lyrics-toggle-btn,#gesture-hud,#cuefield-automix-btn{display:none!important}
+#control-title::after{content:none!important}
+#lyric-timing-control,#free-camera-hint,#cuefield-feedback{display:none!important}

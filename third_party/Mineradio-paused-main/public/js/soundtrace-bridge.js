@@ -21,7 +21,12 @@
     return isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
   }
   function safeTrack(track, index) {
-    if (!track || typeof track.audio !== 'string' || !/^\/outputs\/[\w./-]+$/.test(track.audio) || track.audio.includes('..')) return null;
+    if (!track || typeof track.audio !== 'string') return null;
+    var localFile = /^\/outputs\/[\w./-]+$/.test(track.audio) && !track.audio.includes('..');
+    // Demo edits live in IndexedDB; only accept blobs created by this same origin.
+    var blobPrefix = 'blob:' + location.origin + '/';
+    var localBlob = track.audio.startsWith(blobPrefix) && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(track.audio.slice(blobPrefix.length));
+    if (!localFile && !localBlob) return null;
     var cover = typeof track.cover === 'string' && /^\/(assets|outputs)\/[\w./-]+$/.test(track.cover) && !track.cover.includes('..') ? track.cover : '';
     return {
       type:'local', source:'local', provider:'local',

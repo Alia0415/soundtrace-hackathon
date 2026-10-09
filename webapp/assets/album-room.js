@@ -419,11 +419,11 @@
   }
   function playableItems() {
     if (!window.SoundTraceDemo && new URLSearchParams(location.search).get('demo') === '1') {
-      const audio = 'outputs/seeds/seed_vinyl.wav';
+      const audio = 'outputs/seeds/demo-raw-water.wav', finished = 'outputs/seeds/demo-mix-water.wav';
       const metadata = { location:state.scene.name };
       return [
         { kind:'photo', id:'listen-demo-photo', title:state.scene.sample, story:'听一听，声音把你带回了哪里？', audio, metadata, demo:true },
-        { kind:'vinyl', id:'listen-demo-vinyl', title:`《${state.scene.sample}》`, story:'把这个地方的声音，慢慢做成一张唱片。', audio, metadata, demo:true },
+        { kind:'vinyl', id:'listen-demo-vinyl', title:`《${state.scene.sample}》`, story:'前两秒是水声，随后钢琴进入。预制演示成品。', audio:finished, metadata, demo:true },
         { kind:'tape', id:'listen-demo-tape', title:`${state.scene.sample}的现场声音`, story:'一盘留给下一次创作的声音磁带。', audio, metadata, demo:true },
       ];
     }
@@ -452,7 +452,7 @@
       tracks:state.stageQueue.map((track, index) => ({
         id:track.id || index,
         title:track.title || track.name || '一段声音',
-        artist:'声迹 · SoundTrace',
+        artist:track.kind==='vinyl'?'音乐成品 · 声迹':'现场原声 · 声迹',
         location:track.metadata?.location || state.scene.name,
         audio:mediaUrl(track.audio),
         cover:new URL(stageArt(track), location.href).pathname,
@@ -481,10 +481,10 @@
       const button = node('button');
       button.type = 'button';
       button.classList.toggle('active', index === state.stageIndex);
-      button.setAttribute('aria-label', `聆听${item.title || item.name || '一段声音'}`);
+      button.setAttribute('aria-label', `聆听${{photo:'照片原声',tape:'现场原声',vinyl:'音乐成品'}[item.kind]||''}：${item.title || item.name || '一段声音'}`);
       button.setAttribute('aria-current', index === state.stageIndex ? 'true' : 'false');
       const picture = node('img'); picture.src = stageArt(item); picture.alt = '';
-      button.append(picture, node('span', '', item.title || item.name || '一段声音'));
+      button.append(picture, node('span', '', ({photo:'照片原声 · ',tape:'现场原声 · ',vinyl:'音乐成品 · '}[item.kind]||'')+(item.title || item.name || '一段声音')));
       button.addEventListener('click', () => selectStageTrack(index, true));
       shelf.appendChild(button);
     });
@@ -493,6 +493,11 @@
     if (!state.stageQueue.length) return;
     state.stageIndex = (index + state.stageQueue.length) % state.stageQueue.length;
     const item = state.stageQueue[state.stageIndex];
+    const related=track=>item.metadata?.id?track.metadata?.id===item.metadata.id:item.id?.startsWith('listen-demo-')&&track.id?.startsWith('listen-demo-');
+    const rawIndex=state.stageQueue.findIndex(track=>related(track)&&track.kind==='tape');
+    const mixIndex=state.stageQueue.findIndex(track=>related(track)&&track.kind==='vinyl');
+    $('stageCompare').hidden=rawIndex<0||mixIndex<0;
+    if(rawIndex>=0&&mixIndex>=0){$('stageRaw').onclick=()=>selectStageTrack(rawIndex,true);$('stageMix').onclick=()=>selectStageTrack(mixIndex,true);$('stageRaw').setAttribute('aria-pressed',String(item.kind!=='vinyl'));$('stageMix').setAttribute('aria-pressed',String(item.kind==='vinyl'));}
     const memoryImage = mediaUrl(item.metadata?.images?.[0] || (item.kind === 'photo' ? item.img : null));
     const memoryVideo = mediaUrl(item.metadata?.videos?.[0]);
     const video = $('stageMemoryVideo');
@@ -506,7 +511,7 @@
       audio.src = mediaUrl(item.audio);
       audio.load();
     }
-    $('stageKind').textContent = { photo:'01 / 声音照片', vinyl:'02 / 完成的唱片', tape:'03 / 声音磁带' }[item.kind];
+    $('stageKind').textContent = { photo:'01 / 照片原声', vinyl:'02 / 音乐成品', tape:'03 / 现场原声' }[item.kind];
     $('stageTitle').textContent = item.title || item.name || '一段声音';
     $('stageStory').textContent = item.story || item.metadata?.story || '把这段声音重新放进耳边，回到当时的场景。';
     $('stageLocation').textContent = item.metadata?.location || state.scene.name;
@@ -726,6 +731,10 @@
         if (!$('listeningStage').hidden) notify('音频暂时无法读取，请换一件藏品再试。');
       } else if (message.type === 'soundtrace-engine-state') {
         state.enginePlaying = !!message.playing;
+        const elapsed=Number.isFinite(message.currentTime)?message.currentTime:0;
+        const length=Number.isFinite(message.duration)?message.duration:0;
+        $('stageTime').textContent=`${formatTime(elapsed)} / ${formatTime(length)}`;
+        $('stageProgress').value=length?Math.round(elapsed/length*1000):0;
         const stage = $('listeningStage');
         for (const key of ['bass','beat','energy']) {
           const value = Number.isFinite(message[key]) ? Math.max(0, Math.min(1, message[key])) : 0;

@@ -10,8 +10,8 @@
 <script src="assets/mineradio-port/three.r128.min.js" defer></script>
 <script src="assets/mineradio-port/memory-shelf.js" defer></script>
 <script src="assets/mineradio-port/beat-reactivity.js" defer></script>
-<script src="assets/album-room.js?v=12" defer></script>
-<link rel="stylesheet" href="assets/album-mineradio.css">
+<script src="assets/album-room.js?v=14" defer></script>
+<link rel="stylesheet" href="assets/album-mineradio.css?v=3">
 <script src="/assets/soundtrace-shell.js?v=5" defer></script>
 <link rel="stylesheet" href="/assets/album-memory.css">
 <link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
@@ -54,6 +54,7 @@
   <video id="stageMemoryVideo" class="stage-memory-video" muted loop playsinline preload="none" aria-hidden="true" hidden></video>
   <div class="stage-content">
     <header class="stage-header"><button id="stageClose" class="stage-icon-button" type="button" aria-label="退出沉浸聆听">×</button></header>
+    <div id="stageCompare" class="stage-compare" hidden><span>同一段记忆 · 听听前后变化</span><div><button id="stageRaw" type="button">现场原声</button><button id="stageMix" type="button">音乐成品</button></div></div>
     <div class="stage-body"><div class="stage-description sr-only" aria-live="polite"><span id="stageSceneName"></span><span id="stageKind"></span><span id="stageTitle"></span><span id="stageStory"></span><span id="stageLocation"></span></div>
       <section id="stageShelf3d" class="stage-shelf-3d" aria-label="3D 声音藏品架"><span class="stage-shelf-index sr-only" data-shelf-count>00 / 00</span><div class="stage-shelf-tabs" role="group" aria-label="筛选藏品"><button type="button" data-memory-filter="all" aria-label="全部藏品" aria-pressed="true" class="active">全部</button><button type="button" data-memory-filter="photo" aria-label="照片" aria-pressed="false">照片</button><button type="button" data-memory-filter="vinyl" aria-label="唱片" aria-pressed="false">唱片</button><button type="button" data-memory-filter="tape" aria-label="磁带" aria-pressed="false">磁带</button></div><div class="stage-shelf-viewport" aria-hidden="true"></div><div class="stage-shelf-foot"><strong class="sr-only" data-shelf-type>声音藏品</strong><div class="stage-shelf-nav"><button type="button" data-shelf-prev aria-label="上一件藏品">↑</button><button type="button" data-shelf-next aria-label="下一件藏品">↓</button></div></div></section>
     </div>

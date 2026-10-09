@@ -14,6 +14,7 @@ export default function SaveDialog({close,render,scene,setScene,version,project,
   useEffect(()=>{dialog.current.showModal();return()=>{speech.current?.dispose();dialog.current?.close();};},[]);
   useEffect(()=>{api('/api/health').then(x=>setSpeechEnabled(!!x.speech_to_text)).catch(()=>{});},[]);
   function locate(){
+    if(window.SoundTraceDemo){setGeo({lat:30.258,lng:120.149});setLocationName('西湖 · 演示点位');setWeather(value=>value||'晴天');return;}
     if(!navigator.geolocation){setError('此浏览器无法定位，请手动填写地点。');return;}
     navigator.geolocation.getCurrentPosition(async p=>{
       const lat=p.coords.latitude,lng=p.coords.longitude;setGeo({lat,lng});
@@ -70,7 +71,7 @@ export default function SaveDialog({close,render,scene,setScene,version,project,
       <h2>{rawOnly?'这是什么声音？':'保存音乐日记'}</h2>
       <p>{rawOnly?'留下一句话，或直接保存。其他内容选填。':'天气、心情、照片与笔记将一起收藏。'}</p>
       <div className="save-answer"><label className="field">声音的名字<input maxLength={80} value={title} onChange={e=>setTitle(e.target.value)} placeholder="例如：下雨前的风" autoFocus/></label><button type="button" className="outline" onClick={dictate} disabled={!speechEnabled||speaking||busy} title={speechEnabled?'录音后转为文字':'语音识别尚未启用，请直接输入'}>{speaking?'正在听你说…':speechEnabled?'说给我听':'请直接输入'}</button></div>
-      <div className="save-meta"><span>{new Date(recordedAt.current).toLocaleString('zh-CN',{month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}</span><span>{weather||'天气未获取'}</span>{<button type="button" className="quiet" onClick={locate} disabled={busy}>{geo.lat!=null?'位置已记录 ✓':'获取位置与天气'}</button>}</div>
+      <div className="save-meta"><span>{new Date(recordedAt.current).toLocaleString('zh-CN',{month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}</span><span>{weather||'天气未获取'}</span>{<button type="button" className="quiet" onClick={locate} disabled={busy}>{geo.lat!=null?'位置已记录 ✓':window.SoundTraceDemo?'使用演示位置（西湖）':'获取位置与天气'}</button>}</div>
       <label className="field">地点<input maxLength={100} value={locationName} onChange={e=>setLocationName(e.target.value)} placeholder="在哪里录的？"/></label>
       {rawOnly?<div className="mood-picks" aria-label="此刻心情">{moods.map(value=><button type="button" key={value} aria-pressed={mood===value} onClick={()=>setMood(mood===value?'':value)}>{value}</button>)}</div>:<p>{[weather,mood,diaryValue(diary,'activity')].filter(Boolean).join(' · ')} · {geo.lat!=null?'位置已记录':'不记录位置'}</p>}
       <label className="field">补充笔记<textarea maxLength={1200} value={notes} onChange={e=>setNotes(e.target.value)} placeholder="当时发生了什么？"/></label>

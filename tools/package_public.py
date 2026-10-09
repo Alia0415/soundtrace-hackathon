@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FILES = ['soundtrace_public.py', 'soundtrace_storage.py', 'soundtrace_music.py', 'soundtrace_maps.py', 'soundtrace_art.py', 'soundtrace_processing.py', 'soundtrace_network.py', 'requirements-public.txt', 'Dockerfile', '.dockerignore', 'compose.yaml',
          'DEPLOY.md', 'docs/MINERADIO_ADAPTATION.md', 'docs/DIARY_ASSETS.md', 'docs/PRODUCT_AUDIT_20261009.txt', 'studio/package.json', 'studio/package-lock.json',
-         'studio/vite.config.js', 'tools/backup_public.py', 'tools/package_public.py', 'docs/DEMO_AND_PRODUCTION.md', 'docs/LAUNCH_RESOURCES.md', 'docs/OPEN_SOURCE_AUDIO.md']
+         'studio/vite.config.js', 'tools/backup_public.py', 'tools/package_public.py', 'tools/build_demo_audio.py', 'docs/DEMO_SUBMISSION_20261009.txt', 'docs/DEMO_AND_PRODUCTION.md', 'docs/LAUNCH_RESOURCES.md', 'docs/OPEN_SOURCE_AUDIO.md']
 DIRECTORIES = ['webapp', 'studio/src', 'deploy', 'outputs/seeds', 'third_party/Mineradio-paused-main']
 
 

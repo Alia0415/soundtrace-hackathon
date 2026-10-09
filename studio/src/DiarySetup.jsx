@@ -16,6 +16,7 @@ export default function DiarySetup({diary,setDiary,style,setStyle,onContinue,onB
   function next(){if(group&&!diaryValue(diary,group.id)){setError('写下你的'+group.title);return;}setStep(s=>Math.min(4,s+1));setError('');}
   function choose(id){update(group.id,id);if(id!=='other')setStep(s=>s+1);}
   function locate(){
+    if(window.SoundTraceDemo){setDiary(prev=>({...prev,lat:30.258,lng:120.149,location:'西湖 · 演示点位'}));setError('');return;}
     if(!navigator.geolocation){setError('无法获取位置，可以继续保存。');return;}
     setLocating(true);navigator.geolocation.getCurrentPosition(p=>{setDiary(prev=>prev.includeLocation?({...prev,lat:p.coords.latitude,lng:p.coords.longitude}):prev);setLocating(false);},()=>{setLocating(false);setError('未获得定位权限，仍可继续制作；也可以重试定位。');},{timeout:10000});
   }
@@ -30,11 +31,11 @@ export default function DiarySetup({diary,setDiary,style,setStyle,onContinue,onB
       <label className="story-upload">＋ 留下几张照片<input type="file" accept="image/*" multiple onChange={e=>{const remaining=6-(diary.existingImages||[]).length;update('images',[...e.target.files].slice(0,remaining));}}/><small>共可保存 6 张</small></label>
       <div className="media-preview">{(diary.existingImages||[]).map(p=><img key={p} src={'/'+p} alt="原素材照片"/>)}{urls.map((u,i)=><div key={u}><img src={u} alt={'新增照片 '+(i+1)}/><button type="button" aria-label={'移除照片 '+(i+1)} onClick={()=>update('images',diary.images.filter((_,n)=>n!==i))}>×</button></div>)}</div>
       {!!(urls.length || diary.existingImages?.length)&&<fieldset className="story-background"><legend>记忆背景</legend><label><input type="radio" name="background-mode" checked={diary.backgroundMode!=='stylized'} onChange={()=>update('backgroundMode','photo')}/>照片原图</label><label><input type="radio" name="background-mode" disabled={!artEnabled} checked={diary.backgroundMode==='stylized'} onChange={()=>update('backgroundMode','stylized')}/>生成手绘</label><small>{artEnabled?'选择手绘会将第一张照片发送给豆包；原照片保留。':'手绘服务待配置，当前使用原照片。'}</small></fieldset>}
-      <label className="share-check"><input type="checkbox" checked={!!diary.includeLocation} onChange={e=>{update('includeLocation',e.target.checked);if(e.target.checked&&diary.lat==null)locate();}}/>记录这段记忆的位置</label>
+      <label className="share-check"><input type="checkbox" checked={!!diary.includeLocation} onChange={e=>{update('includeLocation',e.target.checked);if(e.target.checked&&diary.lat==null)locate();}}/>{window.SoundTraceDemo?'记录演示位置（西湖，不获取真实定位）':'记录这段记忆的位置'}</label>
       {diary.includeLocation&&<div className="story-location"><label className="field">地点名称<input maxLength={100} value={diary.location||''} onChange={e=>update('location',e.target.value)} placeholder="例如：西湖边"/></label><button type="button" className="quiet" onClick={locate} disabled={locating}>{locating?'正在定位…':diary.lat!=null?'已定位 ✓ · 重新获取':'获取位置'}</button></div>}
       <button className="primary" type="button" disabled={locating} onClick={next}>选择音乐 →</button>
     </div>}
-    {step===4&&<fieldset className="diary-choice-group music-directions" disabled={busy}><legend>音乐风格</legend><label className="diary-other">想听到的细节<input maxLength={500} value={diary.prompt||''} onChange={e=>update('prompt',e.target.value)} placeholder="可选：温暖的钢琴，轻轻的鼓点"/></label><div className="direction-tags">{styles.map(([id,label])=><button type="button" key={id} aria-pressed={style===id} onClick={()=>{setStyle(id);onContinue(id);}}><RasterArt id={'style-'+id}/><span>{label}</span></button>)}</div></fieldset>}
+    {step===4&&<fieldset className="diary-choice-group music-directions" disabled={busy}><legend>音乐风格</legend>{window.SoundTraceDemo&&<p className="demo-flow-note">选择一种预制编曲，马上试听；正式版使用音乐生成服务。</p>}{!window.SoundTraceDemo&&<label className="diary-other">想听到的细节<input maxLength={500} value={diary.prompt||''} onChange={e=>update('prompt',e.target.value)} placeholder="可选：温暖的钢琴，轻轻的鼓点"/></label>}<div className="direction-tags">{(window.SoundTraceDemo?.styles||styles).map(([id,label])=><button type="button" key={id} aria-pressed={style===id} onClick={()=>{setStyle(id);onContinue(id);}}><RasterArt id={'style-'+id}/><span>{label}</span></button>)}</div></fieldset>}
     {error&&<p role="alert" className="error">{error}</p>}
   </section>;
 }

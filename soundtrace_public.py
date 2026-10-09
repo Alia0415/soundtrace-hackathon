@@ -923,7 +923,7 @@ def create_app(data_dir=None, public_url=None):
             html = (ROOT / 'webapp' / file).read_text(encoding='utf-8')
             html = html.replace('src="assets/', 'src="/assets/').replace('href="assets/', 'href="/assets/')
             html = html.replace('src="mineradio/', 'src="/mineradio/')
-            runtime = '<script src="/assets/soundtrace-demo.js?v=4"></script>' if demo else ''
+            runtime = '<script src="/assets/soundtrace-demo.js?v=5"></script>' if demo else ''
             html = html.replace('<head>', '<head>' + runtime + '<script src="/assets/soundtrace-account.js?v=5" defer></script>', 1)
             html = html.replace('href="/" aria-label="声迹首页"', 'href="/demo" aria-label="声迹演示"')
             html = html.replace('class="doodle-brand" href="/"', 'class="doodle-brand" href="/demo"')
