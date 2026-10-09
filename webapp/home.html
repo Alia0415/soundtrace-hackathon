@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="/assets/soundtrace-doodle.css?v=1">
 <link rel="stylesheet" href="/assets/soundtrace-raster.css?v=7">
 <link rel="stylesheet" href="/assets/soundtrace-selected-ui.css?v=5">
+<link rel="stylesheet" href="/assets/soundtrace-home-motion.css?v=1">
+<script src="/assets/soundtrace-home.js?v=2" defer></script>
 </head>
 <body class="st-home st-home-calm">
   <header class="home-header">
@@ -15,7 +17,34 @@
   </header>
   <main>
     <section class="home-scene" aria-labelledby="homeTitle" id="homeScene">
-      <div class="home-landscape" aria-hidden="true"><span class="home-art-desktop" data-raster="home-desktop"></span><span class="home-art-mobile" data-raster="home-mobile"></span></div>
+      <div class="home-landscape moment-art" data-motion="paused" aria-hidden="true"><span class="home-art-desktop"><img src="/assets/ui-selected-v3/home-desktop.webp" alt=""><svg class="moment-motion" viewBox="0 0 890 900" fill="none" aria-hidden="true">
+          <path class="sound-travel" d="M257 426 C330 396 381 403 397 464 C413 518 352 495 382 475 C408 449 458 542 562 539 C620 539 663 515 625 493 C601 475 636 454 668 471 C700 486 717 502 746 496"/>
+          <g class="sea-glints" stroke="#fff" stroke-width="6" stroke-linecap="round">
+            <path d="M533 395h45m64 8h47m-98 15h36m42 14h49"/>
+            <path d="M607 386h28m64 28h30m-174 31h28"/>
+          </g>
+          <g stroke="#00a8f0" stroke-width="4" stroke-linecap="round">
+            <path class="sea-ripple ripple-one" d="M566 515q29 10 47-6"/>
+            <path class="sea-ripple ripple-two" d="M646 534q36-11 24-24"/>
+            <path class="sea-ripple ripple-three" d="M439 444h32m46 17h26"/>
+          </g>
+          <path d="M42 308 84 344 115 319 94 252 73 256 92 309 54 300Z M670 67 709 98 739 74 719 23 698 26 711 65 682 60Z" fill="white"/>
+          <g class="sun-twinkle" stroke="#ffba16" stroke-width="6" stroke-linecap="round">
+            <path d="m50 314 30 22m6-71 20 52"/>
+          </g>
+          <g class="sun-twinkle twinkle-late" stroke="#ffba16" stroke-width="6" stroke-linecap="round">
+            <path d="m680 71 27 17m2-54 18 34"/>
+          </g>
+          <g class="floating-note note-one" transform="translate(320 398)">
+            <g class="note-drift"><ellipse cx="0" cy="0" rx="9" ry="6" transform="rotate(-20)" fill="currentColor"/><path d="M8-2v-32q17 3 15 15" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></g>
+          </g>
+          <g class="floating-note note-two" transform="translate(437 445)">
+            <g class="note-drift"><ellipse cx="0" cy="0" rx="9" ry="6" transform="rotate(-20)" fill="currentColor"/><ellipse cx="27" cy="-7" rx="9" ry="6" transform="rotate(-20 27 -7)" fill="currentColor"/><path d="M8-2v-30l27-7v30M8-25l27-7" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+          </g>
+          <g class="floating-note note-three" transform="translate(580 514)">
+            <g class="note-drift"><ellipse cx="0" cy="0" rx="9" ry="6" transform="rotate(-20)" fill="currentColor"/><path d="M8-2v-32q17 3 15 15" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></g>
+          </g>
+        </svg></span><span class="home-art-mobile" data-raster="home-mobile"></span><svg class="moment-motion home-mobile-motion" viewBox="0 0 853 515" aria-hidden="true"><g class="floating-note" transform="translate(460 290)"><g class="note-drift"><ellipse rx="9" ry="6" fill="currentColor"/><path d="M8 0v-32q17 3 15 15" fill="none" stroke="currentColor" stroke-width="4"/></g></g></svg></div>
       <div class="home-story">
         <h1 id="homeTitle">此刻，<br>听见生活。</h1>
         <a class="home-record original-art-button" href="/capture" aria-label="录一段声音"><span class="home-button-desktop" data-raster="home-record-desktop"></span><span class="home-button-mobile" data-raster="home-record-mobile"></span><span class="sr-only">录一段声音</span></a>

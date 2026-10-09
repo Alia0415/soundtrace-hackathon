@@ -1,0 +1,22 @@
+/* Animation only; the restored page layout stays in its original stylesheet. */
+.home-art-desktop>img{display:block;width:100%;height:100%;object-fit:contain}
+.moment-motion{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sound-travel{stroke:#0079ad;stroke-width:5;stroke-linecap:round;stroke-dasharray:55 720;animation:sound-travel 4s linear infinite}
+.sea-glints{animation:sea-glints 2.8s ease-in-out infinite}
+.sea-ripple{transform-box:fill-box;transform-origin:center;animation:sea-ripple 2.6s ease-out infinite}
+.ripple-two{animation-delay:-1.4s}.ripple-three{animation-delay:-2.7s}
+.sun-twinkle{transform-box:fill-box;transform-origin:center;animation:sun-twinkle 2.4s ease-in-out infinite}
+.twinkle-late{animation-delay:-1.2s}
+.floating-note{color:#009ee5}
+.note-drift{opacity:0;animation:note-float 4.8s ease-in-out infinite}
+.note-two{color:#e9aa00}.note-two .note-drift{animation-delay:-1.6s}
+.note-three .note-drift{animation-delay:-3.2s}
+@keyframes note-float{0%{opacity:0;transform:translate(0,8px) rotate(-12deg) scale(.8)}18%{opacity:.95}55%{opacity:1;transform:translate(18px,-38px) rotate(9deg) scale(1)}100%{opacity:0;transform:translate(42px,-90px) rotate(-6deg) scale(.9)}}
+.moment-art[data-motion=paused] .moment-motion *{animation-play-state:paused!important}
+.moment-art[data-motion=paused] .moment-motion{visibility:hidden}
+@keyframes sound-travel{to{stroke-dashoffset:-775}}
+@keyframes sea-glints{0%,100%{transform:translateX(-14px);opacity:.3}50%{transform:translateX(14px);opacity:1}}
+@keyframes sea-ripple{0%{transform:translate(-12px,-4px) scale(.7);opacity:0}25%,55%{opacity:1}100%{transform:translate(16px,8px) scale(1.5);opacity:0}}
+@keyframes sun-twinkle{0%,100%{transform:scale(.8) rotate(-9deg);opacity:.25}50%{transform:scale(1.14) rotate(5deg);opacity:1}}
+@media(prefers-reduced-motion:reduce){.moment-art:not([data-motion=playing]) .moment-motion *{animation:none}}
+.home-mobile-motion{display:none}@media(max-width:760px){.home-mobile-motion{display:block}}
