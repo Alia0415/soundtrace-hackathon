@@ -70,4 +70,7 @@ def build(source):
         save('demo-mix-'+key+'.wav',fade(field*envelope[:,None]+bed,.25,2.5))
     print('Built 6 original/music pairs and 3 arrangement beds (32 seconds, stereo).')
 
-if __name__=='__main__': build(Path(sys.argv[1]))
+if __name__=='__main__':
+    build(Path(sys.argv[1]))
+    import runpy
+    runpy.run_path(str(Path(__file__).with_name('fix_lakeside_demo.py')))

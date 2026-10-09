@@ -9,7 +9,8 @@ const studioApi = require('./studio-service.cjs').createStudioApi(root);
 const routes = {
   '/': 'webapp/home.html',
   '/studio': 'webapp/index.html',
-  '/capture': 'webapp/capture.html',
+  '/capture': 'webapp/index.html',
+  '/library': 'webapp/index.html',
   '/album': 'webapp/album-room.html',
   '/map': 'webapp/map.html',
   '/community': 'webapp/community.html',
@@ -27,14 +28,22 @@ const data = {
 const mime = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.webp':'image/webp', '.gif':'image/gif', '.svg':'image/svg+xml', '.woff2':'font/woff2', '.wav':'audio/wav', '.mp3':'audio/mpeg', '.m4a':'audio/mp4', '.ogg':'audio/ogg', '.mp4':'video/mp4', '.webm':'video/webm', '.mov':'video/quicktime' };
 http.createServer(async (req, res) => {
   if (await studioApi(req, res)) return;
-  const pathname = new URL(req.url, 'http://localhost').pathname;
+  const requestedPath = new URL(req.url, 'http://localhost').pathname;
+  const demo = /^\/demo(?:\/|$)/.test(requestedPath);
+  const pathname = demo ? requestedPath.replace(/^\/demo/, '') || '/' : requestedPath;
   if (pathname === '/me') {
-    res.writeHead(302, { Location:'/album?profile=1' });
+    res.writeHead(302, { Location:(demo ? '/demo' : '') + '/album?profile=1' });
     return res.end();
   }
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.writeHead(503, {'Content-Type':'application/json; charset=utf-8'});
     return res.end(JSON.stringify({ detail:'只读视觉预览；请使用 FastAPI 服务进行创作或提交。' }));
+  }
+  if (demo && routes[pathname]) {
+    let html = fs.readFileSync(path.join(root, routes[pathname]), 'utf8');
+    html = html.replace('<head>', '<head><script src="/assets/soundtrace-demo.js?v=6"></script><script src="/assets/soundtrace-account.js?v=5" defer></script>');
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'no-store'});
+    return res.end(req.method === 'HEAD' ? undefined : html);
   }
   if (data[pathname]) {
     const [file, key, reverse, direction] = data[pathname];

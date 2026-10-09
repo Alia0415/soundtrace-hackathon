@@ -7,7 +7,7 @@ import './diary-flow.css';
 const order=['weather','mood','activity'];
 const headings=['那天，天气怎么样？','此刻，是什么心情？','你正在做什么？','把这一刻留在纸上。','想把它变成什么音乐？'];
 export default function DiarySetup({diary,setDiary,style,setStyle,onContinue,onBack,busy}) {
-  const [step,setStep]=useState(0),[error,setError]=useState(''),[locating,setLocating]=useState(false),[urls,setUrls]=useState([]),[artEnabled,setArtEnabled]=useState(false);
+  const [step,setStep]=useState(4),[error,setError]=useState(''),[locating,setLocating]=useState(false),[urls,setUrls]=useState([]),[artEnabled,setArtEnabled]=useState(false);
   const group=diaryGroups.find(g=>g.id===order[step]);
   const update=(key,value)=>{setDiary(prev=>({...prev,[key]:value}));setError('');};
   useEffect(()=>{window.scrollTo({top:0,behavior:'instant'});},[step]);
@@ -21,8 +21,7 @@ export default function DiarySetup({diary,setDiary,style,setStyle,onContinue,onB
     setLocating(true);navigator.geolocation.getCurrentPosition(p=>{setDiary(prev=>prev.includeLocation?({...prev,lat:p.coords.latitude,lng:p.coords.longitude}):prev);setLocating(false);},()=>{setLocating(false);setError('未获得定位权限，仍可继续制作；也可以重试定位。');},{timeout:10000});
   }
   return <section className="diary-setup diary-wizard" aria-label="制作音乐日记">
-    <div className="wizard-top"><button className="quiet" disabled={busy} onClick={()=>step?setStep(step-1):onBack()}>← {step?'上一步':'素材库'}</button><span aria-label={`第 ${step+1} 步，共 5 步`}>{step+1} / 5</span></div>
-    <div className="wizard-dots" aria-hidden="true">{headings.map((_,i)=><i key={i} className={i<=step?'complete':''}/>)}</div>
+    <div className="wizard-top"><button className="quiet" disabled={busy} onClick={onBack}>← 返回素材</button>{step!==4&&<button className="quiet" disabled={busy} onClick={()=>setStep(4)}>跳过，去生成音乐 →</button>}</div>
     <div className="diary-title"><h2>{headings[step]}</h2><RasterArt id="diary"/></div>
     {group&&<fieldset key={group.id} className="diary-choice-group" disabled={busy}><legend>{group.title}</legend><div className="diary-choice-grid">{[...group.options,['other','其他']].map(([id,label])=><button key={id} type="button" className="diary-choice" aria-pressed={diary[group.id]===id} onClick={()=>choose(id)}><RasterArt id={id==='other'?'other':`${group.id}-${id}`}/><span>{label}</span></button>)}</div>
       {diary[group.id]==='other'&&<div className="diary-other"><label>其他{group.title}<input autoFocus maxLength={32} value={diary[group.id+'Other']||''} onChange={e=>update(group.id+'Other',e.target.value)} onKeyDown={e=>{if(e.key==='Enter')next();}}/></label><button type="button" className="primary" onClick={next}>继续 →</button></div>}
@@ -35,7 +34,7 @@ export default function DiarySetup({diary,setDiary,style,setStyle,onContinue,onB
       {diary.includeLocation&&<div className="story-location"><label className="field">地点名称<input maxLength={100} value={diary.location||''} onChange={e=>update('location',e.target.value)} placeholder="例如：西湖边"/></label><button type="button" className="quiet" onClick={locate} disabled={locating}>{locating?'正在定位…':diary.lat!=null?'已定位 ✓ · 重新获取':'获取位置'}</button></div>}
       <button className="primary" type="button" disabled={locating} onClick={next}>选择音乐 →</button>
     </div>}
-    {step===4&&<fieldset className="diary-choice-group music-directions" disabled={busy}><legend>音乐风格</legend>{!window.SoundTraceDemo&&<p className="material-source-note">选择风格后，将所选音频素材和下方文字一起发送给 Mureka，围绕素材生成伴奏。素材会作为独立音轨保留在成品中，可调整比例。</p>}{window.SoundTraceDemo&&<p className="demo-flow-note">选择一种预制编曲，马上试听；正式版使用音乐生成服务。</p>}{!window.SoundTraceDemo&&<label className="diary-other">想听到的细节<input maxLength={500} value={diary.prompt||''} onChange={e=>update('prompt',e.target.value)} placeholder="可选：温暖的钢琴，轻轻的鼓点"/></label>}<div className="direction-tags">{(window.SoundTraceDemo?.styles||styles).map(([id,label])=><button type="button" key={id} aria-pressed={style===id} onClick={()=>{setStyle(id);onContinue(id);}}><RasterArt id={'style-'+id}/><span>{label}</span></button>)}</div></fieldset>}
+    {step===4&&<fieldset className="diary-choice-group music-directions" disabled={busy}><legend>音乐风格</legend>{!window.SoundTraceDemo&&<p className="material-source-note">选择风格后，将所选音频素材和下方文字一起发送给 Mureka，围绕素材生成伴奏。素材会作为独立音轨保留在成品中，可调整比例。</p>}{window.SoundTraceDemo&&<p className="demo-flow-note">选择一种预制编曲，马上试听；正式版使用音乐生成服务。</p>}{!window.SoundTraceDemo&&<label className="diary-other">想听到的细节<input maxLength={500} value={diary.prompt||''} onChange={e=>update('prompt',e.target.value)} placeholder="可选：温暖的钢琴，轻轻的鼓点"/></label>}<div className="direction-tags">{(window.SoundTraceDemo?.styles||styles).map(([id,label])=><button type="button" key={id} aria-pressed={style===id} onClick={()=>setStyle(id)}><RasterArt id={'style-'+id}/><span>{label}</span></button>)}</div><div className="generation-actions"><button className="primary" type="button" disabled={busy} onClick={()=>onContinue(style)}>{busy?'正在制作音乐…':window.SoundTraceDemo?'打开示例音乐 →':'生成音乐 →'}</button><button className="quiet" type="button" disabled={busy} onClick={()=>setStep(0)}>补充天气、心情与故事（选填）</button></div></fieldset>}
     {error&&<p role="alert" className="error">{error}</p>}
   </section>;
 }

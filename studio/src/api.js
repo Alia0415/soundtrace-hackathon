@@ -12,7 +12,7 @@ export async function api(path, options={}) {
       form.delete(key);form.set(key+'_upload_id',task.upload_id);
     }
   }
-  const r=await fetch(path,options); let data; try {data=await r.json();} catch {throw new Error('服务暂时未响应，请稍后重试。');}
+  const r=await fetch(path,options); let data; try {data=await r.json();} catch {throw new Error(r.status===404?'当前服务不支持此功能，请使用完整网站服务。':'服务返回异常，请稍后重试。');}
   if(!r.ok) throw new Error(typeof data.detail==='string'?data.detail:'请求未完成，请重试。'); return data;
 }
 export async function upload(blob) {const form=new FormData();form.append('file',blob,'recording.wav');return api('/api/upload',{method:'POST',body:form});}

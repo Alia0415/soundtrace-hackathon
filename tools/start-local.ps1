@@ -3,6 +3,9 @@ $ErrorActionPreference = 'Stop'
 $taskRoot = Split-Path -Parent $PSScriptRoot
 $taskUrl = 'http://127.0.0.1:8093'
 $taskPython = Join-Path (Split-Path -Parent $taskRoot) 'hackathon-env\Scripts\python.exe'
+if (-not (Test-Path -LiteralPath $taskPython)) {
+    $taskPython = Join-Path $taskRoot 'runtime\audit-env\Scripts\python.exe'
+}
 $taskRuntime = Join-Path $taskRoot 'runtime'
 function Test-LocalSite {
     try {
@@ -23,7 +26,7 @@ if (Test-Path -LiteralPath $taskEnvPath) {
     }
 }
 if (-not (Test-LocalSite)) {
-    if (-not (Test-Path -LiteralPath $taskPython)) { throw 'Python environment missing: hackathon-env\Scripts\python.exe' }
+    if (-not (Test-Path -LiteralPath $taskPython)) { throw 'Python environment missing: hackathon-env or runtime\audit-env. Install requirements-public.txt in a local Python environment.' }
     New-Item -ItemType Directory -Path $taskRuntime -Force | Out-Null
     $taskProcess = Start-Process -FilePath $taskPython -ArgumentList @('-m','uvicorn','soundtrace_public:app','--host','127.0.0.1','--port','8093') -WorkingDirectory $taskRoot -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $taskRuntime 'local-site.out.log') -RedirectStandardError (Join-Path $taskRuntime 'local-site.err.log')
     $taskReady = $false

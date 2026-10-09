@@ -2,7 +2,7 @@
 body.st-home-clear{padding-bottom:32px!important}
 .st-home-clear .home-header{max-width:1240px;margin:auto;height:96px;padding:16px 40px}
 .st-home-clear main{max-width:1160px;padding:0 32px!important}
-.moment-hero{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;padding:32px 0 28px}
+.moment-hero{display:grid;grid-template-columns:minmax(0, .76fr) minmax(0, 1.24fr);align-items:center;gap:16px;padding:16px 0 28px}
 .moment-eyebrow{margin:0 0 18px;font-size:12px;letter-spacing:2px;color:#50707f;font-weight:600}
 .moment-copy h1{font-size:clamp(44px,4.5vw,66px);line-height:1.23;margin:0 0 22px;font-weight:800}
 .moment-intro{font-size:16px;color:#555;line-height:1.9;margin:0 0 28px}
@@ -40,7 +40,7 @@ body.st-home-clear{padding-bottom:32px!important}
 .moment-destinations h3{font-size:16px;font-weight:600;margin:0 0 6px;display:flex;justify-content:space-between;gap:8px}
 .moment-destinations h3 span{color:#0079ad;font-size:16px}
 .moment-destinations p{font-size:12px;color:#666;margin:0}
-@media(max-width:900px) and (min-width:761px){.moment-hero{gap:20px}.moment-destinations>a{padding:16px 12px;gap:8px}.moment-destinations img{width:28px;height:28px}}
+@media(max-width:900px) and (min-width:761px){.moment-hero{grid-template-columns:minmax(0, .9fr) minmax(0, 1.1fr);gap:16px}.moment-destinations>a{padding:16px 12px;gap:8px}.moment-destinations img{width:28px;height:28px}}
 @media(max-width:760px){
  body.st-home-clear{padding-bottom:100px!important}
  .st-home-clear .home-header{height:76px;padding:10px 24px}
@@ -64,7 +64,7 @@ body.st-home-clear{padding-bottom:32px!important}
 @media(prefers-reduced-motion:reduce){.moment-record,.moment-destinations>a{transition:none}}
 
 /* One coordinate system keeps animated ink aligned with the original illustration. */
-.moment-animation{position:relative;width:min(100%,465px);margin:auto;aspect-ratio:890/900}
+.moment-animation{position:relative;width:100%;margin:auto;aspect-ratio:890/900}
 .moment-animation>img{width:100%;height:100%;max-height:none;object-fit:contain}
 .moment-motion{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .sound-travel{stroke:#0079ad;stroke-width:5;stroke-linecap:round;stroke-dasharray:55 720;animation:sound-travel 4s linear infinite}

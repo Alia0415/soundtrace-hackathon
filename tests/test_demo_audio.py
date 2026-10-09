@@ -16,7 +16,7 @@ def load(name):
 class DemoAudioTests(unittest.TestCase):
     def test_originals_and_finished_music_are_distinct_and_preserve_the_original_intro(self):
         hashes=set()
-        for key in ['water','rain','lake','snow','birds','dusk']:
+        for key in ['lakeside','rain','lake-breeze','snow','birds','evening-wind']:
             rate,raw=load('demo-raw-'+key+'.wav');r,mix=load('demo-mix-'+key+'.wav')
             self.assertEqual(rate,r);self.assertEqual(len(raw)/rate,16);self.assertEqual(len(mix)/r,32)
             self.assertEqual(mix.shape[1],2)

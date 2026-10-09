@@ -419,12 +419,12 @@
   }
   function playableItems() {
     if (!window.SoundTraceDemo && new URLSearchParams(location.search).get('demo') === '1') {
-      const audio = 'outputs/seeds/demo-raw-water.wav', finished = 'outputs/seeds/demo-mix-water.wav';
+      const audio = 'outputs/seeds/demo-raw-lakeside.wav', finished = 'outputs/seeds/demo-mix-lakeside.wav';
       const metadata = { location:state.scene.name };
       return [
         { kind:'photo', id:'listen-demo-photo', title:state.scene.sample, story:'听一听，声音把你带回了哪里？', audio, metadata, demo:true },
-        { kind:'vinyl', id:'listen-demo-vinyl', title:`《${state.scene.sample}》`, story:'前两秒是水声，随后钢琴进入。预制演示成品。', audio:finished, metadata, demo:true },
-        { kind:'tape', id:'listen-demo-tape', title:`${state.scene.sample}的现场声音`, story:'一盘留给下一次创作的声音磁带。', audio, metadata, demo:true },
+        { kind:'vinyl', id:'listen-demo-vinyl', title:`《湖畔风声与鸟鸣》`, story:'前两秒是风声与鸟鸣，随后钢琴进入。素材混合示例，非西湖实地录音。', audio:finished, metadata, demo:true },
+        { kind:'tape', id:'listen-demo-tape', title:`湖畔风声与鸟鸣`, story:'一盘留给下一次创作的声音磁带。', audio, metadata, demo:true },
       ];
     }
     return [
@@ -797,17 +797,17 @@
       const params = new URLSearchParams(location.search);
       if(params.get('saved')){
         api('/api/memories/'+encodeURIComponent(params.get('saved'))).then(memory=>{
-          const wrap=modalStart('这一刻，已收藏');
-          wrap.append(node('p','',memory.title),node('p','disclosure',memory.lat!=null?'已同步到声音地图。':'已收进地图的足迹列表；这段记忆未添加位置。'));
+          const wrap=modalStart('音乐已保存');
+          wrap.append(node('p','',memory.title),node('p','disclosure','作品已保存到“我的音乐”，下次可从底部导航回来重听。原声素材仍然保留。'));
           if(params.has('art_unavailable'))wrap.append(node('p','disclosure','记忆已保存；手绘服务尚未就绪，当前保留原照片。可在收藏间稍后生成。'));
           wrap.append(window.SoundTraceArt.create('vinyl','mail-send-art'));
           const row=node('div','saved-memory-actions');
-          const publish=node('button','action','一键同步到社区');
+          const publish=node('button','secondary','分享到社区（可选）');
           publish.onclick=async()=>{publish.disabled=true;try{await apiJSON('/api/memories/'+encodeURIComponent(memory.id)+'/publish',{method:'POST'});publish.textContent='已同步到社区 ✓';}catch(e){notify(e.message||'同步失败，请重试');publish.disabled=false;}};
           const send=node('button','secondary','发送给远方的有缘人');send.onclick=()=>showSend({...memory,kind:'vinyl',metadata:memory});
-          const view=node('button','secondary','看看我的收藏');view.onclick=closeModal;
+          const view=node('button','action','查看我的音乐');view.onclick=closeModal;
           const map=node('a','secondary','声音地图 ↗');map.href='/map';
-          row.append(publish,send,view,map);wrap.append(row);openModal(wrap);
+          row.append(view,publish,send,map);wrap.append(row);openModal(wrap);
           history.replaceState(null,'',window.SoundTraceRoute?.('/album?scene='+encodeURIComponent(memory.scene||'sea-window')) || '/album?scene='+encodeURIComponent(memory.scene||'sea-window'));
         }).catch(()=>notify('记忆暂时无法读取，请重试。'));
       } else if (params.get('listen') === '1') {

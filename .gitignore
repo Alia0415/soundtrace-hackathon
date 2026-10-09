@@ -33,3 +33,6 @@ backups/
 .env
 .env.production
 outputs/public-server*.log
+
+# Local UI verification screenshots
+outputs/flow-audit/

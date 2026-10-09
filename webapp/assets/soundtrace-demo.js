@@ -4,23 +4,23 @@
   const nativeFetch=window.fetch.bind(window), mediaURLs=new Map();
   const route=p=>p.startsWith('/demo')?p:'/demo'+(p==='/'?'':p);
   window.SoundTraceRoute=route;
-  const scenes=['sea-window','rainy-city','autumn-lake','snow-mountain','spring-meadow','desert-dusk'];
-  const titles=['西湖边的晚风','雨夜的回家路','湖水慢慢的','雪山来信','收集一些春天','落日之前'];
-  const stories=['风吹过湖面，也吹走了今天的一点疲惫。','雨点落在窗沿，慢慢变成回家路上的节拍。','把散步时听到的声音，装进一张唱片。','在安静的雪山脚下，听见自己的呼吸。','树梢上有鸟，脚边是新长出来的草。','天色变暖，风也慢慢停了下来。'];
-  const samples=['water','rain','lake','snow','birds','dusk'];
+  const scenes=['autumn-lake','rainy-city','autumn-lake','snow-mountain','spring-meadow','desert-dusk'];
+  const titles=['西湖边的风与鸟鸣','合成雨声 · Lo-fi','湖畔微风与鸟鸣','风声 · 氛围配乐','鸟鸣 · 轻钢琴','落日晚风 · Lo-fi'];
+  const stories=['风声与鸟鸣素材搭配轻钢琴，营造湖畔听感；素材混合示例，非西湖实地录音。','用噪声合成的雨声效果，搭配预制 Lo-fi；不是实地雨声。','微风与较轻的鸟鸣，搭配氛围音乐；素材混合示例，非实地录音。','风声示例搭配预制氛围音乐；雪山仅为展示画面。','鸟鸣素材搭配预制轻钢琴。','风声搭配预制 Lo-fi；落日为场景示意，非实地录音。'];
+  const samples=['lakeside','rain','lake-breeze','snow','birds','evening-wind'];
   const arrangements=['piano','lofi','ambient','ambient','piano','lofi'];
   const demoStyles=[['piano','轻钢琴'],['lofi','Lo-fi'],['ambient','空灵氛围']];
   const audioPath=(kind,key)=>'outputs/seeds/demo-'+kind+'-'+key+'.wav';
   function initial(){
     const memories=scenes.map((scene,i)=>({id:'demo-memory-'+i,title:titles[i],notes:stories[i],scene,created:1775980800-i*86400,captured_at:1775980800-i*86400,
-      location:['断桥边','老街','湖畔','雪山脚下','苏堤','沙丘'][i],lat:[30.258,30.254,30.230,30.263,30.238,30.219][i],lng:[120.149,120.166,120.149,120.129,120.136,120.160][i],
+      location:'示例地图位置（非录音地点）',lat:[30.258,30.254,30.230,30.263,30.238,30.219][i],lng:[120.149,120.166,120.149,120.129,120.136,120.160][i],
       mood:['平静','怀念','思念','期待','开心','平静'][i],weather:['晴天','下雨','多云','下雪','有风','晴天'][i],activity:'散步',example:true,images:[],videos:[],audio_files:[],
       audio:audioPath('raw',samples[i]),music_audio:audioPath('mix',samples[i]),music_style:arrangements[i],duration:16}));
     return {user:{id:'soundtrace-demo-user',name:'小声',username:'demo',avatar:'🎧',logged_in:true,streak:7},memories,
       posts:[{id:'demo-post-0',title:titles[0],text:stories[0],author:'小声',art:'lake',audio:memories[0].music_audio,created:1775980800,liked:false,likes:12,comments:2,mine:true},
         {id:'demo-post-1',title:titles[4],text:stories[4],author:'阿晴',art:'spring',audio:memories[4].music_audio,created:1775808000,liked:false,likes:8,comments:1},
         {id:'demo-post-2',title:titles[1],text:stories[1],author:'阿南',audio:memories[1].music_audio,created:1775635200,liked:false,likes:24,comments:1}],
-      comments:{'demo-post-0':[{id:'demo-comment-0',author:'阿晴',text:'好像也听到了湖边的风。',mine:false}]},
+      comments:{'demo-post-0':[{id:'demo-comment-0',author:'阿晴',text:'风声、鸟鸣与钢琴的衔接很有意思。',mine:false}]},
       inbox:[{id:'demo-letter',dir:'in',from:'远方的旅人',title:'春日的一封来信',story:stories[4],audio:memories[4].audio,kind:'tape',status:'delivered',allow_reuse:true}],sent:[],sample:null};
   }
   let state, database;
@@ -39,6 +39,25 @@
           state.inbox.forEach(p=>{if(p.id==='demo-letter')p.audio=fresh.inbox[0].audio;});
           state.audioRevision=3;
         }
+        if(state.labelRevision!==1){
+          const fresh=initial(),oldTitles=['西湖边的晚风','雨夜的回家路','湖水慢慢的','雪山来信','收集一些春天','落日之前','老街里的收音机'];
+          state.memories.forEach(m=>{const sample=fresh.memories.find(x=>x.id===m.id);if(sample&&m.example&&!m.music_audio?.startsWith('outputs/demo/')&&oldTitles.includes(m.title))Object.assign(m,{title:sample.title,notes:sample.notes,location:sample.location});});
+          state.posts.forEach(p=>{const sample=fresh.posts.find(x=>x.id===p.id);if(sample&&oldTitles.includes(p.title)){p.title=sample.title;p.text=sample.text;}});
+          const comment=state.comments['demo-post-0']?.find(c=>c.id==='demo-comment-0');if(comment?.text==='好像也听到了湖边的风。')comment.text=fresh.comments['demo-post-0'][0].text;
+          state.labelRevision=1;
+        }
+        if(state.sceneAudioRevision!==1){
+          const fresh=initial();
+          state.memories.forEach(m=>{
+            const sample=fresh.memories.find(x=>x.id===m.id);
+            if(sample&&m.example&&!m.audio?.startsWith('outputs/demo/')&&!m.music_audio?.startsWith('outputs/demo/')){
+              Object.assign(m,{title:sample.title,notes:sample.notes,scene:sample.scene,audio:sample.audio,music_audio:sample.music_audio,music_style:sample.music_style,location:sample.location});
+            }
+          });
+          state.posts.forEach(p=>{const sample=fresh.posts.find(x=>x.id===p.id);if(sample&&!p.audio?.startsWith('outputs/demo/'))Object.assign(p,{title:sample.title,text:sample.text,audio:sample.audio});});
+          const comment=state.comments['demo-post-0']?.find(c=>c.id==='demo-comment-0');if(comment)comment.text=fresh.comments['demo-post-0'][0].text;
+          state.sceneAudioRevision=1;
+        }
       };
       const cursor=tx.objectStore('media').openCursor();cursor.onsuccess=()=>{const c=cursor.result;if(c){mediaURLs.set(c.key,URL.createObjectURL(c.value));c.continue();}};
       tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);
@@ -48,9 +67,9 @@
   function publish(m){let post=state.posts.find(x=>x.memory_id===m.id);if(!post){post={id:crypto.randomUUID(),memory_id:m.id,mine:true,likes:0,comments:0,liked:false};state.posts.unshift(post);}Object.assign(post,{author:state.user.name,title:m.title,text:m.notes,audio:m.music_audio||m.audio,images:m.images,img:m.images[0],created:Date.now()/1000});return post;}
   async function store(blob){const ref='outputs/demo/'+crypto.randomUUID();await new Promise((resolve,reject)=>{const tx=database.transaction('media','readwrite');tx.objectStore('media').put(blob,ref);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});mediaURLs.set(ref,URL.createObjectURL(blob));return ref;}
   window.SoundTraceDemo={ready,styles:demoStyles,bed:style=>audioPath('bed',demoStyles.some(x=>x[0]===style)?style:'piano'),samples:[
-    {key:'water',title:'湖边的水声',hint:'水面轻响 → 温暖钢琴',style:'piano'},
-    {key:'rain',title:'窗外的雨',hint:'细雨沙沙 → 慢拍 Lo-fi',style:'lofi'},
-    {key:'birds',title:'树梢的鸟鸣',hint:'清脆鸟鸣 → 柔和氛围',style:'ambient'}
+    {key:'lakeside',title:'湖畔风声与鸟鸣',hint:'风声 + 鸟鸣（混合示例） → 轻钢琴',style:'piano'},
+    {key:'rain',title:'合成雨声',hint:'合成雨声效果 → 慢拍 Lo-fi',style:'lofi'},
+    {key:'birds',title:'鸟鸣',hint:'鸟鸣素材 → 轻钢琴',style:'piano'}
   ].map(x=>({...x,audio:audioPath('raw',x.key)})),media:ref=>mediaURLs.get(ref)||'/'+ref};
   const reply=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}});
   window.fetch=async(input,options={})=>{
@@ -123,9 +142,9 @@
     }
     return reply({detail:'演示中不调用外部 AI 服务；可以体验示例音乐与编辑。'},503);
   };
-  function rewrite(){document.querySelectorAll('a[href]').forEach(a=>{const url=new URL(a.getAttribute('href'),location.href);if(url.origin===location.origin&&/^\/(?:studio|capture|album|map|community|me)?\/?$/.test(url.pathname)&&!a.hasAttribute('data-real-site'))a.href=route(url.pathname)+url.search+url.hash;});document.querySelectorAll('img[src],audio[src],video[src]').forEach(e=>{const u=new URL(e.getAttribute('src'),location.href);const blob=mediaURLs.get(u.pathname.slice(1));if(blob)e.src=blob;});}
+  function rewrite(){document.querySelectorAll('a[href]').forEach(a=>{const url=new URL(a.getAttribute('href'),location.href);if(url.origin===location.origin&&/^\/(?:studio|capture|library|album|map|community|me)?\/?$/.test(url.pathname)&&!a.hasAttribute('data-real-site'))a.href=route(url.pathname)+url.search+url.hash;});document.querySelectorAll('img[src],audio[src],video[src]').forEach(e=>{const u=new URL(e.getAttribute('src'),location.href);const blob=mediaURLs.get(u.pathname.slice(1));if(blob)e.src=blob;});}
   document.addEventListener('DOMContentLoaded',()=>{
-    document.body.dataset.demo='true';const strip=document.createElement('details');strip.className='demo-mode-strip';strip.innerHTML='<summary>演示空间 ⌄</summary><div><a href="/demo/studio">从原声开始 ↗</a><small>预制音频 · 本机保存<br>不会调用付费生成接口</small><button type="button">重置示例</button><a href="/" data-real-site>进入正式版 ↗</a></div>';document.body.append(strip);
+    document.body.dataset.demo='true';const strip=document.createElement('details');strip.className='demo-mode-strip';strip.innerHTML='<summary>示例选项 ⌄</summary><div><a href="/demo/studio">从原声开始 ↗</a><small>预制音频 · 本机保存<br>不会调用付费生成接口</small><button type="button">重置示例</button><a href="/" data-real-site>进入正式版 ↗</a></div>';(document.querySelector('.st-mode-bar') || document.body).append(strip);
     const home=document.querySelector('.home-story');if(home){const start=document.createElement('a');start.href='/demo/studio';start.className='demo-start';start.textContent='用一段原声，完成音乐日记 →';home.append(start);}
     strip.querySelector('button').onclick=async()=>{if(!confirm('重置演示空间？你的正式账号不受影响。'))return;state=initial();await persist();location.href='/demo';};
     const style=document.createElement('style');style.textContent='.demo-start{display:inline-flex;margin-top:16px;padding:12px 18px;background:#ffffffeb;border:1px solid #4d9eba;border-radius:99px;color:#076f98;font-size:14px;text-decoration:none;box-shadow:0 3px 12px #197da515}.demo-mode-strip{position:fixed;left:calc(5vw + 110px);top:28px;z-index:97;font:12px system-ui;color:#087fab}.demo-mode-strip summary{cursor:pointer;list-style:none;padding:10px 6px;min-height:40px}.demo-mode-strip summary::-webkit-details-marker{display:none}.demo-mode-strip>div{position:absolute;left:0;top:44px;width:160px;display:flex;flex-direction:column;gap:10px;background:#fffef7;padding:14px;border:1.5px solid #222;border-radius:9px 4px 11px 5px;box-shadow:2px 3px 0 #2222}.demo-mode-strip a{color:#087fab;text-decoration:none;padding:6px 0}.demo-mode-strip button{border:0;background:none;cursor:pointer;color:#777;font:inherit;text-align:left;padding:6px 0}@media(max-width:600px){.demo-mode-strip{top:24px;left:112px;font-size:11px}}';document.head.append(style);
