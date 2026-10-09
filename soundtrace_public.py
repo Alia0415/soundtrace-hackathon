@@ -813,8 +813,9 @@ def create_app(data_dir=None, public_url=None):
             con.execute('SELECT 1').fetchone()
         from soundtrace_music import music_config
         from soundtrace_art import art_config
+        from soundtrace_processing import processing_config
         config = music_config()
-        return {'editing': True, 'storage': True, 'accounts': True, 'ai': config['enabled'], 'music_provider': config['provider'], 'image_generation': art_config()['enabled'], 'sound_analysis': False}
+        return {'editing': True, 'storage': True, 'accounts': True, 'ai': config['enabled'], 'music_provider': config['provider'], 'image_generation': art_config()['enabled'], 'sound_analysis': processing_config()['enabled'], 'local_humming': True}
 
     @app.get('/api/inbox')
     @app.get('/api/exchange')
@@ -892,6 +893,8 @@ def create_app(data_dir=None, public_url=None):
     from soundtrace_music import install_music
     from soundtrace_art import install_art
     from soundtrace_maps import install_maps
+    from soundtrace_processing import install_processing
+    install_processing(app, db, account, data, quota, validate_wav)
     install_music(app, db, account, data, quota, validate_wav)
     install_art(app, db, account, data, quota, normalize_image, cover)
     install_maps(app)

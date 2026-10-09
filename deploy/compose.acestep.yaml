@@ -1,0 +1,52 @@
+# Optional overlay for an NVIDIA Linux host. Model ports remain private.
+# docker compose --env-file .env.production -f compose.yaml -f deploy/compose.acestep.yaml up -d --build
+services:
+  app:
+    environment:
+      SOUNDTRACE_MUSIC_PROVIDER: acestep
+      SOUNDTRACE_ACE_URL: http://acestep:8001
+      SOUNDTRACE_ACE_KEY: ${SOUNDTRACE_ACE_KEY:?请设置随机的模型服务密钥}
+      SOUNDTRACE_ACE_MODEL: acestep-v15-turbo
+      SOUNDTRACE_ACE_THINKING: "false"
+      SOUNDTRACE_ACE_STEPS: "8"
+  acestep:
+    build:
+      context: https://github.com/ace-step/ACE-Step-1.5.git#ca1e85fe9430179831e6bc6be790c332190a3866
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      ACESTEP_MODE: api
+      ACESTEP_API_KEY: ${SOUNDTRACE_ACE_KEY:?请设置随机的模型服务密钥}
+      ACESTEP_CONFIG_PATH: acestep-v15-turbo
+      ACESTEP_NO_INIT: "false"
+      ACESTEP_INIT_LLM: "false"
+      ACESTEP_LM_MODEL_PATH: acestep-5Hz-lm-0.6B
+      ACESTEP_LLM_BACKEND: pt
+      ACESTEP_QUEUE_WORKERS: "1"
+      TOKENIZERS_PARALLELISM: "false"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - acestep_models:/app/checkpoints
+      - acestep_cache:/root/.cache/huggingface
+      - acestep_output:/app/output
+    shm_size: 2gb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 600s
+      retries: 3
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+volumes:
+  acestep_models:
+  acestep_cache:
+  acestep_output:

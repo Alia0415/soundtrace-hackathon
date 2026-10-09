@@ -22,7 +22,7 @@ export default function App(){
   const recordingEntry=location.pathname.replace(/^\/demo(?=\/|$)/,'')==='/capture';
   const [tracks,setTracks]=useState([]),[style,setStyle]=useState('ambient'),[scene,setScene]=useState('sea-window');
   const [busy,setBusy]=useState(''),[error,setError]=useState(''),[recording,setRecording]=useState(false),[level,setLevel]=useState(0),[seconds,setSeconds]=useState(0);
-  const [draft,setDraft]=useState(null),[ai,setAi]=useState(false),[source,setSource]=useState(null),[draftInfo,setDraftInfo]=useState(null),[epoch,setEpoch]=useState(0);
+  const [draft,setDraft]=useState(null),[ai,setAi]=useState(false),[soundProcessing,setSoundProcessing]=useState(false),[source,setSource]=useState(null),[draftInfo,setDraftInfo]=useState(null),[epoch,setEpoch]=useState(0);
   const [promptSave,setPromptSave]=useState(false),[micError,setMicError]=useState(false),[musicFailed,setMusicFailed]=useState(false);
   const [phase,setPhase]=useState('library'),[sourceName,setSourceName]=useState('此刻的声音'),[memory,setMemory]=useState(null),[diary,setDiary]=useState({...blankDiary}),[libraryRevision,setLibraryRevision]=useState(0);
   const projectSeconds=Math.max(source?.duration||15,...tracks.flatMap(t=>t.clips.map(c=>(c.startSample+c.durationSamples)/(c.sampleRate||44100))));
@@ -32,7 +32,7 @@ export default function App(){
   const pick=useRef(),rec=useRef(),editor=useRef(),musicToken=useRef(0),abortJob=useRef();
   const onPlaybackError=useCallback(()=>setError('播放引擎暂时无法启动，请刷新恢复草稿。'),[]);
   const onEngineReady=useCallback(()=>editor.current?.onReady?.(),[]);
-  useEffect(()=>{readDraft().then(setDraft).catch(()=>{});api('/api/studio/health').then(x=>setAi(!!x.ai)).catch(()=>setAi(false));return ()=>{rec.current?.dispose();abortJob.current?.abort();};},[]);
+  useEffect(()=>{readDraft().then(setDraft).catch(()=>{});api('/api/studio/health').then(x=>{setAi(!!x.ai);setSoundProcessing(!!x.sound_analysis);}).catch(()=>setAi(false));return ()=>{rec.current?.dispose();abortJob.current?.abort();};},[]);
   useEffect(()=>{const id=new URLSearchParams(location.search).get('memory');if(!id)return;
     (async()=>{await window.soundtraceAccountReady;const saved=await api('/api/memories/'+encodeURIComponent(id));await selectMemory(saved,true);})().catch(e=>setError(e.message));
   },[]);
@@ -95,7 +95,7 @@ export default function App(){
       {phase==='library'&&source&&<SoundLibrary source={source} name={sourceName} memory={memory} onSave={saveMaterial} onGenerate={beginDiary} onSelect={selectMemory} busy={recording||!!busy} refreshKey={libraryRevision} onImport={()=>pick.current.click()} onNew={newProject} onRestore={draft?restore:undefined} rawSuccess={promptSave} onDismissSuccess={()=>setPromptSave(false)}/>}
       {phase==='setup'&&<DiarySetup diary={diary} setDiary={setDiary} style={style} setStyle={setStyle} onContinue={createDiary} onBack={()=>setPhase('library')} busy={!!busy}/>}
       {phase==='editor'&&<WaveformPlaylistProvider tracks={tracks} onTracksChange={setTracks} theme={theme} effects={masterEffects} waveHeight={76} mono controls={{show:true,width:88}} samplesPerPixel={initialZoom} zoomLevels={zoomLevels} sampleRate={44100} barWidth={2} barGap={2} roundedBars onReady={onEngineReady} onError={onPlaybackError}>
-        <Editor key={epoch} tracks={tracks} setTracks={setTracks} style={style} scene={scene} setScene={setScene} ai={ai} source={source} busy={busy} setBusy={setBusy} setError={setError} musicFailed={musicFailed} recording={recording} seconds={seconds} record={record} stopRecording={stopRecording} pick={()=>pick.current.click()} changeStyle={changeBed} handle={editor} initial={draftInfo} abortJob={abortJob} diary={diary} memory={memory} onSaved={savedRaw} onEditDiary={()=>{editor.current?.pause();setPhase('setup');}}/>
+        <Editor key={epoch} tracks={tracks} setTracks={setTracks} style={style} scene={scene} setScene={setScene} ai={ai} soundProcessing={soundProcessing} source={source} busy={busy} setBusy={setBusy} setError={setError} musicFailed={musicFailed} recording={recording} seconds={seconds} record={record} stopRecording={stopRecording} pick={()=>pick.current.click()} changeStyle={changeBed} handle={editor} initial={draftInfo} abortJob={abortJob} diary={diary} memory={memory} onSaved={savedRaw} onEditDiary={()=>{editor.current?.pause();setPhase('setup');}}/>
       </WaveformPlaylistProvider>}
       {!!busy&&phase==='setup'&&ai&&<button className="quiet" onClick={()=>abortJob.current?.abort()}>停止等待</button>}
       {recording&&<div className="record-meter" aria-label="录音音量"><div style={{transform:`scaleX(${Math.min(1,level*5+.01)})`}}/></div>}

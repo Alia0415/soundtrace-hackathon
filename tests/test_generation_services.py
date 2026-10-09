@@ -44,8 +44,9 @@ class GenerationServices(unittest.TestCase):
             calls.append(request)
             if request.url.path=='/release_task':
                 payload=json.loads(request.content)
-                self.assertEqual(payload['model'],'acestep-v15-xl-sft')
-                self.assertTrue(payload['thinking']);self.assertEqual(payload['batch_size'],1)
+                self.assertEqual(payload['model'],'acestep-v15-turbo')
+                self.assertFalse(payload['thinking']);self.assertEqual(payload['batch_size'],1)
+                self.assertEqual(payload['inference_steps'],8)
                 return httpx.Response(200,json={'code':200,'data':{'task_id':'t'}})
             if request.url.path=='/query_result':
                 self.assertEqual(json.loads(request.content),{'task_id_list':['t']})

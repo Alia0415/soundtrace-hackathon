@@ -42,11 +42,11 @@ async def generate_music(body, stage):
             base = os.environ['SOUNDTRACE_ACE_URL'].rstrip('/')
             headers = {'Authorization': 'Bearer ' + os.getenv('SOUNDTRACE_ACE_KEY', '')}
             params = {'prompt': prompt, 'lyrics': '[Instrumental]', 'task_type': 'text2music',
-                      'thinking': True, 'audio_format': 'wav', 'batch_size': 1,
+                      'thinking': os.getenv('SOUNDTRACE_ACE_THINKING', 'false').lower() == 'true', 'audio_format': 'wav', 'batch_size': 1,
                       'audio_duration': max(30, min(120, float(body.get('duration', 45)))),
-                      'model': os.getenv('SOUNDTRACE_ACE_MODEL', 'acestep-v15-xl-sft'),
-                      'lm_model_path': os.getenv('SOUNDTRACE_ACE_LM', 'acestep-5Hz-lm-4B'),
-                      'inference_steps': 50, 'use_random_seed': True}
+                      'model': os.getenv('SOUNDTRACE_ACE_MODEL', 'acestep-v15-turbo'),
+                      'lm_model_path': os.getenv('SOUNDTRACE_ACE_LM', 'acestep-5Hz-lm-0.6B'),
+                      'inference_steps': int(os.getenv('SOUNDTRACE_ACE_STEPS', '8')), 'use_random_seed': True}
             response = await client.post(base + '/release_task', json=params, headers=headers)
             response.raise_for_status()
             payload = response.json()

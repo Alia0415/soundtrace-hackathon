@@ -16,16 +16,18 @@ export async function runJob(body, signal, onStatus) {
 }
 export function commit(blob, metadata) { return api('/api/studio/works',{method:'POST',headers:{'Content-Type':'audio/wav','X-Soundtrace-Metadata':encodeURIComponent(JSON.stringify(metadata))},body:blob}); }
 export const route = path => window.SoundTraceRoute?.(path) || path;
-export async function runMusicJob(body, signal, onStatus) {
+export const runMusicJob = (body, signal, onStatus) => runTask('/api/music/jobs', body, signal, onStatus);
+export const runSoundJob = (body, signal, onStatus) => runTask('/api/sound/jobs', body, signal, onStatus);
+async function runTask(endpoint, body, signal, onStatus) {
   let id;
   try {
-    const task=await api('/api/music/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal});id=task.job_id;
+    const task=await api(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal});id=task.job_id;
     while(true){
-      const job=await api('/api/music/jobs/'+id,{signal});
+      const job=await api(endpoint+'/'+id,{signal});
       if(job.status==='done')return job.results;
       if(job.status==='failed'||job.status==='cancelled')throw new Error(job.stage);
       onStatus?.(job.stage);
       await new Promise((resolve,reject)=>{const done=()=>{signal.removeEventListener('abort',cancel);resolve();};const timer=setTimeout(done,2500);const cancel=()=>{clearTimeout(timer);signal.removeEventListener('abort',cancel);reject(new DOMException('Aborted','AbortError'));};signal.addEventListener('abort',cancel,{once:true});if(signal.aborted)cancel();});
     }
-  }catch(error){if(error.name==='AbortError'&&id)await api('/api/music/jobs/'+id+'/cancel',{method:'POST'}).catch(()=>{});throw error;}
+  }catch(error){if(error.name==='AbortError'&&id)await api(endpoint+'/'+id+'/cancel',{method:'POST'}).catch(()=>{});throw error;}
 }

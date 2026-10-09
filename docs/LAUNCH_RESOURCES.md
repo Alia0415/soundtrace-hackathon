@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | 域名与服务器 | 域名、国内可直接访问的 Linux 服务器地址、部署与 DNS 操作权限；可运行 Docker，开放 80/443 | 域名填写 `SOUNDTRACE_DOMAIN`；服务器运行网站、数据库、媒体与 HTTPS | 本地 8093 可用；公网部署目标未提供 |
 | 高德地图 | Web 端 JS API Key、安全密钥、正式域名白名单；自定义地图样式 ID | `SOUNDTRACE_AMAP_KEY`、`SOUNDTRACE_AMAP_SECURITY_CODE`、`SOUNDTRACE_AMAP_STYLE` | 真实地图接口已接；凭据与样式待提供。支持多地点和坐标转换 |
-| 音乐生成 | **默认 Mureka**：国内 API Key、可用音乐模型、余额与测试预算；**或 ACE-Step XL**：已部署服务的 URL、API Key、GPU 资源 | Mureka：`SOUNDTRACE_MUREKA_KEY`、`SOUNDTRACE_MUREKA_MODEL`；自部署：`SOUNDTRACE_MUSIC_PROVIDER=acestep`、`SOUNDTRACE_ACE_URL`、`SOUNDTRACE_ACE_KEY` | 两套协议已接，真实模型输出尚未试听。普通网站服务无需 GPU；选自部署音乐时另配 GPU |
+| 音乐生成 | **默认 Mureka**：国内 API Key、可用音乐模型、余额与测试预算；**或 ACE-Step 1.5**：已部署服务的 URL、API Key、GPU 资源 | Mureka：`SOUNDTRACE_MUREKA_KEY`、`SOUNDTRACE_MUREKA_MODEL`；自部署：`SOUNDTRACE_MUSIC_PROVIDER=acestep`、`SOUNDTRACE_ACE_URL`、`SOUNDTRACE_ACE_KEY` | 两套协议已接，真实模型输出尚未试听。普通网站服务无需 GPU；选自部署音乐时另配 GPU |
 | 照片手绘生成 | **火山方舟/豆包 Seedream**：API Key、已开通图生图的模型 ID 或推理接入点 ID、余额与测试预算 | `SOUNDTRACE_ARK_KEY`、`SOUNDTRACE_IMAGE_MODEL`。默认准备 `doubao-seedream-5-0-pro-260628`，以账号实际开通型号为准 | 本轮已接国内图生图接口、私有图片存储、状态查询与失败回退。未提供 Key，真实手绘效果待联调 |
 
 API 密钥填写项目根目录的 `.env.production`，从 `deploy/production.env.example` 复制后填写即可。该文件不进入 Git 和部署源码包；不用把完整密钥写进普通文档。可以直接提供配置文件的本地路径，再让我读取和验证配置是否可用。
@@ -45,7 +45,7 @@ API 密钥填写项目根目录的 `.env.production`，从 `deploy/production.en
 | 服务文件 | 隐私政策、用户协议、运营主体、联系邮箱；确认照片/声音/生成内容的公开使用授权范围 | 需提供最终文本，接入正式页面 |
 | 账号恢复 | 选择邮箱或短信；提供邮件 SMTP/发送服务凭据，或短信服务应用、签名、模板与凭据 | 注册登录和改密已实现；自动找回密码、邮箱/手机验证未接。选定恢复方式后才能补齐 |
 | 语音识别 | 自部署 faster-whisper：允许下载模型并提供模型目录/部署资源；或提供选定托管 STT 服务及 API Key | `/api/transcribe` 已准备可选 faster-whisper，需安装依赖并启用；托管语音接口尚未接。文字输入可直接使用 |
-| 额外 AI 音频能力 | 若要开放声源识别、声源分离、哼唱转音乐，需分别选择并提供可用模型服务 | 与当前 Mureka/ACE-Step 文本生成接口是独立能力，尚未接；普通录音/音乐日记流程不依赖这些功能 |
+| 额外 AI 音频能力 | 哼唱转旋律使用随站打包的 Basic Pitch；辨识与提取需部署 AudioSep/CLAP 私有服务 | 哼唱真实模型及播放保存已验证；辨识与提取接口已接，GPU 实测待完成。见 [部署说明](OPEN_SOURCE_AUDIO.md) |
 | 自动天气 | 若仍希望自动获取天气，确认天气服务与配额、是否允许定位请求 | 当前后置流程由用户选择天气，制作音乐日记无需天气 API；不要把手选天气显示成自动测量结果 |
 
 音频、照片、视频、用户上传头像和背景由用户自己提供；不是额外购买的上线素材。功能与资源当前状态以表格为准。社区正式对外开放前，应补齐选定的管理、隐私和账号恢复能力；此文档并不表示这些功能已全部完成。
